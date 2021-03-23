@@ -13,9 +13,9 @@ Celeste is a code for generating complex chemical reaction networks and studying
    :maxdepth: 3
    :caption: Contents:
 
-   installation
-   input
-   modules 
+   source/installation
+   source/input
+   source/modules 
 
 Indices and tables
 ==================
