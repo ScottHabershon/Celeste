@@ -1,0 +1,17 @@
+# Example input file.
+
+CalculationType: NEB
+AlignEndPoints: True
+Nimages: 7
+ReactantFile: start.xyz
+ProductFile: end.xyz
+InterpolationType: IDPP
+OptimizeEnds: True
+NavigationSpring: 0.2000
+Ninterpolate: 5
+NavigationStep: 0.1
+NEBspring: 0.050
+NEBiterations: 100
+
+PEScalc: {'calctype' : "Energy", 'code' : "orca", 'executable' : "/Users/scott/programs/orca/orca", 'arglist' : ["! PM3 engrad"]}
+PEScalc: {'calctype' : "Optimize", 'code' : "orca", 'executable' : "/Users/scott/programs/orca/orca", 'arglist' : ["! PM3 Opt"]}
