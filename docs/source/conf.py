@@ -14,8 +14,8 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../'))
-print(sys.path)
-print(sys.executable)
+#print(sys.path)
+#print(sys.executable)
 
 
 # -- Project information -----------------------------------------------------
@@ -39,7 +39,6 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.viewcode",
     "sphinx.ext.napoleon", 
-    "sphinxjp.themes.basicstrap"
 ]
 
 # Add any paths that contain templates here, relative to this directory.
