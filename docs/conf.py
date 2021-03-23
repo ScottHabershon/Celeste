@@ -20,7 +20,8 @@ for mod_name in MOCK_MODULES:
 
 
 sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('../..'))
+#sys.path.insert(0, os.path.abspath('../..'))
+sys.path.insert(0, os.path.abspath('../'))
 
 print(sys.path)
 #print(sys.executable)
