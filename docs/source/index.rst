@@ -10,6 +10,8 @@ Welcome to Celeste's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   modules
+   celeste
 
 
 Indices and tables
