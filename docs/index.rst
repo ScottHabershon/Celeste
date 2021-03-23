@@ -10,6 +10,7 @@ Welcome to Celeste's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   Introduction
    modules
    celeste
 
