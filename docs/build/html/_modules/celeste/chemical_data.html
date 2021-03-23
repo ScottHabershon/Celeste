@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>celeste.chemical_data &#8212; Celeste 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for celeste.chemical_data</h1><div class="highlight"><pre>
+<span></span><span class="c1">#</span>
+<span class="c1">############################################################################</span>
+<span class="c1">#</span>
+<span class="c1"># Celeste - chemical reaction discovery code.</span>
+<span class="c1"># Copyright (C) 2021, Scott Habershon</span>
+<span class="c1">#</span>
+<span class="c1"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1">############################################################################</span>
+
+<span class="sd">&quot;&quot;&quot;Contains dictionaries and other data structures holding chemical data such as</span>
+<span class="sd">atomic masses and covalent radii.</span>
+
+<span class="sd">Notes:</span>
+<span class="sd">    All values are given in Hartree atomic units, where the mass of the electron</span>
+<span class="sd">    is 1, the charge on an electron is -1, :math:`\\hbar = 1` and :math:`4 \\pi \\epsilon = 1`.</span>
+
+<span class="sd">Attributes:</span>
+<span class="sd">    nelements (int) : Total number of elements with data entries.</span>
+<span class="sd">    ElementSymbol (dict) : Dictionary mapping element symbols to atomic numbers.</span>
+<span class="sd">    AtomicMass (dict) : Dictionary mapping element symbol to atomic masses.</span>
+<span class="sd">    CovalentRadii (dict) : Dictionary mapping element symbol to covalent radii.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># Set the atomic label dictionary.</span>
+<span class="n">nelements</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">ElementSymbol</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;H&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                 <span class="s1">&#39;C&#39;</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span>
+                 <span class="s1">&#39;N&#39;</span><span class="p">:</span><span class="mi">7</span><span class="p">,</span>
+                 <span class="s1">&#39;O&#39;</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span>
+                 <span class="p">}</span>
+
+<span class="c1"># Set the atomic mass dictionary.</span>
+<span class="c1">#</span>
+<span class="c1"># See: IUPAC Technical Report, Pure Appl. Chem. 2016; 88(3): 265–291.</span>
+<span class="c1"># Atomic weights taken from Tables 2/3. To convert from Daltons to Hartree atomic units,</span>
+<span class="c1">#</span>
+<span class="c1"># We use:</span>
+<span class="c1"># 1 Da = 1 unified atomic mass unit = 1.660 5402 ×10−27 kg</span>
+<span class="c1"># 1 electron mass = 9.109 383 7015 x 10-31 kg (NIST).</span>
+<span class="c1"># So, to convert from atomic mass units to Hartree atomic units, multiply by</span>
+<span class="c1"># (1 Da) / (1 electron mass) = 1822.889731.</span>
+<span class="c1">#</span>
+<span class="n">AtomicMass</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;H&#39;</span><span class="p">:</span> <span class="mf">1837.47285</span><span class="p">,</span>
+               <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="mf">21894.72856</span><span class="p">,</span>
+               <span class="s1">&#39;N&#39;</span><span class="p">:</span> <span class="mf">25533.21646</span><span class="p">,</span>
+               <span class="s1">&#39;O&#39;</span><span class="p">:</span> <span class="mf">29164.41281</span><span class="p">,</span>
+               <span class="s1">&#39;Fe&#39;</span><span class="p">:</span> <span class="mf">101799.277</span><span class="p">,</span>
+               <span class="p">}</span>
+
+<span class="c1"># Set the atomic covalent radii in atomic units (Bohr).</span>
+<span class="c1">#</span>
+<span class="c1"># See: Covalent radii revisited, Cordero et al, Dalton Trans., 2008, 2832-2838</span>
+<span class="c1">#</span>
+<span class="n">CovalentRadii</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;H&#39;</span> <span class="p">:</span> <span class="mf">0.59</span><span class="p">,</span>  <span class="c1"># 0.31 Angstroms</span>
+                  <span class="s1">&#39;C&#39;</span> <span class="p">:</span> <span class="mf">1.44</span><span class="p">,</span>  <span class="c1"># 0.76 Angstroms</span>
+                  <span class="s1">&#39;N&#39;</span> <span class="p">:</span> <span class="mf">1.34</span><span class="p">,</span>  <span class="c1"># 0.71 Angstroms</span>
+                  <span class="s1">&#39;O&#39;</span> <span class="p">:</span> <span class="mf">1.25</span><span class="p">,</span>  <span class="c1"># 0.66 Angstroms</span>
+                  <span class="s1">&#39;Fe&#39;</span> <span class="p">:</span> <span class="mf">2.87</span><span class="p">,</span>  <span class="c1"># 1.52 Angstroms, Take the larger high-spin value to be safe.</span>
+                <span class="p">}</span>
+
+
+<div class="viewcode-block" id="PrintChemicalDataReport"><a class="viewcode-back" href="../../celeste.html#celeste.chemical_data.PrintChemicalDataReport">[docs]</a><span class="k">def</span> <span class="nf">PrintChemicalDataReport</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Prints a report on the Chemical Data to file.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        file (str) : File in which to print output. If ``file is None``, print to stdout.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">file</span>
+
+    <span class="c1"># Mass reports.</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">* Atomic mass dictionary (in Hartree atomic units):</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">AtomicMass</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Element &quot;</span><span class="o">+</span><span class="n">x</span><span class="o">+</span><span class="s2">&quot;, mass = &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Atomic covalent radii reports.</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">* Atomic covalent radii dictionary (in Hartree atomic units [Bohr]):</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">CovalentRadii</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Element &quot;</span><span class="o">+</span><span class="n">x</span><span class="o">+</span><span class="s2">&quot;, Radius = &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Celeste</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Scott Habershon.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

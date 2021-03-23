@@ -1,21 +1,16 @@
 .. Celeste documentation master file, created by
-   sphinx-quickstart on Tue Dec 15 18:35:48 2020.
+   sphinx-quickstart on Tue Mar 23 22:33:14 2021.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
 Welcome to Celeste's documentation!
 ===================================
 
-Celeste is a code for generating complex chemical reaction networks and studying their properties.
-
-
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    :caption: Contents:
 
-   source/installation
-   source/input
-   source/modules 
+
 
 Indices and tables
 ==================
