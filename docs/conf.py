@@ -36,8 +36,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.mathjax",
     "sphinx.ext.viewcode",
-    "sphinx.ext.napoleon", 
-    "sphinxjp.themes.basicstrap"
+    "sphinx.ext.napoleon"
 ]
 # Napoleon settings
 napoleon_google_docstring = True
