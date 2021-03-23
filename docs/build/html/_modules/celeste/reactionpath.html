@@ -1,0 +1,745 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>celeste.reactionpath &mdash; Celeste 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> Celeste
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installing Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../input.html">Input File Format for RunCeleste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Module descriptions</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Celeste</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>celeste.reactionpath</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for celeste.reactionpath</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Defines the Reaction-Path class.</span>
+
+<span class="sd">The ``RP`` class is the main container for creating, reading, writing and</span>
+<span class="sd">manipulating reaction paths, comprising collections of chemical structure (``CXS``)</span>
+<span class="sd">objects.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">celeste.cxs</span> <span class="k">as</span> <span class="nn">cx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">celeste.pes</span> <span class="k">as</span> <span class="nn">pescalc</span>
+<span class="kn">import</span> <span class="nn">celeste.constants</span> <span class="k">as</span> <span class="nn">const</span>
+<span class="kn">import</span> <span class="nn">scipy.optimize</span> <span class="k">as</span> <span class="nn">opt</span>
+<span class="kn">from</span> <span class="nn">celeste.pes</span> <span class="k">import</span> <span class="n">PES</span>
+<span class="kn">import</span> <span class="nn">celeste.input_output</span> <span class="k">as</span> <span class="nn">io</span>
+
+
+<div class="viewcode-block" id="RP"><a class="viewcode-back" href="../../celeste.html#celeste.reactionpath.RP">[docs]</a><span class="k">class</span> <span class="nc">RP</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines the reaction-path class object.</span>
+
+<span class="sd">    Initializes a ``RP`` object, comprising a set of chemical structures along a reaction-path.</span>
+
+<span class="sd">    If all of ``reactantfile``, ``productfile`` and ``pathfile`` are defined simulataneous,</span>
+<span class="sd">    we&#39;re note sure which to use, so we throw an exception.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        reactantfile (str): File containing reactant structure.</span>
+<span class="sd">        productfile (str): File containing product structure.</span>
+<span class="sd">        pathfile (str): File containing the full reaction-path.</span>
+<span class="sd">        nimages (int): Number of images in the reaction path (including reactants and products).</span>
+<span class="sd">        OptimizeEnds (bool) : Flag indicating whether or not the end-points of a reaction-path should be</span>
+<span class="sd">                              geometry-optimized.</span>
+<span class="sd">        EnergyCalc (PES object list): PES object list defining a set of energy calculation objects. These are used</span>
+<span class="sd">                             if ``OptimizeEnds == True``.</span>
+<span class="sd">        EmptyPath (bool): Flag indicating whether or not to create an empty path, containing just  the reactant</span>
+<span class="sd">                        and product structures.</span>
+<span class="sd">        AlignEndPoints (bool): Flag indicating whether or not to align the product structure to the reactant structure.</span>
+<span class="sd">                         If ``True``, this alignment is achieved by translatin centroids, then minimizing the RMS structural</span>
+<span class="sd">                         difference using the Kabsch algorithm. Note that ``AlignEndPoints`` only works if we are</span>
+<span class="sd">                         initializing from ``reactantfile`` and ``productfile`` (not ``pathfile``).</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        This class provides two methods of initializing ``RP`` objects. First, if ``pathfile`` is defined, we start from</span>
+<span class="sd">        the structurs in the given ``pathfile``.</span>
+
+<span class="sd">            .. code-block:: python3</span>
+
+<span class="sd">                a = RP(pathfile=&#39;path.xyz&#39;)</span>
+
+<span class="sd">        The file ``path.xyz`` (in this case) should contain a sequence of xyz-format frames, one for each</span>
+<span class="sd">        image in the reaction-path. In this case, the structure and number of images ``nimages`` are read from file.</span>
+
+<span class="sd">        Alternatively, if the reactant structure and product structure are given (in ``reactantfile`` and ``productfile``,</span>
+<span class="sd">        respectively), an empty path can be generated (then used for later interpolation. Here, the TOTAL number</span>
+<span class="sd">        of images in the path is then ``nimages``.</span>
+
+<span class="sd">            .. code-block:: python3</span>
+
+<span class="sd">                a = RP(reactantfile=&#39;reactants.xyz&#39;,productfile=&#39;products.xyz&#39;, nimages = 10)</span>
+
+<span class="sd">      &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">reactantfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">productfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pathfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nimages</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">OptimizeEnds</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">EnergyCalc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">EmptyPath</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">AlignEndPoints</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes a reaction-path object ``RP``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># If EmptyPath == True, we just create an empty path with only the reactant and produc structure.</span>
+        <span class="c1"># This empty path is useful in some kinds of calculations, such as MEP approximation using</span>
+        <span class="c1"># navigation functions or the growing-string method.</span>
+
+        <span class="k">if</span> <span class="n">EmptyPath</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">nimages</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">assert</span><span class="p">(</span><span class="n">reactantfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error in reactionpath.__init__: pathfile is None, but no reactantfile is given</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">assert</span><span class="p">(</span><span class="n">productfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error in reactionpath.__init__: pathfile is None, but no productfile is given</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Read the reactant structure.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">cx</span><span class="o">.</span><span class="n">CXS</span><span class="p">(</span><span class="n">FileName</span><span class="o">=</span><span class="n">reactantfile</span><span class="p">)]</span>
+
+            <span class="c1"># Read the product structure.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cx</span><span class="o">.</span><span class="n">CXS</span><span class="p">(</span><span class="n">FileName</span><span class="o">=</span><span class="n">productfile</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="c1"># Set the number of images.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nimages</span> <span class="o">=</span> <span class="n">nimages</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nimages</span> <span class="o">-</span> <span class="mi">1</span>
+
+            <span class="c1"># Check which files are given as input - either the pathfile or the reactantfile and productfile:</span>
+            <span class="k">if</span> <span class="n">pathfile</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">assert</span><span class="p">(</span><span class="n">reactantfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error in reactionpath.__init__: pathfile is None, but no reactantfile is given</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">assert</span><span class="p">(</span><span class="n">productfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error in reactionpath.__init__: pathfile is None, but no productfile is given</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                <span class="c1"># Read the reactant structures.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">cx</span><span class="o">.</span><span class="n">CXS</span><span class="p">(</span><span class="n">FileName</span><span class="o">=</span><span class="n">reactantfile</span><span class="p">)]</span>
+
+                <span class="c1"># Fill in the intermediate images from 1 to nimage-2, by copying the reactant structure.</span>
+                <span class="c1"># This is really just place-holding to make sure that the cxs objects have space so that the</span>
+                <span class="c1"># interpolation scheme can fill them in...</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nimages</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cx</span><span class="o">.</span><span class="n">CXS</span><span class="p">(</span><span class="n">FileName</span><span class="o">=</span><span class="n">reactantfile</span><span class="p">))</span>
+
+                <span class="c1"># Read the product structure.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cx</span><span class="o">.</span><span class="n">CXS</span><span class="p">(</span><span class="n">FileName</span><span class="o">=</span><span class="n">productfile</span><span class="p">))</span>
+
+                <span class="c1"># At this point, align the structures using Kabsch algorithm, if requested.....</span>
+                <span class="k">if</span> <span class="n">AlignEndPoints</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">nimages</span><span class="p">]</span><span class="o">.</span><span class="n">KabschAlign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="c1"># If pathfile is defined, read the full path from file.</span>
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="c1"># Read the full path file.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">nimages</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">ReadPathFromFile</span><span class="p">(</span><span class="n">pathfile</span><span class="p">)</span>
+
+        <span class="c1"># If requested, perform geometry optimization of the reactant and product.</span>
+        <span class="k">if</span> <span class="n">OptimizeEnds</span><span class="p">:</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="n">pescalc</span><span class="o">.</span><span class="n">Driver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">EnergyCalc</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;Optimize&#39;</span><span class="p">)</span>
+            <span class="n">e1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">energy</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">** Harsh Realm...optimization of REACTANTS failed in reactionpath.__init__</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="n">pescalc</span><span class="o">.</span><span class="n">Driver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nimages</span><span class="p">],</span> <span class="n">EnergyCalc</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;Optimize&#39;</span><span class="p">)</span>
+            <span class="n">e2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nimages</span><span class="p">]</span><span class="o">.</span><span class="n">energy</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">** Harsh Realm...optimization of PRODUCTS failed in reactionpath.__init__</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="RP.LinearInterpolation"><a class="viewcode-back" href="../../celeste.html#celeste.reactionpath.RP.LinearInterpolation">[docs]</a>    <span class="k">def</span> <span class="nf">LinearInterpolation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates interpolated atomic coordinates for the intermediate images in a reaction-path object.</span>
+<span class="sd">        The end-points are not changed by this routine.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Simple interpolation in Cartesian coordinates (not great for curvilinear reactions!):</span>
+        <span class="n">x0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span>
+        <span class="n">xn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nimages</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">:</span>
+            <span class="n">lam</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nimages</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span> <span class="o">+</span> <span class="n">lam</span> <span class="o">*</span> <span class="p">(</span><span class="n">xn</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span>
+
+        <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="RP.GetFullPathEnergy"><a class="viewcode-back" href="../../celeste.html#celeste.reactionpath.RP.GetFullPathEnergy">[docs]</a>    <span class="k">def</span> <span class="nf">GetFullPathEnergy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">EnergyCalcs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the potential energy at every image along the reaction-path object ``RP``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">              EnergyCalcs (PES, list): List of ``PES`` calculation objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">:</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="n">pescalc</span><span class="o">.</span><span class="n">Driver</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">EnergyCalcs</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;Energy&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RP.ReportFullPathEnergy"><a class="viewcode-back" href="../../celeste.html#celeste.reactionpath.RP.ReportFullPathEnergy">[docs]</a>    <span class="k">def</span> <span class="nf">ReportFullPathEnergy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">File</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">comment</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reports the energy at each point along a reaction-path. This is output to either File or stdout.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            File (str): A file in which to output the path energy.</span>
+<span class="sd">            comment (str): An optional comment describing the current path.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Setup output destination.</span>
+        <span class="k">if</span> <span class="n">File</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">File</span>
+
+        <span class="k">if</span> <span class="n">comment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># &quot;</span><span class="o">+</span><span class="n">comment</span><span class="o">+</span><span class="s2">&quot; #</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;--------------------------------------------------------------------------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Index  |  Arc length (au)  |  Energy (au)  |  Relative energy (au)  |  Relative energy (kJ/mol)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;--------------------------------------------------------------------------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nimages</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ArcLength</span> <span class="o">=</span> <span class="mf">0.0000</span>
+                <span class="n">E0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">energy</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ArcLength</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span><span class="p">)</span>
+            <span class="n">dE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">energy</span><span class="o">-</span><span class="n">E0</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:6d}</span><span class="s1"> </span><span class="si">{:18f}</span><span class="s1"> </span><span class="si">{:16f}</span><span class="s1"> </span><span class="si">{:20f}</span><span class="s1"> </span><span class="si">{:23f}</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">ArcLength</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">energy</span><span class="p">,</span>
+                                                                    <span class="n">dE</span><span class="p">,</span> <span class="n">dE</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">hartrees_to_kjmol</span><span class="p">))</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;--------------------------------------------------------------------------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RP.NEB"><a class="viewcode-back" href="../../celeste.html#celeste.reactionpath.RP.NEB">[docs]</a>    <span class="k">def</span> <span class="nf">NEB</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">PotentialType</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spring</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">Iterations</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">ForceTolerance</span> <span class="o">=</span> <span class="mf">1E-3</span><span class="p">,</span>
+            <span class="n">MaxForce</span> <span class="o">=</span> <span class="mf">5E-3</span><span class="p">,</span> <span class="n">ClimbingImage</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">Fileroot</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">EnergyCalc</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">Alpha</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+            <span class="n">TimeStep</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">,</span> <span class="n">Nmin</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">File</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Performs a nudged-elastic band calculation on the current reaction path.</span>
+
+<span class="sd">        This routine implements the climbing-image NEB method, using the fast inertial relaxation</span>
+<span class="sd">        method (FIRE) as the optimizer.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            PotentialType (str): Either &#39;IDPP&#39; for an image-dependent pair potential interpolation, or &#39;PES&#39; to</span>
+<span class="sd">                                 perform full NEB optimization on the PES.</span>
+<span class="sd">            spring (float): NEB spring constant (in atomic units)</span>
+<span class="sd">            Iterations (int): Maximum number of NEB optimization steps.</span>
+<span class="sd">            ForceTolerance (float): RMS force-tolerance to signify convergence (in atomic units)</span>
+<span class="sd">            MaxForce (float): Maximum force tolerance to signify convergence (in atomic units). Set to a negative</span>
+<span class="sd">                              value to just use ForceTolerance to judge convergence.</span>
+<span class="sd">            ClimbingImage (bool): Flag to indicate whether to perform climbing-image variant of NEB.</span>
+<span class="sd">            Fileroot (str): A file-root name, which is prefixed onto the output files from the NEB calculation. If</span>
+<span class="sd">                            ``Fileroot is None``, then a set of locally-named files is created instead.</span>
+<span class="sd">            EnergyCalc (``PES`` objects): Set of PES calculation objects, used if ``PotentialType = PES``.</span>
+<span class="sd">            Alpha (float): Initial alpha parameter used in the FIRE scheme.</span>
+<span class="sd">            TimeStep (float): Time-step (in atomic units) for the FIRE scheme.</span>
+<span class="sd">            Nmin (int): Nmin parameter from the FIRE scheme.</span>
+<span class="sd">            File (file object): An open file object, or stdout, where output is placed.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Setup output destination.</span>
+        <span class="k">if</span> <span class="n">File</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">File</span>
+
+        <span class="c1"># Define the number of internal images, assuming the end-points are fixed.</span>
+        <span class="n">ninternal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nimages</span> <span class="o">-</span> <span class="mi">2</span>
+
+        <span class="c1"># Define number of atoms.</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">natoms</span>
+
+        <span class="c1"># Open output files.</span>
+        <span class="k">if</span> <span class="n">PotentialType</span> <span class="o">==</span> <span class="s1">&#39;PES&#39;</span><span class="p">:</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;neb_pes&quot;</span>
+        <span class="k">elif</span> <span class="n">PotentialType</span> <span class="o">==</span> <span class="s1">&#39;IDPP&#39;</span><span class="p">:</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;neb_idpp&quot;</span>
+        <span class="n">fconv</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">Fileroot</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span><span class="o">+</span><span class="n">suffix</span><span class="o">+</span><span class="s2">&quot;.conv&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="n">finitial</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">Fileroot</span><span class="o">+</span><span class="s2">&quot;_&quot;</span><span class="o">+</span><span class="n">suffix</span><span class="o">+</span><span class="s2">&quot;_initial.xyz&quot;</span><span class="p">,</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
+
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">----- NEB output files -----</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">* Convergence analysis file: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">fconv</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;* Initial MEP file: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">finitial</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Pretty-print some initial information..</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">----- Initial NEB parameters -----</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">* Potential Type = &quot;</span><span class="o">+</span><span class="n">PotentialType</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;* NEB spring constant = &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">spring</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; Eh / a0**2 </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;* RMS force tolerance = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ForceTolerance</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; Eh / a0 </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;* Maximum image force tolerance = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">MaxForce</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; Eh / a0 </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">-----------------------------------------------------------------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Iteration  |  &lt;NEB Forces&gt; (au)  |  &lt;Perp. Forces&gt; (au)  |  Max. Perp. Force (au)  </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s2">&quot;-----------------------------------------------------------------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Calculate initial IDPP or PES forces on all internal images.</span>
+        <span class="k">if</span> <span class="n">PotentialType</span> <span class="o">==</span> <span class="s1">&#39;IDPP&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">EvaluateIDPP</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">GetFullPathEnergy</span><span class="p">(</span><span class="n">EnergyCalc</span><span class="p">)</span>
+
+        <span class="c1"># Calculate total forces, accounting for spring and projection.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GetNEBForces</span><span class="p">(</span><span class="n">spring</span><span class="p">,</span> <span class="n">ClimbingImage</span><span class="p">)</span>
+
+        <span class="c1"># Zero initial velocities of all images.</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">:</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">velocities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+
+        <span class="c1"># Output initial information.</span>
+        <span class="n">rmsforce</span><span class="p">,</span> <span class="n">rmsperpforce</span><span class="p">,</span> <span class="n">maxforce</span><span class="p">,</span> <span class="n">maxperpforce</span><span class="p">,</span> <span class="n">converged</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CheckNEBConvergence</span><span class="p">(</span><span class="n">ForceTolerance</span><span class="p">,</span> <span class="n">MaxForce</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{:20f}</span><span class="s1"> </span><span class="si">{:20f}</span><span class="s1"> </span><span class="si">{:24f}</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;  initial&quot;</span><span class="p">,</span><span class="n">rmsforce</span><span class="p">,</span><span class="n">rmsperpforce</span><span class="p">,</span><span class="n">maxforce</span><span class="p">))</span>
+
+
+        <span class="c1"># Loop over iterations.</span>
+        <span class="k">for</span> <span class="n">ineb</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Iterations</span><span class="p">):</span>
+
+            <span class="c1"># Quickmin projection.</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nimages</span><span class="p">):</span>
+
+                <span class="n">TotalForceNorm</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">natoms</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                        <span class="n">TotalForceNorm</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">NEBforces</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
+                <span class="n">bconv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">TotalForceNorm</span> <span class="o">/</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">natoms</span><span class="p">))</span>
+                <span class="n">TotalForceNorm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">TotalForceNorm</span><span class="p">)</span>
+
+                <span class="n">dot</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="c1">#for i in range(1, self.nimages):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">natoms</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                        <span class="n">dot</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">velocities</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">NEBforces</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">/</span><span class="n">TotalForceNorm</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">dot</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="c1">#for i in range(1, self.nimages):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">velocities</span><span class="p">[:,:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="k">else</span><span class="p">:</span>
+                <span class="c1">#for i in range(1, self.nimages):</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">natoms</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">velocities</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">dot</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">NEBforces</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">/</span> <span class="n">TotalForceNorm</span><span class="p">)</span>
+
+
+            <span class="c1"># Update positions and velocities using Euler step.</span>
+            <span class="c1">#for i in range(1, self.nimages):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">natoms</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="o">+=</span> <span class="n">TimeStep</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">velocities</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">velocities</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="o">+=</span> <span class="n">TimeStep</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">NEBforces</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mass</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+
+
+
+            <span class="c1"># Evaluate new forces.</span>
+            <span class="k">if</span> <span class="n">PotentialType</span> <span class="o">==</span> <span class="s1">&#39;IDPP&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">EvaluateIDPP</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">GetFullPathEnergy</span><span class="p">(</span><span class="n">EnergyCalc</span><span class="p">)</span>
+
+            <span class="c1"># Calculate total forces, accounting for spring and projection.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">GetNEBForces</span><span class="p">(</span><span class="n">spring</span><span class="p">,</span> <span class="n">ClimbingImage</span><span class="p">)</span>
+
+            <span class="c1"># Check convergence.</span>
+            <span class="n">rmsforce</span><span class="p">,</span> <span class="n">rmsperpforce</span><span class="p">,</span> <span class="n">maxforce</span><span class="p">,</span> <span class="n">maxperpforce</span><span class="p">,</span> <span class="n">converged</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CheckNEBConvergence</span><span class="p">(</span><span class="n">ForceTolerance</span><span class="p">,</span> <span class="n">MaxForce</span><span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:3}</span><span class="s1"> </span><span class="si">{:26f}</span><span class="s1"> </span><span class="si">{:20f}</span><span class="s1"> </span><span class="si">{:24f}</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ineb</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">rmsforce</span><span class="p">,</span><span class="n">rmsperpforce</span><span class="p">,</span><span class="n">maxperpforce</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">converged</span><span class="p">:</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                    <span class="s2">&quot;-----------------------------------------------------------------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">*** CONVERGENCE ACHIEVED AFTER &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ineb</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; ITERATIONS ***</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="c1"># End of iterations - notify if failed to converge.</span>
+        <span class="k">if</span> <span class="n">converged</span> <span class="o">!=</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                <span class="s2">&quot;-----------------------------------------------------------------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">*** FAILED TO CONVERGE AFTER &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ineb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; ITERATIONS ***</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">*** PLEASE CHECK RESULTS CAREFULLY TO IDENTIFY THE PROBLEM! ***</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="RP.PrintToFile"><a class="viewcode-back" href="../../celeste.html#celeste.reactionpath.RP.PrintToFile">[docs]</a>    <span class="k">def</span> <span class="nf">PrintToFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">File</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;xyz&quot;</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints an entire reaction-path object ``rp`` as a series of xyz-format frames.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            format (str): Define the file output extension, currently only &quot;xyz&quot; is allowed.</span>
+<span class="sd">            File (str): File to print reaction path in.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">fout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">File</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">natoms</span>
+            <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">const</span><span class="o">.</span><span class="n">bohr_to_ang</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">const</span><span class="o">.</span><span class="n">bohr_to_ang</span>
+                <span class="n">z</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">const</span><span class="o">.</span><span class="n">bohr_to_ang</span>
+                <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">atomlabels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">fout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="RP.GetNEBForces"><a class="viewcode-back" href="../../celeste.html#celeste.reactionpath.RP.GetNEBForces">[docs]</a>    <span class="k">def</span> <span class="nf">GetNEBForces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spring</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">ClimbingImage</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates the NEB forces on all images.</span>
+
+<span class="sd">        The forces from the PES or from IDPP are assumed to be present in self.rpcxs[:].dvdr, and this routine</span>
+<span class="sd">        calculates the perpendicular forces plus the parallel spring contribution.</span>
+
+<span class="sd">        The total forces [n,3] at each ``CXS`` object are returned in ``self.rpcxs[:].NEBforces[n,3]``.</span>
+
+<span class="sd">        If ``ClimbingImage == True``, the climbing-image force is calculated on the highest-energy image.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            Climbing-image should not be used for IDPP, as the underlying effective potential is not related</span>
+<span class="sd">            to the actual potential energy surface of the system.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            spring (float): NEB spring constant.</span>
+<span class="sd">            ClimbingImage (bool): A flag indicating whether to use climbing-image forces.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nimages</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">natoms</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">:</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">tangent</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+
+
+        <span class="c1"># First, calculate the tangent vectors at each image.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GetTangents</span><span class="p">()</span>
+
+        <span class="c1"># If using climbing-image, identify the highest-energy image.</span>
+        <span class="k">if</span> <span class="n">ClimbingImage</span><span class="p">:</span>
+            <span class="n">En</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[:]</span><span class="o">.</span><span class="n">energy</span>
+            <span class="n">max_value</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">En</span><span class="p">)</span>
+            <span class="n">CI_image</span> <span class="o">=</span> <span class="n">En</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">max_value</span><span class="p">)</span>
+
+        <span class="c1"># Now we have the tangents, calculate the projected forces at each image.</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nim</span><span class="p">):</span>
+
+            <span class="n">dot</span> <span class="o">=</span> <span class="mf">0.000</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                    <span class="n">dot</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">dvdr</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">tangent</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">PerpendicularForces</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">dvdr</span> <span class="o">-</span> <span class="n">dot</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">tangent</span><span class="p">)</span>
+
+            <span class="n">d1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span><span class="p">)</span>
+            <span class="n">d2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">ParallelForces</span> <span class="o">=</span> <span class="n">spring</span><span class="o">*</span><span class="p">(</span><span class="n">d1</span><span class="o">-</span><span class="n">d2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">tangent</span>
+            <span class="c1">#</span>
+            <span class="c1"># dot = 0.000</span>
+            <span class="c1"># for j in range(n):</span>
+            <span class="c1">#     for k in range(3):</span>
+            <span class="c1">#         a = (self.rpcxs[i+1].positions[j,k] - self.rpcxs[i].positions[j,k])</span>
+            <span class="c1">#         b = (self.rpcxs[i].positions[j,k] - self.rpcxs[i-1].positions[j,k])</span>
+            <span class="c1">#         dot += spring * (a-b) * self.rpcxs[i].tangent[j,k]</span>
+            <span class="c1"># self.rpcxs[i].ParallelForces = dot * self.rpcxs[i].tangent</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">NEBforces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">PerpendicularForces</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">ParallelForces</span>
+
+        <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="RP.CheckNEBConvergence"><a class="viewcode-back" href="../../celeste.html#celeste.reactionpath.RP.CheckNEBConvergence">[docs]</a>    <span class="k">def</span> <span class="nf">CheckNEBConvergence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ForceTolerance</span> <span class="o">=</span> <span class="mf">1E-3</span><span class="p">,</span> <span class="n">MaxForce</span> <span class="o">=</span> <span class="mf">5E-3</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates indicators of NEB convergence, and decides whether or not convergence</span>
+<span class="sd">        has been achieved.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            rmsforce (float): RMS total force on the NEB string. This includes the perpendicular component</span>
+<span class="sd">                              from the PES plus the parallel spring component.</span>
+<span class="sd">            rmsperp (float): RMS of the perpendicular forces from the PES (in atomic units).</span>
+<span class="sd">            maxforce (float): Maximum single force component for the total forces (in atomic units).</span>
+<span class="sd">            maxperpforce (float): Maximum perpendicular force component (in atomic units)</span>
+<span class="sd">            converged (bool): Flag indicating whether the string is converged. This is based on comparing</span>
+<span class="sd">                        ``rmsperp`` and ``maxperpforce`` to the input thresholds ``ForceTolerance`` and ``MaxForce``.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">rmsforce</span> <span class="o">=</span> <span class="mf">0.000</span>
+        <span class="n">rmsperpforce</span> <span class="o">=</span> <span class="mf">0.000</span>
+        <span class="n">maxforce</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1E6</span>
+        <span class="n">maxperpforce</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1E6</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">natoms</span>
+        <span class="n">icount</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nimages</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                    <span class="n">icount</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">rmsforce</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">dvdr</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
+                    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">dvdr</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">maxforce</span><span class="p">:</span>
+                        <span class="n">maxforce</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">dvdr</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">])</span>
+                    <span class="n">rmsperpforce</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">PerpendicularForces</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
+                    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">PerpendicularForces</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">maxperpforce</span><span class="p">:</span>
+                        <span class="n">maxperpforce</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">PerpendicularForces</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="p">)</span>
+        <span class="n">rmsforce</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">rmsforce</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">icount</span><span class="p">)</span> <span class="p">)</span>
+        <span class="n">rmsperpforce</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">rmsperpforce</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">icount</span><span class="p">)</span> <span class="p">)</span>
+
+        <span class="n">converged</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">rmsperpforce</span> <span class="o">&lt;</span> <span class="n">ForceTolerance</span> <span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">maxperpforce</span> <span class="o">&lt;</span> <span class="n">MaxForce</span><span class="p">)</span> <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rmsforce</span><span class="p">,</span> <span class="n">rmsperpforce</span><span class="p">,</span> <span class="n">maxforce</span><span class="p">,</span> <span class="n">maxperpforce</span><span class="p">,</span> <span class="n">converged</span></div>
+
+
+<div class="viewcode-block" id="RP.GetTangents"><a class="viewcode-back" href="../../celeste.html#celeste.reactionpath.RP.GetTangents">[docs]</a>    <span class="k">def</span> <span class="nf">GetTangents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates the tangents to the NEB string at each image.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The tangents are estimated using the improved tangent method described in:</span>
+
+<span class="sd">            Improved tangent estimate in the nudged elastic band method for finding minimum energy paths</span>
+<span class="sd">            and saddle points, G. Henkelman and H. Jónsson, J. Chem. Phys., 113, 9978 (2000).</span>
+<span class="sd">            https://doi.org/10.1063/1.1323224</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">natoms</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nimages</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">tangent</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+
+            <span class="c1">#self.rpcxs[i].tangent = self.rpcxs[i + 1].positions - self.rpcxs[i-1].positions</span>
+
+            <span class="n">E</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">energy</span>
+            <span class="n">Ep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">energy</span>
+            <span class="n">Em</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">energy</span>
+
+            <span class="c1"># Case 1: V(i+1) &gt; V(i) &gt; V(i-1).</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">Ep</span> <span class="o">&gt;</span> <span class="n">E</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">E</span> <span class="o">&gt;</span> <span class="n">Em</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">tangent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span>
+
+            <span class="c1"># Case 2: V(i+1) &lt; V(i) &lt; V(i-1).</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">Ep</span> <span class="o">&lt;</span> <span class="n">E</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">E</span> <span class="o">&lt;</span> <span class="n">Em</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">tangent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span>
+
+            <span class="c1"># Case 3: image i is a minimum or maximum.</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">isMin</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">Ep</span> <span class="o">&gt;</span> <span class="n">E</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">Em</span> <span class="o">&gt;</span> <span class="n">E</span><span class="p">)</span> <span class="p">)</span>
+                <span class="n">isMax</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">Ep</span> <span class="o">&lt;</span> <span class="n">E</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">Em</span> <span class="o">&lt;</span> <span class="n">E</span><span class="p">)</span> <span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">isMin</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">isMax</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
+                    <span class="n">dvmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Ep</span><span class="o">-</span><span class="n">E</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Em</span><span class="o">-</span><span class="n">E</span><span class="p">)</span> <span class="p">)</span>
+                    <span class="n">dvmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Ep</span><span class="o">-</span><span class="n">E</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Em</span><span class="o">-</span><span class="n">E</span><span class="p">)</span> <span class="p">)</span>
+                    <span class="n">dp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span>
+                    <span class="n">dm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span>
+                    <span class="k">if</span> <span class="n">Ep</span> <span class="o">&gt;</span> <span class="n">Em</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">tangent</span> <span class="o">=</span> <span class="n">dp</span> <span class="o">*</span> <span class="n">dvmax</span> <span class="o">+</span> <span class="n">dm</span> <span class="o">*</span> <span class="n">dvmin</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">tangent</span> <span class="o">=</span> <span class="n">dp</span> <span class="o">*</span> <span class="n">dvmin</span> <span class="o">+</span> <span class="n">dm</span> <span class="o">*</span> <span class="n">dvmax</span>
+
+            <span class="c1"># Final job is to normalize the tangent</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">tangent</span> <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">tangent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">tangent</span> <span class="o">/</span> <span class="n">norm</span>
+
+        <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="RP.EvaluateIDPP"><a class="viewcode-back" href="../../celeste.html#celeste.reactionpath.RP.EvaluateIDPP">[docs]</a>    <span class="k">def</span> <span class="nf">EvaluateIDPP</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates the IDPP function and derivatives at all images along the ``rp`` object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Define space for targets.</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">natoms</span>
+        <span class="n">targets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">])</span>
+
+        <span class="c1"># Calculate the pair distance matrix for reactants and products.</span>
+        <span class="n">Rdist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">GetAllPairDistances</span><span class="p">()</span>
+        <span class="n">Pdist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nimages</span><span class="p">]</span><span class="o">.</span><span class="n">GetAllPairDistances</span><span class="p">()</span>
+
+        <span class="c1"># Loop over internal images.</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nimages</span><span class="p">):</span>
+            <span class="n">lam</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nimages</span><span class="p">)</span>
+            <span class="n">targets</span> <span class="o">=</span> <span class="n">Rdist</span> <span class="o">+</span> <span class="n">lam</span> <span class="o">*</span> <span class="p">(</span><span class="n">Pdist</span><span class="o">-</span><span class="n">Rdist</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rpcxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">IDPPFunction</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span>
+
+        <span class="k">return</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Scott Habershon
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

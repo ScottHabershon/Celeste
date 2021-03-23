@@ -1,0 +1,885 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>celeste.cxs &mdash; Celeste 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> Celeste
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installing Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../input.html">Input File Format for RunCeleste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Module descriptions</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Celeste</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>celeste.cxs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for celeste.cxs</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Defines the Chemical Structure (CXS) class object.</span>
+
+<span class="sd">The CXS class is the main container for loading, writing, and manipulating chemical structures;</span>
+<span class="sd">The chemical structure objects might represent single molecules or collections of molecules.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">celeste.chemical_data</span> <span class="k">as</span> <span class="nn">chemdata</span>
+<span class="kn">import</span> <span class="nn">celeste.constants</span> <span class="k">as</span> <span class="nn">const</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
+
+<div class="viewcode-block" id="CXS"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.CXS">[docs]</a><span class="k">class</span> <span class="nc">CXS</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Defines the chemical structure (CXS) object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        natoms (int) : Number of atoms</span>
+<span class="sd">        positions (float, list) : Atomic positions, assumed to be in atomic units (``Bohr``) by default.</span>
+<span class="sd">        atomlabels (str, list) : Atomic labels of all atoms.</span>
+<span class="sd">        comment (str) : A text comment describing the structure.</span>
+<span class="sd">        FileName (str, optional) : File from which structure may be read, if ``FileName is not None``.</span>
+<span class="sd">        PositionUnits (str, optional) : Units for input atomic positions. Atomic units are used internally, so</span>
+<span class="sd">            coordinates are converted after reading. Options for ``PositionUnits`` are ``Bohr`` or ``Angstrom``.</span>
+<span class="sd">        Empty (bool): Flag indicating whether to create an empty ``CXS`` object.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        natoms (int) : Number of atoms in structure.</span>
+<span class="sd">        positions (float, list) : Atomic positions.</span>
+<span class="sd">        comment (str) : Comment string describing the structure.</span>
+<span class="sd">        mass (float) : Atomic mass list.</span>
+<span class="sd">        nmol (int) : Number of molecules</span>
+<span class="sd">        namol (int, list) : Number of atoms in each molecule. For example, ``namol[0]`` is the number of</span>
+<span class="sd">                atoms in the first identified molecule.</span>
+<span class="sd">        molid (int, list) : Atomic indices of atoms in each identified molecule. For example,</span>
+<span class="sd">                ``molid[0][2]`` is the atomic index of the third atom in the first molecule.</span>
+<span class="sd">        mol (Molecule) : A created list of ``Molecule`` objects, generated based on ``nmol``, ``namol``,</span>
+<span class="sd">                and ``molid``.</span>
+<span class="sd">        dist (numpy, float) : Interatomic distance matrix, where element (i,j) gives the interatomic distances</span>
+<span class="sd">                between atoms i and j.</span>
+<span class="sd">        graph (numpy, int) : Adjacency matrix for the structure, with entries 1 for bonded atoms and 0 for non-bonded.</span>
+<span class="sd">                Note that the type of bonding does not matter here - we only report whether or not two atoms are bonded.</span>
+<span class="sd">        TotalCharge (int) : Formal charge on structure...</span>
+<span class="sd">        MolCharge (int, list) : Formal charge on each molecule in the structure.</span>
+<span class="sd">        dvdr (float,list) : Derivatives of energy with respect to Cartesian coordinates.</span>
+<span class="sd">        success (bool): Flag indicating whether last energy calculation performed for this structure</span>
+<span class="sd">                was successful or not.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        A CXS object can be created by either directly reading a structure from file:</span>
+
+<span class="sd">    .. code-block:: python3</span>
+
+<span class="sd">            a = CXS(FileName=&#39;test.xyz&#39;)</span>
+
+<span class="sd">    or by defining the number of atoms ``natoms``, atomic ``positions`` and ``atomlabels`` parameters:</span>
+
+<span class="sd">    .. code-block:: python3</span>
+
+<span class="sd">        a = CXS(natoms = 2, positions =[(0.0,0.0,0.0), (1.5,0.0,0.0)], atomlabels =[&#39;C&#39;,&#39;O&#39;],</span>
+<span class="sd">                comment = &quot;Carbon monoxide&quot;)</span>
+
+<span class="sd">    The example above creates a carbon monoxide molecule, with the carbon atom at (0,0,0) and the</span>
+<span class="sd">    oxygen atom at (1.5,0,0) (atomic units used by default).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">natoms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">positions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">atomlabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">FileName</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">PositionUnits</span><span class="o">=</span><span class="s1">&#39;Bohr&#39;</span><span class="p">,</span><span class="n">Empty</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialization of a CXS object, either from file FileName, or from direct definition.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># If requested, create and empty CXS object....</span>
+        <span class="k">if</span> <span class="n">Empty</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">natoms</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dvdr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">velocities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">NEBForces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">PerpendicularForces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ParallelForces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">atomlabels</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="s2">&quot;Empty CXS object&quot;</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="c1"># If FileName is defined, read from file - otherwise, use passed values.</span>
+            <span class="k">if</span> <span class="n">FileName</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># self.natoms,self.comment,self.atomlabels,self.positions = \</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ReadStructureFromFile</span><span class="p">(</span><span class="n">FileName</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="c1"># Check number of atoms is at least sensible.</span>
+                <span class="k">if</span> <span class="n">natoms</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error in cxs.__init__: Number of atoms must be defined.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="p">(</span><span class="n">natoms</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error in cxs.__init__: Number of atoms must be greater than zero.&quot;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">atomlabels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error in cxs.__init__: Atom labels must be defined.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">natoms</span> <span class="o">=</span> <span class="n">natoms</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="n">positions</span> <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dvdr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">natoms</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="n">comment</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">atomlabels</span> <span class="o">=</span> <span class="n">atomlabels</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dvdr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">velocities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">PerpendicularForces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ParallelForces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">NEBForces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+        <span class="c1"># Set the atomic masses.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SetMasses</span><span class="p">()</span>
+
+        <span class="c1"># Calculate the adjacency matrix.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GetGraph</span><span class="p">()</span>
+
+        <span class="c1"># Calculate the number and details of molecules - note that this results in a new set of molecule</span>
+        <span class="c1"># objects being created.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GetMols</span><span class="p">()</span>
+
+        <span class="c1"># Zero-out the energy:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">energy</span> <span class="o">=</span> <span class="mf">0.0000</span>
+
+
+<div class="viewcode-block" id="CXS.SetMasses"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.CXS.SetMasses">[docs]</a>    <span class="k">def</span> <span class="nf">SetMasses</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Allocates the atomic masses of each atom.</span>
+
+<span class="sd">        The masses (in atomic units, where mass of electron is 1) are stored in a dictionary in ``chemical_data.py``.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">             mass (float, list) : A list of atomic masses.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mass</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">chemdata</span><span class="o">.</span><span class="n">AtomicMass</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">atomlabels</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error in cxs.SetMasses - element not in chemical_data.py AtomicMass dictionary: &quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">atomlabels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">mass</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span>
+        <span class="k">return</span> <span class="n">mass</span></div>
+
+
+<div class="viewcode-block" id="CXS.GetGraph"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.CXS.GetGraph">[docs]</a>    <span class="k">def</span> <span class="nf">GetGraph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates the adjacency matrix ``self.graph`` for the structure.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The determination of whether atoms are `bonded&#39; or not is based on the covalent radii in the ``chemical_data``</span>
+<span class="sd">            module, as well as the ``BondingScaleFactor`` in ``constants.py``. The cut-off distance :math:`R_{cut}`</span>
+<span class="sd">            for each pair of atoms (i,j) is:</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                R_{cut} = \\alpha (R_{i} + R_{j})</span>
+
+<span class="sd">            where :math:`\\alpha` is ``BondingScaleFactor`` and :math:`R_{i,j}` are covalent radii.</span>
+
+
+<span class="sd">        Example:</span>
+<span class="sd">            After creating a CXS object, the adjacency matrix ``graph`` and the distance matrix ``dist``</span>
+<span class="sd">            can be calculated as follows:</span>
+
+<span class="sd">            .. code-block:: python3</span>
+
+<span class="sd">                a = CXS(FileName=&#39;test.xyz&#39;)</span>
+<span class="sd">                a.GetGraph()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">natoms</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">radius_i</span> <span class="o">=</span> <span class="n">chemdata</span><span class="o">.</span><span class="n">CovalentRadii</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">atomlabels</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">a</span><span class="p">[:]</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[:][</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">b</span><span class="p">[:]</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[:][</span><span class="n">j</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dist</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">radius_j</span> <span class="o">=</span> <span class="n">chemdata</span><span class="o">.</span><span class="n">CovalentRadii</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">atomlabels</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span>
+
+                <span class="c1"># Calculate the cutoff distance for this atom pair based on covalent radii</span>
+                <span class="c1"># and the BondingScaleFactor (in constants.py).</span>
+                <span class="n">rcut</span> <span class="o">=</span> <span class="p">(</span><span class="n">radius_i</span> <span class="o">+</span> <span class="n">radius_j</span><span class="p">)</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">BondingScaleFactor</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">rcut</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="CXS.PrintEnergy"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.CXS.PrintEnergy">[docs]</a>    <span class="k">def</span> <span class="nf">PrintEnergy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Simple routine to print energy in pretty format.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file (str): File to print energy. If ``File is None``, print to stdout.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">file</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">* Calculated energy = &quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="o">+</span><span class="s2">&quot; Eh</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CXS.Printdvdr"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.CXS.Printdvdr">[docs]</a>    <span class="k">def</span> <span class="nf">Printdvdr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Simple routine to print derivatives in pretty format.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file (str): File to print energy. If ``File is None``, print to stdout.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">file</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">* Calculated derivatives:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">):</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> </span><span class="si">{:f}</span><span class="s1"> </span><span class="si">{:f}</span><span class="s1"> </span><span class="si">{:f}</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">atomlabels</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">dvdr</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">dvdr</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">dvdr</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">2</span><span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="CXS.PrintGraph"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.CXS.PrintGraph">[docs]</a>    <span class="k">def</span> <span class="nf">PrintGraph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints the adjacency matrix to either ``file`` or standard output.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file (str) : File to print adjacency matrix stored in ``self.graph``.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            If ``file is None``, then prints to standard output.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">file</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">* NON-ZERO adjacency matrix elements for structure: &quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Atom &quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">atomlabels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; - Atom &quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">atomlabels</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CXS.GetMols"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.CXS.GetMols">[docs]</a>    <span class="k">def</span> <span class="nf">GetMols</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Uses the adjacency matrix in ``self.graph`` to determine the molecules defined by the chemical</span>
+<span class="sd">        structure object.</span>
+
+<span class="sd">        This is achieved using the Floyd-Warshall shortest-path algorithm to split the adjacency matrix into</span>
+<span class="sd">        disconnected sub-graphs.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Get shortest-paths between atoms based on connectivity matrix.</span>
+        <span class="n">dsp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GetShortestPaths</span><span class="p">()</span>
+
+        <span class="c1"># Get the molecules based on the shortest-path lengths.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nmol</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">namol</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">const</span><span class="o">.</span><span class="n">NMOLMAX</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">molid</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">const</span><span class="o">.</span><span class="n">NMOLMAX</span><span class="p">)]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">const</span><span class="o">.</span><span class="n">NAMOLMAX</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MolCharge</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">const</span><span class="o">.</span><span class="n">NMOLMAX</span><span class="p">)]</span>
+        <span class="n">na</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">natoms</span>
+
+        <span class="n">ifound</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">na</span><span class="p">)]</span>
+
+        <span class="k">while</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">ifound</span><span class="p">):</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">na</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">ifound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                    <span class="c1"># Started a molecule....</span>
+                    <span class="n">ifound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmol</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">namol</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">molid</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">nmol</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">break</span>
+
+
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">na</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">ifound</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                    <span class="n">jfound</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nmol</span><span class="p">):</span>
+
+                        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">namol</span><span class="p">[</span><span class="n">k</span><span class="p">]):</span>
+                            <span class="n">kl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">molid</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">l</span><span class="p">]</span>
+                            <span class="k">if</span> <span class="n">dsp</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">kl</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">const</span><span class="o">.</span><span class="n">BIG_BONDING</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">molid</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">namol</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span> <span class="o">=</span> <span class="n">j</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">namol</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                                <span class="n">ifound</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                                <span class="n">jfound</span> <span class="o">=</span> <span class="kc">True</span>
+                                <span class="k">break</span>
+                        <span class="k">if</span> <span class="n">jfound</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                            <span class="k">break</span>
+
+        <span class="c1"># Finally, assign molecule objects.</span>
+        <span class="n">nmol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmol</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mol</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmol</span><span class="p">):</span>
+            <span class="n">na</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">namol</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">lab</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">na</span><span class="p">):</span>
+                <span class="n">ii</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">molid</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[:][</span><span class="n">ii</span><span class="p">]</span>
+                <span class="n">pos</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">])</span>
+                <span class="n">lab</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atomlabels</span><span class="p">[</span><span class="n">ii</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">Molecule</span><span class="p">(</span><span class="n">natoms</span><span class="o">=</span><span class="n">na</span><span class="p">,</span><span class="n">positions</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span><span class="n">atomlabels</span><span class="o">=</span><span class="n">lab</span><span class="p">)</span> <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">formula</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">GetFormula</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="CXS.GetShortestPaths"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.CXS.GetShortestPaths">[docs]</a>    <span class="k">def</span> <span class="nf">GetShortestPaths</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Determine the shortest-path between atoms using the Floyd-Warshall algorithm.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            If atoms i and j are not bonded, the distance between them is assigned some very</span>
+<span class="sd">            large value ``BIG_BONDING`` which is stored in ``constants.py``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">natoms</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">BIG_BONDING</span>
+                <span class="n">dist</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+
+        <span class="c1"># Floyd-Warshall algorithm - note that dist is destroyed.</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">for</span>  <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                    <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">],</span> <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">+</span><span class="n">dist</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">dist</span></div>
+
+
+<div class="viewcode-block" id="CXS.PrintAllMols"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.CXS.PrintAllMols">[docs]</a>    <span class="k">def</span> <span class="nf">PrintAllMols</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints information on all molecules in structure.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">           file (str) : File to which molecule information is printed. If ``file is None``, then we print to stdout.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">file</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">* Molecule information for structure: &quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nmol</span><span class="p">):</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">+</span><span class="s2">&quot;+ Molecule: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;- Number of atoms = &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">namol</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;- Molecular formula = &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mol</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">formula</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CXS.ReadStructureFromFile"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.CXS.ReadStructureFromFile">[docs]</a>    <span class="k">def</span> <span class="nf">ReadStructureFromFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">FileName</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reads a ``CXS`` chemical structure object from file. Currently, only .xyz file formats are read.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            FileName (int) : Input filename. For now, this should be a standard .xyz file.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (tuple) : tuple containing</span>
+
+<span class="sd">                - natoms (int): Number of atoms.</span>
+<span class="sd">                - comment (str): A text comment, read from second line of xyz file.</span>
+<span class="sd">                - atomlabels (str): List of atom labels.</span>
+<span class="sd">                - positions (float, numpy array): x,y,z positions of all atoms.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># First check that FileName exists.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">assert</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">FileName</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: In ReadStructureFromFile, file &#39;&quot;</span><span class="o">+</span><span class="n">FileName</span><span class="o">+</span><span class="s2">&quot;&#39; does not exist&quot;</span><span class="p">)</span>
+
+
+        <span class="c1"># Check that this is identified as an xyz file.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">assert</span><span class="p">(</span><span class="n">FileName</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;xyz&#39;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: In ReadStructureFromFile, FileName must end with .xyz&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Read the file.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atomlabels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">FileName</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">natoms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: In ReadStructureFromFile, problem reading line &#39;&quot;</span><span class="o">+</span><span class="n">line</span><span class="p">)</span>
+
+
+                    <span class="c1"># Check that b,c,d can be converted to floats.</span>
+                    <span class="c1">#</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="nb">float</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+                        <span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+                        <span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: In ReadStructureFromFile, (x,y,z) coordinates not floats in line: &quot;</span><span class="o">+</span><span class="n">line</span><span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">atomlabels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">const</span><span class="o">.</span><span class="n">ang_to_bohr</span><span class="p">,</span><span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">*</span><span class="n">const</span><span class="o">.</span><span class="n">ang_to_bohr</span><span class="p">,</span><span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">*</span><span class="n">const</span><span class="o">.</span><span class="n">ang_to_bohr</span><span class="p">])</span>
+
+        <span class="c1"># Check that the number of coordinate lines matches the number of atoms.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">assert</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">natoms</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atomlabels</span><span class="p">)</span> <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: In ReadStructureFromFile, number of atoms and number of coordinate lines don&#39;t match.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Return values.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">)</span>
+        <span class="k">return</span> \</div>
+            <span class="c1"># natoms,comment,atomlabels,np.array(positions)</span>
+
+
+<div class="viewcode-block" id="CXS.PrinttoFile"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.CXS.PrinttoFile">[docs]</a>    <span class="k">def</span> <span class="nf">PrinttoFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;xyz&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints structure to file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file (str): Filename to write the structure to.</span>
+<span class="sd">            format (str): Output format. Allowed values: *xyz* only....</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">format</span> <span class="o">!=</span> <span class="s1">&#39;xyz&#39;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;* Only xyz supported in cxs.PrinttoFile right now...&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">format</span> <span class="o">==</span> <span class="s1">&#39;xyz&#39;</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">):</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">bohr_to_ang</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">bohr_to_ang</span>
+                <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">bohr_to_ang</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">  </span><span class="si">{:14f}{:14f}{:14f}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atomlabels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CXS.GetSpinandCharge"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.CXS.GetSpinandCharge">[docs]</a>    <span class="k">def</span> <span class="nf">GetSpinandCharge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates the total charge and the spin multiplicity on the structure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># First count electrons assuming neutral....</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nel</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TotalCharge</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">):</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atomlabels</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nel</span> <span class="o">+=</span> <span class="n">chemdata</span><span class="o">.</span><span class="n">ElementSymbol</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nmol</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nel</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MolCharge</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">TotalCharge</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MolCharge</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+
+        <span class="c1"># Spin multiplicity.....based on odd or even electrons.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nel</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">multiplicity</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">multiplicity</span> <span class="o">=</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="CXS.CopyCXS"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.CXS.CopyCXS">[docs]</a>    <span class="k">def</span> <span class="nf">CopyCXS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Makes a copy of the self.CXS object in a safe manner.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            cxnew (``CXS``): A new ``CXS`` object which is a copy of ``self``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># cxnew = CXS(Empty=True)</span>
+        <span class="c1"># pos = self.positions</span>
+        <span class="c1"># cxnew.atomlabels = self.atomlabels</span>
+        <span class="c1"># cxnew.positions = pos</span>
+        <span class="c1"># cxnew.mass = self.mass</span>
+        <span class="c1"># cxnew.comment = self.comment</span>
+        <span class="c1"># cxnew.natoms = self.natoms</span>
+        <span class="c1"># cxnew.MolCharge = self.MolCharge</span>
+        <span class="c1"># cxnew.graph = self.graph</span>
+        <span class="c1"># cxnew.mol = self.mol</span>
+        <span class="c1"># cxnew.molid = self.molid</span>
+        <span class="c1"># cxnew.namol = self.namol</span>
+
+        <span class="n">cxnew</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cxnew</span></div>
+
+
+<div class="viewcode-block" id="CXS.NavigationFunction"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.CXS.NavigationFunction">[docs]</a>    <span class="k">def</span> <span class="nf">NavigationFunction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cxp</span><span class="p">,</span> <span class="n">knav</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Evaluates the navigation function for MEP calculation, and calculates the derivatives.</span>
+
+<span class="sd">        In the current implementation, the navigation function is similar to that used in IDPP, namely:</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            V_{nav}(\mathbf{r}) = \sum_{i,j} k_{nav} ( r_{ij} - r_{ij}^{P})^2,</span>
+
+<span class="sd">        Here, :math:`k_{nav}` is a spring-constant for the navigation function, :math:`r_{ij}^{P}`</span>
+<span class="sd">        is the interatomic distance between :math:`i` and :math:`j` in the products (``cxp``), and :math:`r_{ij}` is</span>
+<span class="sd">        the corresponding distance in the current structure (``self``).</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The navigation function is returned by this routine, and the derivatives with respect to the</span>
+<span class="sd">            Cartesian coordinates are placed into ``self.dvdr_nav``.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Enav (float): Value of the navigation function.</span>
+<span class="sd">            cxp (``CXS`` object): Chemical structure object containing the target product structure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Enav</span> <span class="o">=</span> <span class="mf">0.00000</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">dp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">dxr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">natoms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dvdr_nav</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">d</span><span class="p">[:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">j</span><span class="p">,:]</span>
+                <span class="n">dp</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">cxp</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">-</span> <span class="n">cxp</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">j</span><span class="p">,:]</span>
+                <span class="n">dr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+                <span class="n">dr_P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span>
+                <span class="n">onr</span> <span class="o">=</span> <span class="mf">1.000</span><span class="o">/</span><span class="n">dr</span>
+                <span class="n">dxr</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[:]</span> <span class="o">*</span> <span class="n">onr</span>
+                <span class="n">t1</span> <span class="o">=</span> <span class="n">dr</span><span class="o">-</span><span class="n">dr_P</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Enav</span> <span class="o">+=</span> <span class="n">knav</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">*</span> <span class="n">t1</span>
+                <span class="n">dE</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">knav</span> <span class="o">*</span> <span class="n">t1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dvdr_nav</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">+=</span> <span class="n">dE</span> <span class="o">*</span> <span class="n">dxr</span><span class="p">[:]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dvdr_nav</span><span class="p">[</span><span class="n">j</span><span class="p">,:]</span> <span class="o">-=</span> <span class="n">dE</span> <span class="o">*</span> <span class="n">dxr</span><span class="p">[:]</span>
+
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="CXS.NavigationDot"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.CXS.NavigationDot">[docs]</a>    <span class="k">def</span> <span class="nf">NavigationDot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates the dot product between the derivatives of the PES and those given by the</span>
+<span class="sd">        navigation function.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The calculated dot product is stored in ``self.NavigationDotForces``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mag1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">dvdr</span> <span class="p">)</span>
+        <span class="n">mag2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">dvdr_nav</span> <span class="p">)</span>
+        <span class="nb">sum</span> <span class="o">=</span> <span class="mf">0.0000</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                <span class="nb">sum</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dvdr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dvdr_nav</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NavigationDotForces</span> <span class="o">=</span> <span class="nb">sum</span> <span class="o">/</span> <span class="p">(</span><span class="n">mag1</span> <span class="o">*</span> <span class="n">mag2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CXS.GetAllPairDistances"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.CXS.GetAllPairDistances">[docs]</a>    <span class="k">def</span> <span class="nf">GetAllPairDistances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates ALL interatomic distances in the current structure, and returns them in</span>
+<span class="sd">        a numpy array ``distances``. Also stores the distances in ``self.distances``.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            distances (np, float): n-by-n matrix containing all atomic pair-distance (in atomic units)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">natoms</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">distances</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">j</span><span class="p">,:])</span>
+                <span class="n">distances</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">distances</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distance</span> <span class="o">=</span> <span class="n">distances</span>
+        <span class="k">return</span> <span class="n">distances</span></div>
+
+
+<div class="viewcode-block" id="CXS.KabschAlign"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.CXS.KabschAlign">[docs]</a>    <span class="k">def</span> <span class="nf">KabschAlign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cxt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Uses the Kabsch algorithm to align structure to a target structure ``cxt``. First, the centroids of the</span>
+<span class="sd">        two structures are aligned (so the centroid of ``self`` is shifted to match that of ``cxt``), then the</span>
+<span class="sd">        orientation of ``self`` is changed to match that of ``cxt`` using the Kabsch algorithm. This results</span>
+<span class="sd">        in ``self`` having the minimized RMS displacement from cxt.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cxt (a ``CXS`` structure): A target structure, against which ``self`` is optimally aligned.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Check that the number of atoms in both structures is the same.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">natoms</span> <span class="o">!=</span> <span class="n">cxt</span><span class="o">.</span><span class="n">natoms</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;* Error in cxs.KabschAlign: Number of atoms in two structures is NOT the same!&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Calculate centroid.</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">natoms</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">x</span><span class="p">[:]</span> <span class="o">+=</span> <span class="n">cxt</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+        <span class="c1"># Shift the current structure to the centroid.</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">-=</span> <span class="n">x</span><span class="p">[:]</span>
+
+        <span class="c1"># Finally, rotate self.positions to match cxt.positions using the Kabsch algorithm, as implemented</span>
+        <span class="c1"># in scipy:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">cxt</span><span class="o">.</span><span class="n">positions</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span>
+        <span class="n">Rotation</span><span class="p">,</span> <span class="n">rmsd</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">Rotation</span><span class="o">.</span><span class="n">align_vectors</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+
+        <span class="c1"># Finally, apply the rotation:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="n">Rotation</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CXS.IDPPFunction"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.CXS.IDPPFunction">[docs]</a>    <span class="k">def</span> <span class="nf">IDPPFunction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">TargetDistances</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates the IDPP potential function and its derivatives for the current structure.</span>
+
+<span class="sd">        The ``TargetDistances`` need to be passed into this function; in IDPP, these are linearly</span>
+<span class="sd">        interpolated between the reactants and products according to:</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            r_{ij}^{target} = r_{ij}^{R} + \frac{k}{n} (r_{ij}^{R} - r_{ij}^{P})</span>
+
+<span class="sd">        where :math:``r_{ij}^{R}`` is the inter-atomic distance between two atoms in the reactant structure,</span>
+<span class="sd">        :math&quot;``r_{ij}^{P} is the corresponding distance in the product.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            TargetDistances (float): An [n,n] array of target distances, where n is the number of atoms.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Eidpp (float): Calculated IDPP energy value.</span>
+<span class="sd">            derivs (float): Derivatives of IDPP cost function, size [N,3].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">natoms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">energy</span> <span class="o">=</span> <span class="mf">0.000</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dvdr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">dxr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+        <span class="c1"># Calculate function and derivs.</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">d</span><span class="p">[:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">j</span><span class="p">,:]</span>
+                <span class="n">dr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span> <span class="n">d</span> <span class="p">)</span>
+                <span class="n">onr</span> <span class="o">=</span> <span class="mf">1.000</span> <span class="o">/</span> <span class="n">dr</span>
+                <span class="n">onr4</span> <span class="o">=</span> <span class="n">onr</span><span class="o">**</span><span class="mi">4</span>
+                <span class="n">dxr</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[:]</span> <span class="o">*</span> <span class="n">onr</span>
+                <span class="n">t1</span> <span class="o">=</span> <span class="n">dr</span> <span class="o">-</span> <span class="n">TargetDistances</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">energy</span> <span class="o">+=</span> <span class="n">onr4</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">*</span> <span class="n">t1</span>
+                <span class="n">dEdr</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">*</span> <span class="n">onr4</span> <span class="o">-</span> <span class="mf">4.0</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">*</span> <span class="p">(</span><span class="n">onr4</span> <span class="o">*</span> <span class="n">onr</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dvdr</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">+=</span> <span class="n">dEdr</span> <span class="o">*</span> <span class="n">dxr</span><span class="p">[:]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dvdr</span><span class="p">[</span><span class="n">j</span><span class="p">,:]</span> <span class="o">-=</span> <span class="n">dEdr</span> <span class="o">*</span> <span class="n">dxr</span><span class="p">[:]</span>
+        <span class="k">return</span></div></div>
+
+
+<span class="c1">########################</span>
+
+<div class="viewcode-block" id="Molecule"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.Molecule">[docs]</a><span class="k">class</span> <span class="nc">Molecule</span><span class="p">(</span><span class="n">CXS</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Defines the &quot;molecule&quot; sub-class. This is an inherited class (base-class is ``CXS``) defining</span>
+<span class="sd">    individual molecules in a ``CXS`` object.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        formula (string) : A string containing the chemical formula of the molecule.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Molecule.GetMols"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.Molecule.GetMols">[docs]</a>    <span class="k">def</span> <span class="nf">GetMols</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;When GetMols is called for a molecule object, it should not return anything new - this function ensures</span>
+<span class="sd">        that happens.....</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nmol</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GetFormula</span><span class="p">()</span>
+        <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="Molecule.GetFormula"><a class="viewcode-back" href="../../celeste.html#celeste.cxs.Molecule.GetFormula">[docs]</a>    <span class="k">def</span> <span class="nf">GetFormula</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a string representation of the molecular chemical formula.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            formula (string) : A string containing the chemical formula of the molecule.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nelem</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">chemdata</span><span class="o">.</span><span class="n">nelements</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">chemdata</span><span class="o">.</span><span class="n">ElementSymbol</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">atomlabels</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
+                    <span class="n">nelem</span><span class="p">[</span><span class="n">chemdata</span><span class="o">.</span><span class="n">ElementSymbol</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">formula</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">chemdata</span><span class="o">.</span><span class="n">ElementSymbol</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nelem</span><span class="p">[</span><span class="n">chemdata</span><span class="o">.</span><span class="n">ElementSymbol</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">formula</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="n">formula</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">nelem</span><span class="p">[</span><span class="n">chemdata</span><span class="o">.</span><span class="n">ElementSymbol</span><span class="p">[</span><span class="n">key</span><span class="p">]])</span>
+        <span class="k">return</span> <span class="n">formula</span></div></div>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Scott Habershon
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,558 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>celeste.pes &mdash; Celeste 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> Celeste
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installing Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../input.html">Input File Format for RunCeleste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Module descriptions</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Celeste</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>celeste.pes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for celeste.pes</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Contains routines relating to potential energy surface calculations for</span>
+<span class="sd">``CXS`` objects.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">celeste.chemical_data</span> <span class="k">as</span> <span class="nn">chemdata</span>
+<span class="kn">import</span> <span class="nn">celeste.constants</span> <span class="k">as</span> <span class="nn">const</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">ast</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+
+<div class="viewcode-block" id="PES"><a class="viewcode-back" href="../../celeste.html#celeste.pes.PES">[docs]</a><span class="k">class</span> <span class="nc">PES</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Defines the PES object, the main object used in interfacing with energy calculations.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        calctype (str) : Calculation type. Allowed values:</span>
+
+<span class="sd">                - *Energy*: Performs an energy and gradient evaluation.</span>
+<span class="sd">                - *Optimize*: Performs geometry optimization.</span>
+<span class="sd">                - *Frequency*: Performs frequency/thermodynamics calculation.</span>
+
+<span class="sd">        code (str) : Identifies which code to run to perform calculation. Allowed values are **orca**</span>
+<span class="sd">        executable (str): Identifies the external executable for ab initio calculation. *This should be an available</span>
+<span class="sd">            executable installed on your computer.*</span>
+<span class="sd">        calctemplate (str, optional) : Identifies template file for ab initio calculation.</span>
+<span class="sd">        arglist (str,optional) : Gives directives to be used by external ab initio codes,</span>
+<span class="sd">                for example relating to DFT calculation type or basis set.)</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        PES objects can be initialized by either providing the ``arglist`` containing the</span>
+<span class="sd">        set of arguments for the energy calculation, or by providing the name of a template file ``calctemplate``.</span>
+
+<span class="sd">        If both ``arglist`` and ``calctemplate`` are provided to a ``PES`` object, it&#39;s not clear</span>
+<span class="sd">        what the user intends (*i.e.* which one do we use?), so the code will flag an error.</span>
+
+
+<span class="sd">    Example:</span>
+<span class="sd">        To use the ``arglist`` to create a ``PES`` object to perform ORCA energy calcuations</span>
+<span class="sd">        using DFT B3LYP and a def2-SVP basis:</span>
+
+<span class="sd">            .. code-block:: python3</span>
+
+<span class="sd">               d={ &#39;calctype&#39; : &quot;Energy&quot;,</span>
+<span class="sd">                    &#39;code&#39; : &quot;orca&quot;,</span>
+<span class="sd">                    &#39;executable&#39; : &quot;~/orca&quot;,</span>
+<span class="sd">                    &#39;arglist&#39; : &quot;! DFT B3LYP def2-SVP engrad&quot; }</span>
+<span class="sd">                ecalc = PES(d)</span>
+
+<span class="sd">        Now suppose we have a ``CXS`` object created as follows:</span>
+
+<span class="sd">            .. code-block:: python3</span>
+
+<span class="sd">                a = CXS(natoms = 2, positions =[(0.0,0.0,0.0), (1.5,0.0,0.0)], atomlabels =[&#39;C&#39;,&#39;O&#39;],</span>
+<span class="sd">                comment = &quot;Carbon monoxide&quot;)</span>
+
+<span class="sd">        To perform PES calculation ``ecalc`` on the ``CXS`` object ``a``, we then do:</span>
+
+<span class="sd">            .. code-block :: python3</span>
+
+<span class="sd">                E = ecalc.RunPES( a )</span>
+
+<span class="sd">        What happens when we run this command? First, the ``PES`` object writes a file which is in the correct</span>
+<span class="sd">        format for the external *ab initio* code. Next, the external code is executed with the input file. Finally,</span>
+<span class="sd">        the results of the calculation are read back into the ``CXS`` object. So, in the example above, the</span>
+<span class="sd">        ORCA input file which was created looks like this:</span>
+
+
+<span class="sd">             .. code-block :: console</span>
+
+<span class="sd">                    ! DFT B3LYP def2-SVP engrad</span>
+<span class="sd">                    *xyzfile 0 1 temp.xyz</span>
+
+
+<span class="sd">        Here, the first directive line is the same as the one we had in the dictionary which initialized the</span>
+<span class="sd">        ``PES`` object. The second line identifies the charge (0) and spin-multiplicity (1), as well as the</span>
+<span class="sd">        temporary xyz file which stores the coordinates of the ``CXS`` structure; this temporary file (``temp.xyz``)</span>
+<span class="sd">        is generated when ``ecalc.RunPES`` is executed.</span>
+
+<span class="sd">        Note that the arglist entry in the input list can also be a list; in this case, each list member is</span>
+<span class="sd">        interpreted as a new line in the input file required for the ab initio code. For example,</span>
+
+<span class="sd">              .. code-block:: python3</span>
+
+
+<span class="sd">                d={ &#39;calctype&#39; : &quot;Energy&quot;,</span>
+<span class="sd">                    &#39;code&#39; : &quot;orca&quot;,</span>
+<span class="sd">                    &#39;executable&#39; : &quot;~/orca&quot;,</span>
+<span class="sd">                    &#39;arglist&#39; : [&quot;! DFT B3LYP def2-SVP&quot;, &quot;! engrad&quot;] }</span>
+<span class="sd">                ecalc = PES(d)</span>
+
+<span class="sd">        The resulting ORCA input file in this case will look as follows:</span>
+
+<span class="sd">               .. code-block :: console</span>
+
+<span class="sd">                    ! DFT B3LYP def2-SVP</span>
+<span class="sd">                    ! engrad</span>
+<span class="sd">                    *xyzfile 0 1 temp.xyz</span>
+
+<span class="sd">        Further examples of PES calculation set-ups can be found in the Examples section.</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">calctype</span> <span class="o">=</span> <span class="s2">&quot;Energy&quot;</span><span class="p">,</span> <span class="n">code</span> <span class="o">=</span> <span class="s2">&quot;orca&quot;</span><span class="p">,</span> <span class="n">executable</span> <span class="o">=</span> <span class="s2">&quot;~/orca&quot;</span><span class="p">,</span> <span class="n">arglist</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">calctemplate</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a ``PES`` object for energy calculations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calctype</span> <span class="o">=</span> <span class="n">calctype</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="n">code</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">executable</span> <span class="o">=</span> <span class="n">executable</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arglist</span> <span class="o">=</span> <span class="n">arglist</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calctemplate</span> <span class="o">=</span> <span class="n">calctemplate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="n">comment</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fromtemplate</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fromarglist</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Check the input - either from template file or arglist. If both are defined, we need to flag</span>
+        <span class="c1"># an error....</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calctemplate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>   <span class="c1"># No template file defined...</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">fromarglist</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="c1"># Check that arglist is defined...if not, we stop.</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">assert</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">arglist</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error in PES.__init__: Both arglist and calctemplate are empty!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span> <span class="c1"># Template file found....</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">fromtemplate</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="c1"># Check that arglist is empty...if not, we stop.</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">assert</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">arglist</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error in PES.__init__: both calctemplate are defined (not sure which to use)!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="PES.PrintPESDetails"><a class="viewcode-back" href="../../celeste.html#celeste.pes.PES.PrintPESDetails">[docs]</a>    <span class="k">def</span> <span class="nf">PrintPESDetails</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints the details of the PES object to either file or stdout (if File is None)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">file</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">*** PES Calculation details ***</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;- Calculation comment: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;- Calculation type: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calctype</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;- Calculation code: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">code</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;- Executable: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">executable</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;- Argument list: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arglist</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;- Template file: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calctemplate</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">*******************************</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PES.RunPES"><a class="viewcode-back" href="../../celeste.html#celeste.pes.PES.RunPES">[docs]</a>    <span class="k">def</span> <span class="nf">RunPES</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Performs a PES calculation on the chemical structure object ``cx``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cx (``CXS`` object) : A chemical structure object provided by ``cxs.py``. This should be a valid ``CXS``</span>
+<span class="sd">                                object containing atomic labels and coordinates.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            success (bool): Flag indicating whether calculation was successful.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            As a result of the electronic structure calculation, cx.energy, cx.dvdr and cx.positions will be</span>
+<span class="sd">            updated, depending on calculation options:</span>
+
+<span class="sd">                - *calctype = Energy*: ``cx.energy`` and ``cx.dvdr`` are read from calculation output, but</span>
+<span class="sd">                        ``cx.positions`` remains untouched.</span>
+<span class="sd">                - *calctype = Optimize&quot;: ``cx.energy``, ``cx.dvdr`` and ``cx.positions`` are all read from</span>
+<span class="sd">                        calculation output.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The return flag does not indicate anything about the reliability or quality of the results of the</span>
+<span class="sd">            energy calculation; instead, it reports on simply whether the calculation ran as expected or not.</span>
+<span class="sd">            It&#39;s up to you to make sure that the results are sensible!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="s1">&#39;orca&#39;</span><span class="p">:</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RunOrcaCalc</span><span class="p">(</span> <span class="n">cx</span> <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;non-orca not yet implemented&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">cx</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="n">success</span>
+        <span class="k">return</span> <span class="n">success</span></div>
+
+
+<div class="viewcode-block" id="PES.RunOrcaCalc"><a class="viewcode-back" href="../../celeste.html#celeste.pes.PES.RunOrcaCalc">[docs]</a>    <span class="k">def</span> <span class="nf">RunOrcaCalc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">FileRoot</span><span class="o">=</span><span class="s2">&quot;orca_temp&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Runs an ORCA calculation.</span>
+
+<span class="sd">        This function writes an ORCA input file using either the argument list or template file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cx (CXS object): Chemical structure object to run calculation on.</span>
+<span class="sd">            FileRoot (str) : Root to use for temporary input/output files.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            success (bool): Flag indicating whether the calulation completed successfully.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The ``success`` flag does not indicate anything about the energy calculation itself; it</span>
+<span class="sd">            simply indicates whether or not the calculation finished, as judged by the appearance of</span>
+<span class="sd">            the expected output files.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Set the file root for the orca file.</span>
+        <span class="n">fr</span> <span class="o">=</span> <span class="n">FileRoot</span>
+
+        <span class="c1"># Remove any previous orca data...</span>
+        <span class="n">ofiles</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;orca_temp*&#39;</span><span class="p">)</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s1">&#39;rm&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">ofiles</span><span class="p">)</span>
+
+        <span class="c1"># First, print the structure to xyz file.</span>
+        <span class="n">cx</span><span class="o">.</span><span class="n">PrinttoFile</span><span class="p">(</span> <span class="n">file</span><span class="o">=</span><span class="s1">&#39;temp.xyz&#39;</span><span class="p">,</span><span class="nb">format</span> <span class="o">=</span> <span class="s1">&#39;xyz&#39;</span> <span class="p">)</span>
+
+        <span class="c1"># Calculate spin multiplicity...</span>
+        <span class="n">cx</span><span class="o">.</span><span class="n">GetSpinandCharge</span><span class="p">()</span>
+
+        <span class="c1"># Option 1: Run from argument list.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fromarglist</span><span class="p">:</span>
+
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fr</span><span class="o">+</span><span class="s1">&#39;.in&#39;</span><span class="p">,</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arglist</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">item</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;* xyzfile &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">cx</span><span class="o">.</span><span class="n">TotalCharge</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">cx</span><span class="o">.</span><span class="n">multiplicity</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="s2">&quot;temp.xyz</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c1"># Option 2: Run from template file.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;* Not yet done from file in pes.RunOrcaCalc&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Execute the calculation.</span>
+        <span class="n">fout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fr</span><span class="o">+</span><span class="s1">&#39;.output&#39;</span><span class="p">,</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">executable</span><span class="p">),</span><span class="n">fr</span><span class="o">+</span><span class="s2">&quot;.in&quot;</span><span class="p">],</span><span class="n">stdout</span><span class="o">=</span><span class="n">fout</span> <span class="p">)</span>
+
+        <span class="c1"># Check that the engrad file exists, signifying calculation complete.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fr</span><span class="o">+</span><span class="s2">&quot;.engrad&quot;</span><span class="p">):</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">return</span> <span class="n">success</span>
+
+        <span class="c1"># Read in the lines from the engrad file.</span>
+        <span class="n">fen</span> <span class="o">=</span> <span class="n">fr</span> <span class="o">+</span> <span class="s2">&quot;.engrad&quot;</span>
+        <span class="n">pattern1</span> <span class="o">=</span> <span class="s2">&quot;# The current total energy in Eh&quot;</span>
+        <span class="n">pattern2</span> <span class="o">=</span> <span class="s2">&quot;# The current gradient in Eh/bohr&quot;</span>
+        <span class="n">pattern3</span> <span class="o">=</span> <span class="s2">&quot;# The atomic numbers and current coordinates in Bohr&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fen</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+                <span class="c1"># For the energy line, read the 2 lines after pattern1 - the energy is the second line...</span>
+                <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="n">pattern1</span><span class="p">:</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
+                    <span class="n">cx</span><span class="o">.</span><span class="n">energy</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+                <span class="c1"># Read in derivative data in atomic units.</span>
+                <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="n">pattern2</span><span class="p">:</span>
+                    <span class="n">cx</span><span class="o">.</span><span class="n">dvdr</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">3</span><span class="o">*</span><span class="n">cx</span><span class="o">.</span><span class="n">natoms</span><span class="p">)]</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cx</span><span class="o">.</span><span class="n">natoms</span><span class="p">):</span>
+                        <span class="n">cx</span><span class="o">.</span><span class="n">dvdr</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">]),</span><span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="p">]),</span><span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">+</span><span class="mi">3</span><span class="p">])])</span>
+                    <span class="n">cx</span><span class="o">.</span><span class="n">dvdr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cx</span><span class="o">.</span><span class="n">dvdr</span><span class="p">)</span>
+
+                <span class="c1"># If the calctype is optimization, then the structure itself needs to be updated by</span>
+                <span class="c1"># reading in the new coordinates.</span>
+                <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="n">pattern3</span><span class="p">:</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">cx</span><span class="o">.</span><span class="n">natoms</span><span class="p">)]</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cx</span><span class="o">.</span><span class="n">natoms</span><span class="p">):</span>
+                        <span class="n">cx</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="p">[(</span><span class="n">j</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]),</span><span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="p">[(</span><span class="n">j</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]),</span><span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="p">[(</span><span class="n">j</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="mi">3</span><span class="p">])]</span>
+                    <span class="n">cx</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cx</span><span class="o">.</span><span class="n">positions</span><span class="p">)</span>
+
+        <span class="c1"># If we get here, everything (at least in reading) was fine...</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">success</span></div></div>
+
+
+<div class="viewcode-block" id="InitializePESCalcs"><a class="viewcode-back" href="../../celeste.html#celeste.pes.InitializePESCalcs">[docs]</a><span class="k">def</span> <span class="nf">InitializePESCalcs</span><span class="p">(</span><span class="n">npes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">PESdetails</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initializes a set of PES calculation objects using PESdetails input dictionaries.</span>
+<span class="sd">     </span>
+<span class="sd">    Args:</span>
+<span class="sd">        npes (int): Number of PES objects to be initialized (limited to 0, 1 or 2). </span>
+<span class="sd">        PESdetails (dict): Dictionary of keywords for PES set-up. These will be PES calculation dependent!</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        EnergyCalcs (PES): List of PES calculation objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">EnergyCalcs</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">npes</span><span class="p">):</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">PESdetails</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">EnergyCalcs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PES</span><span class="p">(</span><span class="o">**</span><span class="n">d</span><span class="p">))</span>
+
+    <span class="c1"># Check the details of the PES calculation types - we need to make sure there is only 1 Energy calculation</span>
+    <span class="c1"># type and 1 optimization type.</span>
+    <span class="n">nopt</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">nen</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">en</span> <span class="ow">in</span> <span class="n">EnergyCalcs</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">en</span><span class="o">.</span><span class="n">calctype</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;optimize&#39;</span><span class="p">:</span>
+            <span class="n">nopt</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;energy&#39;</span><span class="p">:</span>
+            <span class="n">nen</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">nopt</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">** Harsh Realm...Number of defined OPTIMIZE calculation objects must be less than 2!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nen</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">** Harsh Realm...Number of defined ENERGY calculation objects must be less than 2!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">EnergyCalcs</span></div>
+
+
+<div class="viewcode-block" id="Driver"><a class="viewcode-back" href="../../celeste.html#celeste.pes.Driver">[docs]</a><span class="k">def</span> <span class="nf">Driver</span><span class="p">(</span><span class="n">cx</span><span class="p">,</span><span class="n">EnergyCalc</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;Energy&#39;</span><span class="p">,):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is a PES evaluation driver. Given a set of energy calculation types and a ``CXS`` object, this</span>
+<span class="sd">    routine identifies the correct energy calculation according to ``type``, then runs the calculation.</span>
+
+<span class="sd">    This driver provides an alternative route to performing energy calculations which is useful in</span>
+<span class="sd">    calculations where several mixtures of calculation types are requested (e.g. NEB calculations).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        type: Type of calculation to be performed. Either &#39;Energy&#39;, &#39;Optimize&#39; or &#39;Hessian&#39;.</span>
+<span class="sd">        cx: Chemical structure object to perform calculation on.</span>
+<span class="sd">        EnergyCalc: List of energy calculation types.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        success (bool): Flag indicating problems (or not) with energy calculation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">OK</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">en</span> <span class="ow">in</span> <span class="n">EnergyCalc</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">en</span><span class="o">.</span><span class="n">calctype</span> <span class="o">==</span> <span class="nb">type</span><span class="p">:</span>
+            <span class="n">OK</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="n">en</span><span class="o">.</span><span class="n">RunPES</span><span class="p">(</span><span class="n">cx</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">OK</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">** Harsh Realm... &quot;</span> <span class="o">+</span> <span class="nb">type</span> <span class="o">+</span> <span class="s2">&quot; is not an available PES calculation type in pes.Driver</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">success</span></div>
+
+
+
+
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Scott Habershon
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

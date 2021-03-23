@@ -1,0 +1,1524 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>celeste package &mdash; Celeste 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Module descriptions" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Celeste
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input File Format for RunCeleste</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Module descriptions</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">celeste package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-celeste.RunCeleste">celeste.RunCeleste module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-celeste.chemical_data">celeste.chemical_data module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-celeste.constants">celeste.constants module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-celeste.cxs">celeste.cxs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-celeste.input_output">celeste.input_output module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-celeste.params">celeste.params module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-celeste.reactionpath">celeste.reactionpath module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-celeste.pes">celeste.pes module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-celeste">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Celeste</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">Module descriptions</a> &raquo;</li>
+        
+      <li>celeste package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/celeste.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="celeste-package">
+<h1>celeste package<a class="headerlink" href="#celeste-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-celeste.RunCeleste">
+<span id="celeste-runceleste-module"></span><h2>celeste.RunCeleste module<a class="headerlink" href="#module-celeste.RunCeleste" title="Permalink to this headline">¶</a></h2>
+<p>Main driver routine to run the Celeste reaction discovery program.</p>
+<dl class="simple">
+<dt>Celeste can be used to perform the following simulations:</dt><dd><ol class="arabic simple">
+<li><p>Single-ended graph-driven discovery (GDS),</p></li>
+<li><p>Double-ended mechanism search (DEGDS),</p></li>
+<li><p>Reaction path analysis, particularly (CI)NEB.</p></li>
+</ol>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>To execute Celeste as a stand-alone code, you’ll need an input file. You can find information and example input files in
+<a class="reference internal" href="input.html#input"><span class="std std-ref">Input File Format for RunCeleste</span></a>.</p>
+<p>Once you have an input file, you can run Celeste code using:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>RunCeleste.py -i <span class="o">[</span>input file<span class="o">]</span> -o <span class="o">[</span>output file<span class="o">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="function">
+<dt id="celeste.RunCeleste.main">
+<code class="sig-prename descclassname">celeste.RunCeleste.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param">argv</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/RunCeleste.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.RunCeleste.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main driver routine for RunCeleste.py.</p>
+<p>Performs a variety of reaction-discovery and reaction-path finding simulations, as controlled through the
+<code class="docutils literal notranslate"><span class="pre">input</span></code> file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>argv</strong> (<em>str</em>) – List of input arguments from command line.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-celeste.chemical_data">
+<span id="celeste-chemical-data-module"></span><h2>celeste.chemical_data module<a class="headerlink" href="#module-celeste.chemical_data" title="Permalink to this headline">¶</a></h2>
+<p>Contains dictionaries and other data structures holding chemical data such as
+atomic masses and covalent radii.</p>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>All values are given in Hartree atomic units, where the mass of the electron
+is 1, the charge on an electron is -1, <span class="math notranslate nohighlight">\(\hbar = 1\)</span> and <span class="math notranslate nohighlight">\(4 \pi \epsilon = 1\)</span>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">ivar ~celeste.chemical_data.nelements</dt>
+<dd class="field-odd"><p>Total number of elements with data entries.</p>
+</dd>
+<dt class="field-even">vartype ~celeste.chemical_data.nelements</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">ivar ~celeste.chemical_data.ElementSymbol</dt>
+<dd class="field-odd"><p>Dictionary mapping element symbols to atomic numbers.</p>
+</dd>
+<dt class="field-even">vartype ~celeste.chemical_data.ElementSymbol</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+<dt class="field-odd">ivar ~celeste.chemical_data.AtomicMass</dt>
+<dd class="field-odd"><p>Dictionary mapping element symbol to atomic masses.</p>
+</dd>
+<dt class="field-even">vartype ~celeste.chemical_data.AtomicMass</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+<dt class="field-odd">ivar ~celeste.chemical_data.CovalentRadii</dt>
+<dd class="field-odd"><p>Dictionary mapping element symbol to covalent radii.</p>
+</dd>
+<dt class="field-even">vartype ~celeste.chemical_data.CovalentRadii</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+<dl class="function">
+<dt id="celeste.chemical_data.PrintChemicalDataReport">
+<code class="sig-prename descclassname">celeste.chemical_data.</code><code class="sig-name descname">PrintChemicalDataReport</code><span class="sig-paren">(</span><em class="sig-param">file=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/chemical_data.html#PrintChemicalDataReport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.chemical_data.PrintChemicalDataReport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints a report on the Chemical Data to file.
+:param file: File in which to print output. If <code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">is</span> <span class="pre">None</span></code>, print to stdout.
+:type file: str</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-celeste.constants">
+<span id="celeste-constants-module"></span><h2>celeste.constants module<a class="headerlink" href="#module-celeste.constants" title="Permalink to this headline">¶</a></h2>
+<p>Contains useful numerical constants such as bonding scale factor, threshold parameters and more.</p>
+<dl class="field-list simple">
+<dt class="field-odd">ivar ~celeste.constants.BondingScaleFactor</dt>
+<dd class="field-odd"><p>numerical factor used to multiply sum of covalent radii in
+determining cut-off distance for calculating adjacency matrix.</p>
+</dd>
+<dt class="field-even">vartype ~celeste.constants.BondingScaleFactor</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">ivar ~celeste.constants.BIG_BONDING</dt>
+<dd class="field-odd"><p>An arbitrary large distance given to pairs of atoms which are not
+accessible by walking along bonds. Used during calculation of molecules from a graph.</p>
+</dd>
+<dt class="field-even">vartype ~celeste.constants.BIG_BONDING</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">ivar ~celeste.constants.NMOLMAX</dt>
+<dd class="field-odd"><p>Maximum recommended treatable number of molecules.</p>
+</dd>
+<dt class="field-even">vartype ~celeste.constants.NMOLMAX</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">ivar ~celeste.constants.NAMOLMAX</dt>
+<dd class="field-odd"><p>Maximum recommended number of atoms in molecules.</p>
+</dd>
+<dt class="field-even">vartype ~celeste.constants.NAMOLMAX</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+<dl class="function">
+<dt id="celeste.constants.PrintConstants">
+<code class="sig-prename descclassname">celeste.constants.</code><code class="sig-name descname">PrintConstants</code><span class="sig-paren">(</span><em class="sig-param">file=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/constants.html#PrintConstants"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.constants.PrintConstants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints a report on the current values of important parameters defined in <code class="docutils literal notranslate"><span class="pre">constants.py</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – File in which to print output. If <code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">is</span> <span class="pre">None</span></code>, print to stdout.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-celeste.cxs">
+<span id="celeste-cxs-module"></span><h2>celeste.cxs module<a class="headerlink" href="#module-celeste.cxs" title="Permalink to this headline">¶</a></h2>
+<p>Defines the Chemical Structure (CXS) class object.</p>
+<p>The CXS class is the main container for loading, writing, and manipulating chemical structures;
+The chemical structure objects might represent single molecules or collections of molecules.</p>
+<dl class="class">
+<dt id="celeste.cxs.CXS">
+<em class="property">class </em><code class="sig-prename descclassname">celeste.cxs.</code><code class="sig-name descname">CXS</code><span class="sig-paren">(</span><em class="sig-param">natoms=None</em>, <em class="sig-param">positions=None</em>, <em class="sig-param">atomlabels=None</em>, <em class="sig-param">comment=None</em>, <em class="sig-param">FileName=None</em>, <em class="sig-param">PositionUnits='Bohr'</em>, <em class="sig-param">Empty=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Defines the chemical structure (CXS) object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>natoms</strong> (<em>int</em>) – Number of atoms</p></li>
+<li><p><strong>positions</strong> (<em>float</em><em>, </em><em>list</em>) – Atomic positions, assumed to be in atomic units (<code class="docutils literal notranslate"><span class="pre">Bohr</span></code>) by default.</p></li>
+<li><p><strong>atomlabels</strong> (<em>str</em><em>, </em><em>list</em>) – Atomic labels of all atoms.</p></li>
+<li><p><strong>comment</strong> (<em>str</em>) – A text comment describing the structure.</p></li>
+<li><p><strong>FileName</strong> (<em>str</em><em>, </em><em>optional</em>) – File from which structure may be read, if <code class="docutils literal notranslate"><span class="pre">FileName</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">None</span></code>.</p></li>
+<li><p><strong>PositionUnits</strong> (<em>str</em><em>, </em><em>optional</em>) – Units for input atomic positions. Atomic units are used internally, so
+coordinates are converted after reading. Options for <code class="docutils literal notranslate"><span class="pre">PositionUnits</span></code> are <code class="docutils literal notranslate"><span class="pre">Bohr</span></code> or <code class="docutils literal notranslate"><span class="pre">Angstrom</span></code>.</p></li>
+<li><p><strong>Empty</strong> (<em>bool</em>) – Flag indicating whether to create an empty <code class="docutils literal notranslate"><span class="pre">CXS</span></code> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>natoms</strong> (<em>int</em>) – Number of atoms in structure.</p></li>
+<li><p><strong>positions</strong> (<em>float</em><em>, </em><em>list</em>) – Atomic positions.</p></li>
+<li><p><strong>comment</strong> (<em>str</em>) – Comment string describing the structure.</p></li>
+<li><p><strong>mass</strong> (<em>float</em>) – Atomic mass list.</p></li>
+<li><p><strong>nmol</strong> (<em>int</em>) – Number of molecules</p></li>
+<li><p><strong>namol</strong> (<em>int</em><em>, </em><em>list</em>) – Number of atoms in each molecule. For example, <code class="docutils literal notranslate"><span class="pre">namol[0]</span></code> is the number of
+atoms in the first identified molecule.</p></li>
+<li><p><strong>molid</strong> (<em>int</em><em>, </em><em>list</em>) – Atomic indices of atoms in each identified molecule. For example,
+<code class="docutils literal notranslate"><span class="pre">molid[0][2]</span></code> is the atomic index of the third atom in the first molecule.</p></li>
+<li><p><strong>mol</strong> (<a class="reference internal" href="#celeste.cxs.Molecule" title="celeste.cxs.Molecule"><em>Molecule</em></a>) – A created list of <code class="docutils literal notranslate"><span class="pre">Molecule</span></code> objects, generated based on <code class="docutils literal notranslate"><span class="pre">nmol</span></code>, <code class="docutils literal notranslate"><span class="pre">namol</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">molid</span></code>.</p></li>
+<li><p><strong>dist</strong> (<em>numpy</em><em>, </em><em>float</em>) – Interatomic distance matrix, where element (i,j) gives the interatomic distances
+between atoms i and j.</p></li>
+<li><p><strong>graph</strong> (<em>numpy</em><em>, </em><em>int</em>) – Adjacency matrix for the structure, with entries 1 for bonded atoms and 0 for non-bonded.
+Note that the type of bonding does not matter here - we only report whether or not two atoms are bonded.</p></li>
+<li><p><strong>TotalCharge</strong> (<em>int</em>) – Formal charge on structure…</p></li>
+<li><p><strong>MolCharge</strong> (<em>int</em><em>, </em><em>list</em>) – Formal charge on each molecule in the structure.</p></li>
+<li><p><strong>dvdr</strong> (<em>float</em><em>,</em><em>list</em>) – Derivatives of energy with respect to Cartesian coordinates.</p></li>
+<li><p><strong>success</strong> (<em>bool</em>) – Flag indicating whether last energy calculation performed for this structure
+was successful or not.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>A CXS object can be created by either directly reading a structure from file:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">CXS</span><span class="p">(</span><span class="n">FileName</span><span class="o">=</span><span class="s1">&#39;test.xyz&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or by defining the number of atoms <code class="docutils literal notranslate"><span class="pre">natoms</span></code>, atomic <code class="docutils literal notranslate"><span class="pre">positions</span></code> and <code class="docutils literal notranslate"><span class="pre">atomlabels</span></code> parameters:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">CXS</span><span class="p">(</span><span class="n">natoms</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">positions</span> <span class="o">=</span><span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.5</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">)],</span> <span class="n">atomlabels</span> <span class="o">=</span><span class="p">[</span><span class="s1">&#39;C&#39;</span><span class="p">,</span><span class="s1">&#39;O&#39;</span><span class="p">],</span>
+        <span class="n">comment</span> <span class="o">=</span> <span class="s2">&quot;Carbon monoxide&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The example above creates a carbon monoxide molecule, with the carbon atom at (0,0,0) and the
+oxygen atom at (1.5,0,0) (atomic units used by default).</p>
+<dl class="method">
+<dt id="celeste.cxs.CXS.CopyCXS">
+<code class="sig-name descname">CopyCXS</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.CopyCXS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.CopyCXS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes a copy of the self.CXS object in a safe manner.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A new <code class="docutils literal notranslate"><span class="pre">CXS</span></code> object which is a copy of <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>cxnew (<code class="docutils literal notranslate"><span class="pre">CXS</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.cxs.CXS.GetAllPairDistances">
+<code class="sig-name descname">GetAllPairDistances</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.GetAllPairDistances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.GetAllPairDistances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates ALL interatomic distances in the current structure, and returns them in
+a numpy array <code class="docutils literal notranslate"><span class="pre">distances</span></code>. Also stores the distances in <code class="docutils literal notranslate"><span class="pre">self.distances</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>n-by-n matrix containing all atomic pair-distance (in atomic units)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>distances (np, float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.cxs.CXS.GetGraph">
+<code class="sig-name descname">GetGraph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.GetGraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.GetGraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the adjacency matrix <code class="docutils literal notranslate"><span class="pre">self.graph</span></code> for the structure.</p>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>The determination of whether atoms are <cite>bonded’ or not is based on the covalent radii in the ``chemical_data`</cite>
+module, as well as the <code class="docutils literal notranslate"><span class="pre">BondingScaleFactor</span></code> in <code class="docutils literal notranslate"><span class="pre">constants.py</span></code>. The cut-off distance <span class="math notranslate nohighlight">\(R_{cut}\)</span>
+for each pair of atoms (i,j) is:</p>
+<div class="math notranslate nohighlight">
+\[R_{cut} = \alpha (R_{i} + R_{j})\]</div>
+<p>where <span class="math notranslate nohighlight">\(\alpha\)</span> is <code class="docutils literal notranslate"><span class="pre">BondingScaleFactor</span></code> and <span class="math notranslate nohighlight">\(R_{i,j}\)</span> are covalent radii.</p>
+</div>
+<p class="rubric">Example</p>
+<p>After creating a CXS object, the adjacency matrix <code class="docutils literal notranslate"><span class="pre">graph</span></code> and the distance matrix <code class="docutils literal notranslate"><span class="pre">dist</span></code>
+can be calculated as follows:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">CXS</span><span class="p">(</span><span class="n">FileName</span><span class="o">=</span><span class="s1">&#39;test.xyz&#39;</span><span class="p">)</span>
+<span class="n">a</span><span class="o">.</span><span class="n">GetGraph</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.cxs.CXS.GetMols">
+<code class="sig-name descname">GetMols</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.GetMols"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.GetMols" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the adjacency matrix in <code class="docutils literal notranslate"><span class="pre">self.graph</span></code> to determine the molecules defined by the chemical
+structure object.</p>
+<p>This is achieved using the Floyd-Warshall shortest-path algorithm to split the adjacency matrix into
+disconnected sub-graphs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.cxs.CXS.GetShortestPaths">
+<code class="sig-name descname">GetShortestPaths</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.GetShortestPaths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.GetShortestPaths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine the shortest-path between atoms using the Floyd-Warshall algorithm.</p>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>If atoms i and j are not bonded, the distance between them is assigned some very
+large value <code class="docutils literal notranslate"><span class="pre">BIG_BONDING</span></code> which is stored in <code class="docutils literal notranslate"><span class="pre">constants.py</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.cxs.CXS.GetSpinandCharge">
+<code class="sig-name descname">GetSpinandCharge</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.GetSpinandCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.GetSpinandCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the total charge and the spin multiplicity on the structure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.cxs.CXS.IDPPFunction">
+<code class="sig-name descname">IDPPFunction</code><span class="sig-paren">(</span><em class="sig-param">TargetDistances</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.IDPPFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.IDPPFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the IDPP potential function and its derivatives for the current structure.</p>
+<blockquote>
+<div><p>The <code class="docutils literal notranslate"><span class="pre">TargetDistances</span></code> need to be passed into this function; in IDPP, these are linearly
+interpolated between the reactants and products according to:</p>
+<div class="math notranslate nohighlight">
+\[r_{ij}^{target} = r_{ij}^{R} +\]</div>
+</div></blockquote>
+<p>rac{k}{n} (r_{ij}^{R} - r_{ij}^{P})</p>
+<blockquote>
+<div><p>where :math:<code class="docutils literal notranslate"><span class="pre">r_{ij}^{R}</span></code> is the inter-atomic distance between two atoms in the reactant structure,
+:math”<a href="#id1"><span class="problematic" id="id2">``</span></a>r_{ij}^{P} is the corresponding distance in the product.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>TargetDistances (float): An [n,n] array of target distances, where n is the number of atoms.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Eidpp (float): Calculated IDPP energy value.
+derivs (float): Derivatives of IDPP cost function, size [N,3].</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.cxs.CXS.KabschAlign">
+<code class="sig-name descname">KabschAlign</code><span class="sig-paren">(</span><em class="sig-param">cxt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.KabschAlign"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.KabschAlign" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the Kabsch algorithm to align structure to a target structure <code class="docutils literal notranslate"><span class="pre">cxt</span></code>. First, the centroids of the
+two structures are aligned (so the centroid of <code class="docutils literal notranslate"><span class="pre">self</span></code> is shifted to match that of <code class="docutils literal notranslate"><span class="pre">cxt</span></code>), then the
+orientation of <code class="docutils literal notranslate"><span class="pre">self</span></code> is changed to match that of <code class="docutils literal notranslate"><span class="pre">cxt</span></code> using the Kabsch algorithm. This results
+in <code class="docutils literal notranslate"><span class="pre">self</span></code> having the minimized RMS displacement from cxt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cxt</strong> (a <code class="docutils literal notranslate"><span class="pre">CXS</span></code> structure) – A target structure, against which <code class="docutils literal notranslate"><span class="pre">self</span></code> is optimally aligned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.cxs.CXS.NavigationDot">
+<code class="sig-name descname">NavigationDot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.NavigationDot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.NavigationDot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dot product between the derivatives of the PES and those given by the
+navigation function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The calculated dot product is stored in <code class="docutils literal notranslate"><span class="pre">self.NavigationDotForces</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.cxs.CXS.NavigationFunction">
+<code class="sig-name descname">NavigationFunction</code><span class="sig-paren">(</span><em class="sig-param">cxp</em>, <em class="sig-param">knav=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.NavigationFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.NavigationFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates the navigation function for MEP calculation, and calculates the derivatives.</p>
+<p>In the current implementation, the navigation function is similar to that used in IDPP, namely:</p>
+<div class="math notranslate nohighlight">
+\[V_{nav}(\mathbf{r}) = \sum_{i,j} k_{nav} ( r_{ij} - r_{ij}^{P})^2,\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(k_{nav}\)</span> is a spring-constant for the navigation function, <span class="math notranslate nohighlight">\(r_{ij}^{P}\)</span>
+is the interatomic distance between <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span> in the products (<code class="docutils literal notranslate"><span class="pre">cxp</span></code>), and <span class="math notranslate nohighlight">\(r_{ij}\)</span> is
+the corresponding distance in the current structure (<code class="docutils literal notranslate"><span class="pre">self</span></code>).</p>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>The navigation function is returned by this routine, and the derivatives with respect to the
+Cartesian coordinates are placed into <code class="docutils literal notranslate"><span class="pre">self.dvdr_nav</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Value of the navigation function.
+cxp (<code class="docutils literal notranslate"><span class="pre">CXS</span></code> object): Chemical structure object containing the target product structure.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Enav (float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.cxs.CXS.PrintAllMols">
+<code class="sig-name descname">PrintAllMols</code><span class="sig-paren">(</span><em class="sig-param">file=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.PrintAllMols"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.PrintAllMols" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints information on all molecules in structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – File to which molecule information is printed. If <code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">is</span> <span class="pre">None</span></code>, then we print to stdout.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.cxs.CXS.PrintEnergy">
+<code class="sig-name descname">PrintEnergy</code><span class="sig-paren">(</span><em class="sig-param">file=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.PrintEnergy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.PrintEnergy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple routine to print energy in pretty format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – File to print energy. If <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">is</span> <span class="pre">None</span></code>, print to stdout.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.cxs.CXS.PrintGraph">
+<code class="sig-name descname">PrintGraph</code><span class="sig-paren">(</span><em class="sig-param">file=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.PrintGraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.PrintGraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the adjacency matrix to either <code class="docutils literal notranslate"><span class="pre">file</span></code> or standard output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – File to print adjacency matrix stored in <code class="docutils literal notranslate"><span class="pre">self.graph</span></code>.</p>
+</dd>
+</dl>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">is</span> <span class="pre">None</span></code>, then prints to standard output.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.cxs.CXS.Printdvdr">
+<code class="sig-name descname">Printdvdr</code><span class="sig-paren">(</span><em class="sig-param">file=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.Printdvdr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.Printdvdr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple routine to print derivatives in pretty format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – File to print energy. If <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">is</span> <span class="pre">None</span></code>, print to stdout.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.cxs.CXS.PrinttoFile">
+<code class="sig-name descname">PrinttoFile</code><span class="sig-paren">(</span><em class="sig-param">file</em>, <em class="sig-param">format='xyz'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.PrinttoFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.PrinttoFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints structure to file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>str</em>) – Filename to write the structure to.</p></li>
+<li><p><strong>format</strong> (<em>str</em>) – Output format. Allowed values: <em>xyz</em> only….</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.cxs.CXS.ReadStructureFromFile">
+<code class="sig-name descname">ReadStructureFromFile</code><span class="sig-paren">(</span><em class="sig-param">FileName</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.ReadStructureFromFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.ReadStructureFromFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a <code class="docutils literal notranslate"><span class="pre">CXS</span></code> chemical structure object from file. Currently, only .xyz file formats are read.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>FileName</strong> (<em>int</em>) – Input filename. For now, this should be a standard .xyz file.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>tuple containing</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>natoms (int): Number of atoms.</p></li>
+<li><p>comment (str): A text comment, read from second line of xyz file.</p></li>
+<li><p>atomlabels (str): List of atom labels.</p></li>
+<li><p>positions (float, numpy array): x,y,z positions of all atoms.</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(tuple)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.cxs.CXS.SetMasses">
+<code class="sig-name descname">SetMasses</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.SetMasses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.SetMasses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocates the atomic masses of each atom.</p>
+<p>The masses (in atomic units, where mass of electron is 1) are stored in a dictionary in <code class="docutils literal notranslate"><span class="pre">chemical_data.py</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of atomic masses.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>mass (float, list)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="celeste.cxs.Molecule">
+<em class="property">class </em><code class="sig-prename descclassname">celeste.cxs.</code><code class="sig-name descname">Molecule</code><span class="sig-paren">(</span><em class="sig-param">natoms=None</em>, <em class="sig-param">positions=None</em>, <em class="sig-param">atomlabels=None</em>, <em class="sig-param">comment=None</em>, <em class="sig-param">FileName=None</em>, <em class="sig-param">PositionUnits='Bohr'</em>, <em class="sig-param">Empty=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#Molecule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.Molecule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#celeste.cxs.CXS" title="celeste.cxs.CXS"><code class="xref py py-class docutils literal notranslate"><span class="pre">celeste.cxs.CXS</span></code></a></p>
+<p>Defines the “molecule” sub-class. This is an inherited class (base-class is <code class="docutils literal notranslate"><span class="pre">CXS</span></code>) defining
+individual molecules in a <code class="docutils literal notranslate"><span class="pre">CXS</span></code> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><strong>formula</strong> (<em>string</em>) – A string containing the chemical formula of the molecule.</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="celeste.cxs.Molecule.GetFormula">
+<code class="sig-name descname">GetFormula</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#Molecule.GetFormula"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.Molecule.GetFormula" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a string representation of the molecular chemical formula.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A string containing the chemical formula of the molecule.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>formula (string)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.cxs.Molecule.GetMols">
+<code class="sig-name descname">GetMols</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#Molecule.GetMols"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.Molecule.GetMols" title="Permalink to this definition">¶</a></dt>
+<dd><p>When GetMols is called for a molecule object, it should not return anything new - this function ensures
+that happens…..</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-celeste.input_output">
+<span id="celeste-input-output-module"></span><h2>celeste.input_output module<a class="headerlink" href="#module-celeste.input_output" title="Permalink to this headline">¶</a></h2>
+<p>General file I/O functions for celeste package.</p>
+<dl class="function">
+<dt id="celeste.input_output.ParseCommandLine">
+<code class="sig-prename descclassname">celeste.input_output.</code><code class="sig-name descname">ParseCommandLine</code><span class="sig-paren">(</span><em class="sig-param">argv</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/input_output.html#ParseCommandLine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.input_output.ParseCommandLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses the command-line arguments to retrieve the input and output files when
+using <code class="docutils literal notranslate"><span class="pre">RunCeleste.py</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>argv</strong> (<em>str</em>) – Command line arguments for parsing.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>(tuple) containing</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>inputfile (str) : input file from command line</p></li>
+<li><p>outputfile (str) : output file from command line</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="celeste.input_output.ReadInputFile">
+<code class="sig-prename descclassname">celeste.input_output.</code><code class="sig-name descname">ReadInputFile</code><span class="sig-paren">(</span><em class="sig-param">inputfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/input_output.html#ReadInputFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.input_output.ReadInputFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads information from inputfile and stores it in the params.py module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputfile</strong> (<em>str</em>) – Reads the file in <code class="docutils literal notranslate"><span class="pre">inputfile</span></code> and parses input information based on keywords in</p></li>
+<li><p><strong>celeste.params.py.</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="celeste.input_output.StartupOutput">
+<code class="sig-prename descclassname">celeste.input_output.</code><code class="sig-name descname">StartupOutput</code><span class="sig-paren">(</span><em class="sig-param">outputfile</em>, <em class="sig-param">inputfile=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/input_output.html#StartupOutput"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.input_output.StartupOutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opens a generic logfile for calculation output and returns the corresponding filestrea as f.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>outputfile</strong> (<em>str</em>) – File to be opened for output.</p></li>
+<li><p><strong>inputfile</strong> (<em>str</em>) – Name of input file.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-celeste.params">
+<span id="celeste-params-module"></span><h2>celeste.params module<a class="headerlink" href="#module-celeste.params" title="Permalink to this headline">¶</a></h2>
+<p>Container module for parameter access across Celeste.</p>
+<p>Sets default parameters, and makes them available module-wide.</p>
+<dl class="field-list simple">
+<dt class="field-odd">ivar ~celeste.params.IOvars</dt>
+<dd class="field-odd"><p>Dictionary containing possible input keywords.</p>
+</dd>
+<dt class="field-even">vartype ~celeste.params.IOvars</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+<dt class="field-odd">ivar ~celeste.params.PositiveIntegerInputs</dt>
+<dd class="field-odd"><p>List of keywords which should correspond to positive integers.</p>
+</dd>
+<dt class="field-even">vartype ~celeste.params.PositiveIntegerInputs</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">ivar ~celeste.params.IOvarsFreeForm</dt>
+<dd class="field-odd"><p>List of parameters whcih are free-form strings.</p>
+</dd>
+<dt class="field-even">vartype ~celeste.params.IOvarsFreeForm</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">ivar ~celeste.params.IOvarsAllowed</dt>
+<dd class="field-odd"><p>Dictionary of allowed keywords.</p>
+</dd>
+<dt class="field-even">vartype ~celeste.params.IOvarsAllowed</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="module-celeste.reactionpath">
+<span id="celeste-reactionpath-module"></span><h2>celeste.reactionpath module<a class="headerlink" href="#module-celeste.reactionpath" title="Permalink to this headline">¶</a></h2>
+<p>Defines the Reaction-Path class.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">RP</span></code> class is the main container for creating, reading, writing and
+manipulating reaction paths, comprising collections of chemical structure (<code class="docutils literal notranslate"><span class="pre">CXS</span></code>)
+objects.</p>
+<dl class="class">
+<dt id="celeste.reactionpath.RP">
+<em class="property">class </em><code class="sig-prename descclassname">celeste.reactionpath.</code><code class="sig-name descname">RP</code><span class="sig-paren">(</span><em class="sig-param">reactantfile=None</em>, <em class="sig-param">productfile=None</em>, <em class="sig-param">pathfile=None</em>, <em class="sig-param">nimages=0</em>, <em class="sig-param">OptimizeEnds=False</em>, <em class="sig-param">EnergyCalc=None</em>, <em class="sig-param">EmptyPath=False</em>, <em class="sig-param">AlignEndPoints=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/reactionpath.html#RP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.reactionpath.RP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Defines the reaction-path class object.</p>
+<p>Initializes a <code class="docutils literal notranslate"><span class="pre">RP</span></code> object, comprising a set of chemical structures along a reaction-path.</p>
+<p>If all of <code class="docutils literal notranslate"><span class="pre">reactantfile</span></code>, <code class="docutils literal notranslate"><span class="pre">productfile</span></code> and <code class="docutils literal notranslate"><span class="pre">pathfile</span></code> are defined simulataneous,
+we’re note sure which to use, so we throw an exception.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reactantfile</strong> (<em>str</em>) – File containing reactant structure.</p></li>
+<li><p><strong>productfile</strong> (<em>str</em>) – File containing product structure.</p></li>
+<li><p><strong>pathfile</strong> (<em>str</em>) – File containing the full reaction-path.</p></li>
+<li><p><strong>nimages</strong> (<em>int</em>) – Number of images in the reaction path (including reactants and products).</p></li>
+<li><p><strong>OptimizeEnds</strong> (<em>bool</em>) – Flag indicating whether or not the end-points of a reaction-path should be
+geometry-optimized.</p></li>
+<li><p><strong>EnergyCalc</strong> (<em>PES object list</em>) – PES object list defining a set of energy calculation objects. These are used
+if <code class="docutils literal notranslate"><span class="pre">OptimizeEnds</span> <span class="pre">==</span> <span class="pre">True</span></code>.</p></li>
+<li><p><strong>EmptyPath</strong> (<em>bool</em>) – Flag indicating whether or not to create an empty path, containing just  the reactant
+and product structures.</p></li>
+<li><p><strong>AlignEndPoints</strong> (<em>bool</em>) – Flag indicating whether or not to align the product structure to the reactant structure.
+If <code class="docutils literal notranslate"><span class="pre">True</span></code>, this alignment is achieved by translatin centroids, then minimizing the RMS structural
+difference using the Kabsch algorithm. Note that <code class="docutils literal notranslate"><span class="pre">AlignEndPoints</span></code> only works if we are
+initializing from <code class="docutils literal notranslate"><span class="pre">reactantfile</span></code> and <code class="docutils literal notranslate"><span class="pre">productfile</span></code> (not <code class="docutils literal notranslate"><span class="pre">pathfile</span></code>).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>This class provides two methods of initializing <code class="docutils literal notranslate"><span class="pre">RP</span></code> objects. First, if <code class="docutils literal notranslate"><span class="pre">pathfile</span></code> is defined, we start from
+the structurs in the given <code class="docutils literal notranslate"><span class="pre">pathfile</span></code>.</p>
+<blockquote>
+<div><div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">RP</span><span class="p">(</span><span class="n">pathfile</span><span class="o">=</span><span class="s1">&#39;path.xyz&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The file <code class="docutils literal notranslate"><span class="pre">path.xyz</span></code> (in this case) should contain a sequence of xyz-format frames, one for each
+image in the reaction-path. In this case, the structure and number of images <code class="docutils literal notranslate"><span class="pre">nimages</span></code> are read from file.</p>
+<p>Alternatively, if the reactant structure and product structure are given (in <code class="docutils literal notranslate"><span class="pre">reactantfile</span></code> and <code class="docutils literal notranslate"><span class="pre">productfile</span></code>,
+respectively), an empty path can be generated (then used for later interpolation. Here, the TOTAL number
+of images in the path is then <code class="docutils literal notranslate"><span class="pre">nimages</span></code>.</p>
+<blockquote>
+<div><div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">RP</span><span class="p">(</span><span class="n">reactantfile</span><span class="o">=</span><span class="s1">&#39;reactants.xyz&#39;</span><span class="p">,</span><span class="n">productfile</span><span class="o">=</span><span class="s1">&#39;products.xyz&#39;</span><span class="p">,</span> <span class="n">nimages</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="method">
+<dt id="celeste.reactionpath.RP.CheckNEBConvergence">
+<code class="sig-name descname">CheckNEBConvergence</code><span class="sig-paren">(</span><em class="sig-param">ForceTolerance=0.001</em>, <em class="sig-param">MaxForce=0.005</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/reactionpath.html#RP.CheckNEBConvergence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.reactionpath.RP.CheckNEBConvergence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates indicators of NEB convergence, and decides whether or not convergence
+has been achieved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>RMS total force on the NEB string. This includes the perpendicular component</dt><dd><p>from the PES plus the parallel spring component.</p>
+</dd>
+</dl>
+<p>rmsperp (float): RMS of the perpendicular forces from the PES (in atomic units).
+maxforce (float): Maximum single force component for the total forces (in atomic units).
+maxperpforce (float): Maximum perpendicular force component (in atomic units)
+converged (bool): Flag indicating whether the string is converged. This is based on comparing</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">rmsperp</span></code> and <code class="docutils literal notranslate"><span class="pre">maxperpforce</span></code> to the input thresholds <code class="docutils literal notranslate"><span class="pre">ForceTolerance</span></code> and <code class="docutils literal notranslate"><span class="pre">MaxForce</span></code>.</p>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>rmsforce (float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.reactionpath.RP.EvaluateIDPP">
+<code class="sig-name descname">EvaluateIDPP</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/reactionpath.html#RP.EvaluateIDPP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.reactionpath.RP.EvaluateIDPP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the IDPP function and derivatives at all images along the <code class="docutils literal notranslate"><span class="pre">rp</span></code> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.reactionpath.RP.GetFullPathEnergy">
+<code class="sig-name descname">GetFullPathEnergy</code><span class="sig-paren">(</span><em class="sig-param">EnergyCalcs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/reactionpath.html#RP.GetFullPathEnergy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.reactionpath.RP.GetFullPathEnergy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the potential energy at every image along the reaction-path object <code class="docutils literal notranslate"><span class="pre">RP</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>EnergyCalcs</strong> (<a class="reference internal" href="#celeste.pes.PES" title="celeste.pes.PES"><em>PES</em></a><em>, </em><em>list</em>) – List of <code class="docutils literal notranslate"><span class="pre">PES</span></code> calculation objects.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.reactionpath.RP.GetNEBForces">
+<code class="sig-name descname">GetNEBForces</code><span class="sig-paren">(</span><em class="sig-param">spring=0.05</em>, <em class="sig-param">ClimbingImage=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/reactionpath.html#RP.GetNEBForces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.reactionpath.RP.GetNEBForces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the NEB forces on all images.</p>
+<p>The forces from the PES or from IDPP are assumed to be present in self.rpcxs[:].dvdr, and this routine
+calculates the perpendicular forces plus the parallel spring contribution.</p>
+<p>The total forces [n,3] at each <code class="docutils literal notranslate"><span class="pre">CXS</span></code> object are returned in <code class="docutils literal notranslate"><span class="pre">self.rpcxs[:].NEBforces[n,3]</span></code>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">ClimbingImage</span> <span class="pre">==</span> <span class="pre">True</span></code>, the climbing-image force is calculated on the highest-energy image.</p>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>Climbing-image should not be used for IDPP, as the underlying effective potential is not related
+to the actual potential energy surface of the system.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spring</strong> (<em>float</em>) – NEB spring constant.</p></li>
+<li><p><strong>ClimbingImage</strong> (<em>bool</em>) – A flag indicating whether to use climbing-image forces.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.reactionpath.RP.GetTangents">
+<code class="sig-name descname">GetTangents</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/reactionpath.html#RP.GetTangents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.reactionpath.RP.GetTangents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the tangents to the NEB string at each image.</p>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>The tangents are estimated using the improved tangent method described in:</p>
+<p>Improved tangent estimate in the nudged elastic band method for finding minimum energy paths
+and saddle points, G. Henkelman and H. Jónsson, J. Chem. Phys., 113, 9978 (2000).
+<a class="reference external" href="https://doi.org/10.1063/1.1323224">https://doi.org/10.1063/1.1323224</a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.reactionpath.RP.LinearInterpolation">
+<code class="sig-name descname">LinearInterpolation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/reactionpath.html#RP.LinearInterpolation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.reactionpath.RP.LinearInterpolation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates interpolated atomic coordinates for the intermediate images in a reaction-path object.
+The end-points are not changed by this routine.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.reactionpath.RP.NEB">
+<code class="sig-name descname">NEB</code><span class="sig-paren">(</span><em class="sig-param">PotentialType=None</em>, <em class="sig-param">spring=0.05</em>, <em class="sig-param">Iterations=10</em>, <em class="sig-param">ForceTolerance=0.001</em>, <em class="sig-param">MaxForce=0.005</em>, <em class="sig-param">ClimbingImage=False</em>, <em class="sig-param">Fileroot=None</em>, <em class="sig-param">EnergyCalc=None</em>, <em class="sig-param">Alpha=0.1</em>, <em class="sig-param">TimeStep=20.0</em>, <em class="sig-param">Nmin=5</em>, <em class="sig-param">File=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/reactionpath.html#RP.NEB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.reactionpath.RP.NEB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a nudged-elastic band calculation on the current reaction path.</p>
+<p>This routine implements the climbing-image NEB method, using the fast inertial relaxation
+method (FIRE) as the optimizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>PotentialType</strong> (<em>str</em>) – Either ‘IDPP’ for an image-dependent pair potential interpolation, or ‘PES’ to
+perform full NEB optimization on the PES.</p></li>
+<li><p><strong>spring</strong> (<em>float</em>) – NEB spring constant (in atomic units)</p></li>
+<li><p><strong>Iterations</strong> (<em>int</em>) – Maximum number of NEB optimization steps.</p></li>
+<li><p><strong>ForceTolerance</strong> (<em>float</em>) – RMS force-tolerance to signify convergence (in atomic units)</p></li>
+<li><p><strong>MaxForce</strong> (<em>float</em>) – Maximum force tolerance to signify convergence (in atomic units). Set to a negative
+value to just use ForceTolerance to judge convergence.</p></li>
+<li><p><strong>ClimbingImage</strong> (<em>bool</em>) – Flag to indicate whether to perform climbing-image variant of NEB.</p></li>
+<li><p><strong>Fileroot</strong> (<em>str</em>) – A file-root name, which is prefixed onto the output files from the NEB calculation. If
+<code class="docutils literal notranslate"><span class="pre">Fileroot</span> <span class="pre">is</span> <span class="pre">None</span></code>, then a set of locally-named files is created instead.</p></li>
+<li><p><strong>EnergyCalc</strong> (<code class="docutils literal notranslate"><span class="pre">PES</span></code> objects) – Set of PES calculation objects, used if <code class="docutils literal notranslate"><span class="pre">PotentialType</span> <span class="pre">=</span> <span class="pre">PES</span></code>.</p></li>
+<li><p><strong>Alpha</strong> (<em>float</em>) – Initial alpha parameter used in the FIRE scheme.</p></li>
+<li><p><strong>TimeStep</strong> (<em>float</em>) – Time-step (in atomic units) for the FIRE scheme.</p></li>
+<li><p><strong>Nmin</strong> (<em>int</em>) – Nmin parameter from the FIRE scheme.</p></li>
+<li><p><strong>File</strong> (<em>file object</em>) – An open file object, or stdout, where output is placed.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.reactionpath.RP.PrintToFile">
+<code class="sig-name descname">PrintToFile</code><span class="sig-paren">(</span><em class="sig-param">File=None</em>, <em class="sig-param">format='xyz'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/reactionpath.html#RP.PrintToFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.reactionpath.RP.PrintToFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints an entire reaction-path object <code class="docutils literal notranslate"><span class="pre">rp</span></code> as a series of xyz-format frames.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>format</strong> (<em>str</em>) – Define the file output extension, currently only “xyz” is allowed.</p></li>
+<li><p><strong>File</strong> (<em>str</em>) – File to print reaction path in.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.reactionpath.RP.ReportFullPathEnergy">
+<code class="sig-name descname">ReportFullPathEnergy</code><span class="sig-paren">(</span><em class="sig-param">File=None</em>, <em class="sig-param">comment=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/reactionpath.html#RP.ReportFullPathEnergy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.reactionpath.RP.ReportFullPathEnergy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reports the energy at each point along a reaction-path. This is output to either File or stdout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>File</strong> (<em>str</em>) – A file in which to output the path energy.</p></li>
+<li><p><strong>comment</strong> (<em>str</em>) – An optional comment describing the current path.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-celeste.pes">
+<span id="celeste-pes-module"></span><h2>celeste.pes module<a class="headerlink" href="#module-celeste.pes" title="Permalink to this headline">¶</a></h2>
+<p>Contains routines relating to potential energy surface calculations for
+<code class="docutils literal notranslate"><span class="pre">CXS</span></code> objects.</p>
+<dl class="function">
+<dt id="celeste.pes.Driver">
+<code class="sig-prename descclassname">celeste.pes.</code><code class="sig-name descname">Driver</code><span class="sig-paren">(</span><em class="sig-param">cx</em>, <em class="sig-param">EnergyCalc</em>, <em class="sig-param">type='Energy'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/pes.html#Driver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.pes.Driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a PES evaluation driver. Given a set of energy calculation types and a <code class="docutils literal notranslate"><span class="pre">CXS</span></code> object, this
+routine identifies the correct energy calculation according to <code class="docutils literal notranslate"><span class="pre">type</span></code>, then runs the calculation.</p>
+<p>This driver provides an alternative route to performing energy calculations which is useful in
+calculations where several mixtures of calculation types are requested (e.g. NEB calculations).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> – Type of calculation to be performed. Either ‘Energy’, ‘Optimize’ or ‘Hessian’.</p></li>
+<li><p><strong>cx</strong> – Chemical structure object to perform calculation on.</p></li>
+<li><p><strong>EnergyCalc</strong> – List of energy calculation types.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Flag indicating problems (or not) with energy calculation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>success (bool)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="celeste.pes.InitializePESCalcs">
+<code class="sig-prename descclassname">celeste.pes.</code><code class="sig-name descname">InitializePESCalcs</code><span class="sig-paren">(</span><em class="sig-param">npes=0</em>, <em class="sig-param">PESdetails=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/pes.html#InitializePESCalcs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.pes.InitializePESCalcs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a set of PES calculation objects using PESdetails input dictionaries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>npes</strong> (<em>int</em>) – Number of PES objects to be initialized (limited to 0, 1 or 2).</p></li>
+<li><p><strong>PESdetails</strong> (<em>dict</em>) – Dictionary of keywords for PES set-up. These will be PES calculation dependent!</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of PES calculation objects.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>EnergyCalcs (<a class="reference internal" href="#celeste.pes.PES" title="celeste.pes.PES">PES</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="celeste.pes.PES">
+<em class="property">class </em><code class="sig-prename descclassname">celeste.pes.</code><code class="sig-name descname">PES</code><span class="sig-paren">(</span><em class="sig-param">calctype='Energy'</em>, <em class="sig-param">code='orca'</em>, <em class="sig-param">executable='~/orca'</em>, <em class="sig-param">arglist=None</em>, <em class="sig-param">calctemplate=None</em>, <em class="sig-param">comment=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/pes.html#PES"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.pes.PES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Defines the PES object, the main object used in interfacing with energy calculations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>calctype</strong> (<em>str</em>) – <p>Calculation type. Allowed values:</p>
+<ul>
+<li><p><em>Energy</em>: Performs an energy and gradient evaluation.</p></li>
+<li><p><em>Optimize</em>: Performs geometry optimization.</p></li>
+<li><p><em>Frequency</em>: Performs frequency/thermodynamics calculation.</p></li>
+</ul>
+</p></li>
+<li><p><strong>code</strong> (<em>str</em>) – Identifies which code to run to perform calculation. Allowed values are <strong>orca</strong></p></li>
+<li><p><strong>executable</strong> (<em>str</em>) – Identifies the external executable for ab initio calculation. <em>This should be an available
+executable installed on your computer.</em></p></li>
+<li><p><strong>calctemplate</strong> (<em>str</em><em>, </em><em>optional</em>) – Identifies template file for ab initio calculation.</p></li>
+<li><p><strong>arglist</strong> (<em>str</em><em>,</em><em>optional</em>) – Gives directives to be used by external ab initio codes,
+for example relating to DFT calculation type or basis set.)</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>PES objects can be initialized by either providing the <code class="docutils literal notranslate"><span class="pre">arglist</span></code> containing the
+set of arguments for the energy calculation, or by providing the name of a template file <code class="docutils literal notranslate"><span class="pre">calctemplate</span></code>.</p>
+<p>If both <code class="docutils literal notranslate"><span class="pre">arglist</span></code> and <code class="docutils literal notranslate"><span class="pre">calctemplate</span></code> are provided to a <code class="docutils literal notranslate"><span class="pre">PES</span></code> object, it’s not clear
+what the user intends (<em>i.e.</em> which one do we use?), so the code will flag an error.</p>
+</div>
+<p class="rubric">Example</p>
+<p>To use the <code class="docutils literal notranslate"><span class="pre">arglist</span></code> to create a <code class="docutils literal notranslate"><span class="pre">PES</span></code> object to perform ORCA energy calcuations
+using DFT B3LYP and a def2-SVP basis:</p>
+<blockquote>
+<div><div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">d</span><span class="o">=</span><span class="p">{</span> <span class="s1">&#39;calctype&#39;</span> <span class="p">:</span> <span class="s2">&quot;Energy&quot;</span><span class="p">,</span>
+     <span class="s1">&#39;code&#39;</span> <span class="p">:</span> <span class="s2">&quot;orca&quot;</span><span class="p">,</span>
+     <span class="s1">&#39;executable&#39;</span> <span class="p">:</span> <span class="s2">&quot;~/orca&quot;</span><span class="p">,</span>
+     <span class="s1">&#39;arglist&#39;</span> <span class="p">:</span> <span class="s2">&quot;! DFT B3LYP def2-SVP engrad&quot;</span> <span class="p">}</span>
+ <span class="n">ecalc</span> <span class="o">=</span> <span class="n">PES</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Now suppose we have a <code class="docutils literal notranslate"><span class="pre">CXS</span></code> object created as follows:</p>
+<blockquote>
+<div><div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">CXS</span><span class="p">(</span><span class="n">natoms</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">positions</span> <span class="o">=</span><span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.5</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">)],</span> <span class="n">atomlabels</span> <span class="o">=</span><span class="p">[</span><span class="s1">&#39;C&#39;</span><span class="p">,</span><span class="s1">&#39;O&#39;</span><span class="p">],</span>
+<span class="n">comment</span> <span class="o">=</span> <span class="s2">&quot;Carbon monoxide&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>To perform PES calculation <code class="docutils literal notranslate"><span class="pre">ecalc</span></code> on the <code class="docutils literal notranslate"><span class="pre">CXS</span></code> object <code class="docutils literal notranslate"><span class="pre">a</span></code>, we then do:</p>
+<blockquote>
+<div><div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">E</span> <span class="o">=</span> <span class="n">ecalc</span><span class="o">.</span><span class="n">RunPES</span><span class="p">(</span> <span class="n">a</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>What happens when we run this command? First, the <code class="docutils literal notranslate"><span class="pre">PES</span></code> object writes a file which is in the correct
+format for the external <em>ab initio</em> code. Next, the external code is executed with the input file. Finally,
+the results of the calculation are read back into the <code class="docutils literal notranslate"><span class="pre">CXS</span></code> object. So, in the example above, the
+ORCA input file which was created looks like this:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">! DFT B3LYP def2-SVP engrad</span>
+<span class="go">*xyzfile 0 1 temp.xyz</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Here, the first directive line is the same as the one we had in the dictionary which initialized the
+<code class="docutils literal notranslate"><span class="pre">PES</span></code> object. The second line identifies the charge (0) and spin-multiplicity (1), as well as the
+temporary xyz file which stores the coordinates of the <code class="docutils literal notranslate"><span class="pre">CXS</span></code> structure; this temporary file (<code class="docutils literal notranslate"><span class="pre">temp.xyz</span></code>)
+is generated when <code class="docutils literal notranslate"><span class="pre">ecalc.RunPES</span></code> is executed.</p>
+<p>Note that the arglist entry in the input list can also be a list; in this case, each list member is
+interpreted as a new line in the input file required for the ab initio code. For example,</p>
+<blockquote>
+<div><div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">d</span><span class="o">=</span><span class="p">{</span> <span class="s1">&#39;calctype&#39;</span> <span class="p">:</span> <span class="s2">&quot;Energy&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;code&#39;</span> <span class="p">:</span> <span class="s2">&quot;orca&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;executable&#39;</span> <span class="p">:</span> <span class="s2">&quot;~/orca&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;arglist&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;! DFT B3LYP def2-SVP&quot;</span><span class="p">,</span> <span class="s2">&quot;! engrad&quot;</span><span class="p">]</span> <span class="p">}</span>
+<span class="n">ecalc</span> <span class="o">=</span> <span class="n">PES</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The resulting ORCA input file in this case will look as follows:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">! DFT B3LYP def2-SVP</span>
+<span class="go">! engrad</span>
+<span class="go">*xyzfile 0 1 temp.xyz</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Further examples of PES calculation set-ups can be found in the Examples section.</p>
+<dl class="method">
+<dt id="celeste.pes.PES.PrintPESDetails">
+<code class="sig-name descname">PrintPESDetails</code><span class="sig-paren">(</span><em class="sig-param">file=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/pes.html#PES.PrintPESDetails"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.pes.PES.PrintPESDetails" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the details of the PES object to either file or stdout (if File is None)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.pes.PES.RunOrcaCalc">
+<code class="sig-name descname">RunOrcaCalc</code><span class="sig-paren">(</span><em class="sig-param">cx</em>, <em class="sig-param">FileRoot='orca_temp'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/pes.html#PES.RunOrcaCalc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.pes.PES.RunOrcaCalc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs an ORCA calculation.</p>
+<p>This function writes an ORCA input file using either the argument list or template file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cx</strong> (<em>CXS object</em>) – Chemical structure object to run calculation on.</p></li>
+<li><p><strong>FileRoot</strong> (<em>str</em>) – Root to use for temporary input/output files.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Flag indicating whether the calulation completed successfully.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>success (bool)</p>
+</dd>
+</dl>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">success</span></code> flag does not indicate anything about the energy calculation itself; it
+simply indicates whether or not the calculation finished, as judged by the appearance of
+the expected output files.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.pes.PES.RunPES">
+<code class="sig-name descname">RunPES</code><span class="sig-paren">(</span><em class="sig-param">cx</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/pes.html#PES.RunPES"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.pes.PES.RunPES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a PES calculation on the chemical structure object <code class="docutils literal notranslate"><span class="pre">cx</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cx</strong> (<code class="docutils literal notranslate"><span class="pre">CXS</span></code> object) – A chemical structure object provided by <code class="docutils literal notranslate"><span class="pre">cxs.py</span></code>. This should be a valid <code class="docutils literal notranslate"><span class="pre">CXS</span></code>
+object containing atomic labels and coordinates.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Flag indicating whether calculation was successful.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>success (bool)</p>
+</dd>
+</dl>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>As a result of the electronic structure calculation, cx.energy, cx.dvdr and cx.positions will be
+updated, depending on calculation options:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt><em>calctype = Energy</em>: <code class="docutils literal notranslate"><span class="pre">cx.energy</span></code> and <code class="docutils literal notranslate"><span class="pre">cx.dvdr</span></code> are read from calculation output, but</dt><dd><p><code class="docutils literal notranslate"><span class="pre">cx.positions</span></code> remains untouched.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a href="#id3"><span class="problematic" id="id4">*</span></a>calctype = Optimize”: <code class="docutils literal notranslate"><span class="pre">cx.energy</span></code>, <code class="docutils literal notranslate"><span class="pre">cx.dvdr</span></code> and <code class="docutils literal notranslate"><span class="pre">cx.positions</span></code> are all read from</dt><dd><p>calculation output.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>The return flag does not indicate anything about the reliability or quality of the results of the
+energy calculation; instead, it reports on simply whether the calculation ran as expected or not.
+It’s up to you to make sure that the results are sensible!</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-celeste">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-celeste" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="celeste.CXS">
+<em class="property">class </em><code class="sig-prename descclassname">celeste.</code><code class="sig-name descname">CXS</code><span class="sig-paren">(</span><em class="sig-param">natoms=None</em>, <em class="sig-param">positions=None</em>, <em class="sig-param">atomlabels=None</em>, <em class="sig-param">comment=None</em>, <em class="sig-param">FileName=None</em>, <em class="sig-param">PositionUnits='Bohr'</em>, <em class="sig-param">Empty=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Defines the chemical structure (CXS) object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>natoms</strong> (<em>int</em>) – Number of atoms</p></li>
+<li><p><strong>positions</strong> (<em>float</em><em>, </em><em>list</em>) – Atomic positions, assumed to be in atomic units (<code class="docutils literal notranslate"><span class="pre">Bohr</span></code>) by default.</p></li>
+<li><p><strong>atomlabels</strong> (<em>str</em><em>, </em><em>list</em>) – Atomic labels of all atoms.</p></li>
+<li><p><strong>comment</strong> (<em>str</em>) – A text comment describing the structure.</p></li>
+<li><p><strong>FileName</strong> (<em>str</em><em>, </em><em>optional</em>) – File from which structure may be read, if <code class="docutils literal notranslate"><span class="pre">FileName</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">None</span></code>.</p></li>
+<li><p><strong>PositionUnits</strong> (<em>str</em><em>, </em><em>optional</em>) – Units for input atomic positions. Atomic units are used internally, so
+coordinates are converted after reading. Options for <code class="docutils literal notranslate"><span class="pre">PositionUnits</span></code> are <code class="docutils literal notranslate"><span class="pre">Bohr</span></code> or <code class="docutils literal notranslate"><span class="pre">Angstrom</span></code>.</p></li>
+<li><p><strong>Empty</strong> (<em>bool</em>) – Flag indicating whether to create an empty <code class="docutils literal notranslate"><span class="pre">CXS</span></code> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>natoms</strong> (<em>int</em>) – Number of atoms in structure.</p></li>
+<li><p><strong>positions</strong> (<em>float</em><em>, </em><em>list</em>) – Atomic positions.</p></li>
+<li><p><strong>comment</strong> (<em>str</em>) – Comment string describing the structure.</p></li>
+<li><p><strong>mass</strong> (<em>float</em>) – Atomic mass list.</p></li>
+<li><p><strong>nmol</strong> (<em>int</em>) – Number of molecules</p></li>
+<li><p><strong>namol</strong> (<em>int</em><em>, </em><em>list</em>) – Number of atoms in each molecule. For example, <code class="docutils literal notranslate"><span class="pre">namol[0]</span></code> is the number of
+atoms in the first identified molecule.</p></li>
+<li><p><strong>molid</strong> (<em>int</em><em>, </em><em>list</em>) – Atomic indices of atoms in each identified molecule. For example,
+<code class="docutils literal notranslate"><span class="pre">molid[0][2]</span></code> is the atomic index of the third atom in the first molecule.</p></li>
+<li><p><strong>mol</strong> (<a class="reference internal" href="#celeste.cxs.Molecule" title="celeste.cxs.Molecule"><em>Molecule</em></a>) – A created list of <code class="docutils literal notranslate"><span class="pre">Molecule</span></code> objects, generated based on <code class="docutils literal notranslate"><span class="pre">nmol</span></code>, <code class="docutils literal notranslate"><span class="pre">namol</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">molid</span></code>.</p></li>
+<li><p><strong>dist</strong> (<em>numpy</em><em>, </em><em>float</em>) – Interatomic distance matrix, where element (i,j) gives the interatomic distances
+between atoms i and j.</p></li>
+<li><p><strong>graph</strong> (<em>numpy</em><em>, </em><em>int</em>) – Adjacency matrix for the structure, with entries 1 for bonded atoms and 0 for non-bonded.
+Note that the type of bonding does not matter here - we only report whether or not two atoms are bonded.</p></li>
+<li><p><strong>TotalCharge</strong> (<em>int</em>) – Formal charge on structure…</p></li>
+<li><p><strong>MolCharge</strong> (<em>int</em><em>, </em><em>list</em>) – Formal charge on each molecule in the structure.</p></li>
+<li><p><strong>dvdr</strong> (<em>float</em><em>,</em><em>list</em>) – Derivatives of energy with respect to Cartesian coordinates.</p></li>
+<li><p><strong>success</strong> (<em>bool</em>) – Flag indicating whether last energy calculation performed for this structure
+was successful or not.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>A CXS object can be created by either directly reading a structure from file:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">CXS</span><span class="p">(</span><span class="n">FileName</span><span class="o">=</span><span class="s1">&#39;test.xyz&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or by defining the number of atoms <code class="docutils literal notranslate"><span class="pre">natoms</span></code>, atomic <code class="docutils literal notranslate"><span class="pre">positions</span></code> and <code class="docutils literal notranslate"><span class="pre">atomlabels</span></code> parameters:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">CXS</span><span class="p">(</span><span class="n">natoms</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">positions</span> <span class="o">=</span><span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.5</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">)],</span> <span class="n">atomlabels</span> <span class="o">=</span><span class="p">[</span><span class="s1">&#39;C&#39;</span><span class="p">,</span><span class="s1">&#39;O&#39;</span><span class="p">],</span>
+        <span class="n">comment</span> <span class="o">=</span> <span class="s2">&quot;Carbon monoxide&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The example above creates a carbon monoxide molecule, with the carbon atom at (0,0,0) and the
+oxygen atom at (1.5,0,0) (atomic units used by default).</p>
+<dl class="method">
+<dt id="celeste.CXS.CopyCXS">
+<code class="sig-name descname">CopyCXS</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.CopyCXS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.CopyCXS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes a copy of the self.CXS object in a safe manner.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A new <code class="docutils literal notranslate"><span class="pre">CXS</span></code> object which is a copy of <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>cxnew (<code class="docutils literal notranslate"><span class="pre">CXS</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.CXS.GetAllPairDistances">
+<code class="sig-name descname">GetAllPairDistances</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.GetAllPairDistances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.GetAllPairDistances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates ALL interatomic distances in the current structure, and returns them in
+a numpy array <code class="docutils literal notranslate"><span class="pre">distances</span></code>. Also stores the distances in <code class="docutils literal notranslate"><span class="pre">self.distances</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>n-by-n matrix containing all atomic pair-distance (in atomic units)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>distances (np, float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.CXS.GetGraph">
+<code class="sig-name descname">GetGraph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.GetGraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.GetGraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the adjacency matrix <code class="docutils literal notranslate"><span class="pre">self.graph</span></code> for the structure.</p>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>The determination of whether atoms are <cite>bonded’ or not is based on the covalent radii in the ``chemical_data`</cite>
+module, as well as the <code class="docutils literal notranslate"><span class="pre">BondingScaleFactor</span></code> in <code class="docutils literal notranslate"><span class="pre">constants.py</span></code>. The cut-off distance <span class="math notranslate nohighlight">\(R_{cut}\)</span>
+for each pair of atoms (i,j) is:</p>
+<div class="math notranslate nohighlight">
+\[R_{cut} = \alpha (R_{i} + R_{j})\]</div>
+<p>where <span class="math notranslate nohighlight">\(\alpha\)</span> is <code class="docutils literal notranslate"><span class="pre">BondingScaleFactor</span></code> and <span class="math notranslate nohighlight">\(R_{i,j}\)</span> are covalent radii.</p>
+</div>
+<p class="rubric">Example</p>
+<p>After creating a CXS object, the adjacency matrix <code class="docutils literal notranslate"><span class="pre">graph</span></code> and the distance matrix <code class="docutils literal notranslate"><span class="pre">dist</span></code>
+can be calculated as follows:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">CXS</span><span class="p">(</span><span class="n">FileName</span><span class="o">=</span><span class="s1">&#39;test.xyz&#39;</span><span class="p">)</span>
+<span class="n">a</span><span class="o">.</span><span class="n">GetGraph</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.CXS.GetMols">
+<code class="sig-name descname">GetMols</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.GetMols"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.GetMols" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the adjacency matrix in <code class="docutils literal notranslate"><span class="pre">self.graph</span></code> to determine the molecules defined by the chemical
+structure object.</p>
+<p>This is achieved using the Floyd-Warshall shortest-path algorithm to split the adjacency matrix into
+disconnected sub-graphs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.CXS.GetShortestPaths">
+<code class="sig-name descname">GetShortestPaths</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.GetShortestPaths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.GetShortestPaths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine the shortest-path between atoms using the Floyd-Warshall algorithm.</p>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>If atoms i and j are not bonded, the distance between them is assigned some very
+large value <code class="docutils literal notranslate"><span class="pre">BIG_BONDING</span></code> which is stored in <code class="docutils literal notranslate"><span class="pre">constants.py</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.CXS.GetSpinandCharge">
+<code class="sig-name descname">GetSpinandCharge</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.GetSpinandCharge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.GetSpinandCharge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the total charge and the spin multiplicity on the structure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.CXS.IDPPFunction">
+<code class="sig-name descname">IDPPFunction</code><span class="sig-paren">(</span><em class="sig-param">TargetDistances</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.IDPPFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.IDPPFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the IDPP potential function and its derivatives for the current structure.</p>
+<blockquote>
+<div><p>The <code class="docutils literal notranslate"><span class="pre">TargetDistances</span></code> need to be passed into this function; in IDPP, these are linearly
+interpolated between the reactants and products according to:</p>
+<div class="math notranslate nohighlight">
+\[r_{ij}^{target} = r_{ij}^{R} +\]</div>
+</div></blockquote>
+<p>rac{k}{n} (r_{ij}^{R} - r_{ij}^{P})</p>
+<blockquote>
+<div><p>where :math:<code class="docutils literal notranslate"><span class="pre">r_{ij}^{R}</span></code> is the inter-atomic distance between two atoms in the reactant structure,
+:math”<a href="#id5"><span class="problematic" id="id6">``</span></a>r_{ij}^{P} is the corresponding distance in the product.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>TargetDistances (float): An [n,n] array of target distances, where n is the number of atoms.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Eidpp (float): Calculated IDPP energy value.
+derivs (float): Derivatives of IDPP cost function, size [N,3].</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.CXS.KabschAlign">
+<code class="sig-name descname">KabschAlign</code><span class="sig-paren">(</span><em class="sig-param">cxt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.KabschAlign"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.KabschAlign" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the Kabsch algorithm to align structure to a target structure <code class="docutils literal notranslate"><span class="pre">cxt</span></code>. First, the centroids of the
+two structures are aligned (so the centroid of <code class="docutils literal notranslate"><span class="pre">self</span></code> is shifted to match that of <code class="docutils literal notranslate"><span class="pre">cxt</span></code>), then the
+orientation of <code class="docutils literal notranslate"><span class="pre">self</span></code> is changed to match that of <code class="docutils literal notranslate"><span class="pre">cxt</span></code> using the Kabsch algorithm. This results
+in <code class="docutils literal notranslate"><span class="pre">self</span></code> having the minimized RMS displacement from cxt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cxt</strong> (a <code class="docutils literal notranslate"><span class="pre">CXS</span></code> structure) – A target structure, against which <code class="docutils literal notranslate"><span class="pre">self</span></code> is optimally aligned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.CXS.NavigationDot">
+<code class="sig-name descname">NavigationDot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.NavigationDot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.NavigationDot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dot product between the derivatives of the PES and those given by the
+navigation function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The calculated dot product is stored in <code class="docutils literal notranslate"><span class="pre">self.NavigationDotForces</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.CXS.NavigationFunction">
+<code class="sig-name descname">NavigationFunction</code><span class="sig-paren">(</span><em class="sig-param">cxp</em>, <em class="sig-param">knav=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.NavigationFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.NavigationFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates the navigation function for MEP calculation, and calculates the derivatives.</p>
+<p>In the current implementation, the navigation function is similar to that used in IDPP, namely:</p>
+<div class="math notranslate nohighlight">
+\[V_{nav}(\mathbf{r}) = \sum_{i,j} k_{nav} ( r_{ij} - r_{ij}^{P})^2,\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(k_{nav}\)</span> is a spring-constant for the navigation function, <span class="math notranslate nohighlight">\(r_{ij}^{P}\)</span>
+is the interatomic distance between <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span> in the products (<code class="docutils literal notranslate"><span class="pre">cxp</span></code>), and <span class="math notranslate nohighlight">\(r_{ij}\)</span> is
+the corresponding distance in the current structure (<code class="docutils literal notranslate"><span class="pre">self</span></code>).</p>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>The navigation function is returned by this routine, and the derivatives with respect to the
+Cartesian coordinates are placed into <code class="docutils literal notranslate"><span class="pre">self.dvdr_nav</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Value of the navigation function.
+cxp (<code class="docutils literal notranslate"><span class="pre">CXS</span></code> object): Chemical structure object containing the target product structure.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Enav (float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.CXS.PrintAllMols">
+<code class="sig-name descname">PrintAllMols</code><span class="sig-paren">(</span><em class="sig-param">file=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.PrintAllMols"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.PrintAllMols" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints information on all molecules in structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – File to which molecule information is printed. If <code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">is</span> <span class="pre">None</span></code>, then we print to stdout.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.CXS.PrintEnergy">
+<code class="sig-name descname">PrintEnergy</code><span class="sig-paren">(</span><em class="sig-param">file=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.PrintEnergy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.PrintEnergy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple routine to print energy in pretty format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – File to print energy. If <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">is</span> <span class="pre">None</span></code>, print to stdout.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.CXS.PrintGraph">
+<code class="sig-name descname">PrintGraph</code><span class="sig-paren">(</span><em class="sig-param">file=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.PrintGraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.PrintGraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the adjacency matrix to either <code class="docutils literal notranslate"><span class="pre">file</span></code> or standard output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – File to print adjacency matrix stored in <code class="docutils literal notranslate"><span class="pre">self.graph</span></code>.</p>
+</dd>
+</dl>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">is</span> <span class="pre">None</span></code>, then prints to standard output.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.CXS.Printdvdr">
+<code class="sig-name descname">Printdvdr</code><span class="sig-paren">(</span><em class="sig-param">file=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.Printdvdr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.Printdvdr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple routine to print derivatives in pretty format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – File to print energy. If <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">is</span> <span class="pre">None</span></code>, print to stdout.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.CXS.PrinttoFile">
+<code class="sig-name descname">PrinttoFile</code><span class="sig-paren">(</span><em class="sig-param">file</em>, <em class="sig-param">format='xyz'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.PrinttoFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.PrinttoFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints structure to file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>str</em>) – Filename to write the structure to.</p></li>
+<li><p><strong>format</strong> (<em>str</em>) – Output format. Allowed values: <em>xyz</em> only….</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.CXS.ReadStructureFromFile">
+<code class="sig-name descname">ReadStructureFromFile</code><span class="sig-paren">(</span><em class="sig-param">FileName</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.ReadStructureFromFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.ReadStructureFromFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a <code class="docutils literal notranslate"><span class="pre">CXS</span></code> chemical structure object from file. Currently, only .xyz file formats are read.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>FileName</strong> (<em>int</em>) – Input filename. For now, this should be a standard .xyz file.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>tuple containing</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>natoms (int): Number of atoms.</p></li>
+<li><p>comment (str): A text comment, read from second line of xyz file.</p></li>
+<li><p>atomlabels (str): List of atom labels.</p></li>
+<li><p>positions (float, numpy array): x,y,z positions of all atoms.</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(tuple)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.CXS.SetMasses">
+<code class="sig-name descname">SetMasses</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/celeste/cxs.html#CXS.SetMasses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.SetMasses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocates the atomic masses of each atom.</p>
+<p>The masses (in atomic units, where mass of electron is 1) are stored in a dictionary in <code class="docutils literal notranslate"><span class="pre">chemical_data.py</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of atomic masses.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>mass (float, list)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="modules.html" class="btn btn-neutral float-left" title="Module descriptions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Scott Habershon
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
