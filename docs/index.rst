@@ -11,6 +11,7 @@ Welcome to Celeste's documentation!
    :caption: Contents:
 
    Introduction
+   test
    modules
    celeste
 
