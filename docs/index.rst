@@ -7,11 +7,10 @@ Welcome to Celeste's documentation!
 ===================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
-   Introduction
-   test
+   Introduction   
    modules
    celeste
 
