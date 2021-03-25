@@ -1,0 +1,401 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Setting up energy calculations &mdash; Celeste 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Example calculations" href="examples.html" />
+    <link rel="prev" title="Input specification" href="completeinput.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Celeste
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms in Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setting up Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">Running Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input files for Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="completeinput.html">Input specification</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Setting up energy calculations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#set-up-using-the-pescalc-directive">Set-up using the <code class="docutils literal notranslate"><span class="pre">PEScalc</span></code> directive</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#entries-in-the-pescalc-directive">Entries in the <code class="docutils literal notranslate"><span class="pre">PEScalc</span></code> directive</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-celeste-doing-when-it-calculates-energy">What is <code class="docutils literal notranslate"><span class="pre">Celeste</span></code> doing when it calculates energy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#which-external-codes-are-supported">Which external codes are supported?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#useful-notes-about-energy-calculations">Useful notes about energy calculations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Example calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="importing.html">Importing Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/modules.html">celeste</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Celeste</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Setting up energy calculations</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/energy.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="setting-up-energy-calculations">
+<h1>Setting up energy calculations<a class="headerlink" href="#setting-up-energy-calculations" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">Celeste</span></code> package generally uses external codes to perform energy evaluations and geometry optimization.</p>
+<p>The external energy calculation can be set-up in one of two ways:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Through the <code class="docutils literal notranslate"><span class="pre">PEScalc</span></code> directive in the input file;</p></li>
+<li><p>Through the use of a template file, as specified in the input file;</p></li>
+</ol>
+</div></blockquote>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Currently, only the <code class="docutils literal notranslate"><span class="pre">PEScalc</span></code> method for setting-up energy evaluations is employed, and the only current interface
+is to the <a class="reference external" href="https://orcaforum.kofo.mpg.de/app.php/portal">ORCA quantum chemistry code.</a>.</p>
+</div>
+<div class="section" id="set-up-using-the-pescalc-directive">
+<h2>Set-up using the <code class="docutils literal notranslate"><span class="pre">PEScalc</span></code> directive<a class="headerlink" href="#set-up-using-the-pescalc-directive" title="Permalink to this headline">¶</a></h2>
+<p>The input file to <code class="docutils literal notranslate"><span class="pre">Celeste</span></code> can contain a series of <code class="docutils literal notranslate"><span class="pre">PEScalc</span></code> directives which are used to specify an
+energy evalution method.</p>
+<p>For example, a typical <code class="docutils literal notranslate"><span class="pre">PEScalc</span></code> directive in an input file is shown below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PEScalc</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;calctype&#39;</span> <span class="p">:</span> <span class="s2">&quot;Energy&quot;</span><span class="p">,</span> <span class="s1">&#39;code&#39;</span> <span class="p">:</span> <span class="s2">&quot;orca&quot;</span><span class="p">,</span> <span class="s1">&#39;executable&#39;</span> <span class="p">:</span> <span class="s2">&quot;/Users/scott/programs/orca/orca&quot;</span><span class="p">,</span> <span class="s1">&#39;arglist&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;! PM3 engrad&quot;</span><span class="p">]}</span>
+</pre></div>
+</div>
+<p>Note that the the input value given is in the form of a python dictionary, with each entry of the form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">key</span> <span class="p">:</span> <span class="n">value</span>
+</pre></div>
+</div>
+<p>The entries given in the dictionary are used to create a <code class="docutils literal notranslate"><span class="pre">PES</span></code> object, which contains information about the
+type of calculation to be performed and the information required to run the calculation.</p>
+<p>During a simulation, whenever an energy evaluation job is requested, the <code class="docutils literal notranslate"><span class="pre">PES</span></code> object is used to perform the corresponding
+calculation on a provided <code class="docutils literal notranslate"><span class="pre">CXS</span></code> object, and the results are returned in the relevant entries of the <code class="docutils literal notranslate"><span class="pre">CXS</span></code> object
+(such as <code class="docutils literal notranslate"><span class="pre">CXS.energy</span></code> for the total energy, or <code class="docutils literal notranslate"><span class="pre">CXS.dvdr</span></code> for the atomic derivatives).</p>
+<div class="section" id="entries-in-the-pescalc-directive">
+<h3>Entries in the <code class="docutils literal notranslate"><span class="pre">PEScalc</span></code> directive<a class="headerlink" href="#entries-in-the-pescalc-directive" title="Permalink to this headline">¶</a></h3>
+<p>Each <code class="docutils literal notranslate"><span class="pre">PEScalc</span></code> directive should contain the following dictionary entries:</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">calctype</span></code>: This defines the calculation type. Allowed values are:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><strong>Energy</strong>: To perform a single-point energy and gradient evaluation.</p></li>
+<li><p><strong>Optimize</strong>: To perform a geometry optimization to the nearest local minimum.</p></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">code</span></code>: Specifies the external code which will be used. Allowed values are:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><strong>orca</strong>: To use the <a class="reference external" href="https://orcaforum.kofo.mpg.de/app.php/portal">ORCA quantum chemistry code.</a></p></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">executable</span></code>: To define the <strong>full path</strong> to the requested executable.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The relevant executable for energy evaluations obviously needs to be installed and available on your system!</p>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">arglist</span></code>: This is the list of arguments which will be passed to the energy evaluation code, in the form of a python list.</p></li>
+</ul>
+<p>In general, the format of this list is code-dependent; this information is used to create an input file for the
+target executable.</p>
+<p>In the case of using <strong>ORCA</strong> to perform external energy evaluation, the <code class="docutils literal notranslate"><span class="pre">arglist</span></code> should contain the
+usual input lines which would go in the header of an <strong>ORCA</strong> input file. For example, the <code class="docutils literal notranslate"><span class="pre">arglist</span></code> of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;arglist&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;! PM3 engrad&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>would result in production of an <strong>ORCA</strong> input file like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>! PM3 engrad
+*xyzfile 0 1 temp.xyz
+</pre></div>
+</div>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">!</span> <span class="pre">PM3</span> <span class="pre">engrad</span></code> has been input in the first-line of the created input file; the
+rest of the input file contains structure information for the <code class="docutils literal notranslate"><span class="pre">CXS</span></code> object on which a <code class="docutils literal notranslate"><span class="pre">PES</span></code>
+calculation has been requested.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Celeste</span></code> code handles the generation of the <strong>ORCA</strong> input file here; the user only needs to provide the
+calculation-type information for the header line.</p>
+</div>
+<p>As a second example, consider the following <code class="docutils literal notranslate"><span class="pre">PEScalc</span></code> directive:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PEScalc</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;calctype&#39;</span> <span class="p">:</span> <span class="s2">&quot;Energy&quot;</span><span class="p">,</span> <span class="s1">&#39;code&#39;</span> <span class="p">:</span> <span class="s2">&quot;orca&quot;</span><span class="p">,</span> <span class="s1">&#39;executable&#39;</span> <span class="p">:</span> <span class="s2">&quot;~/orca&quot;</span><span class="p">,</span> <span class="s1">&#39;arglist&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;! DFT B3LYP def2-SVP&quot;</span><span class="p">,</span> <span class="s2">&quot;! engrad&quot;</span><span class="p">]</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that, in this case, the <code class="docutils literal notranslate"><span class="pre">arglist</span></code> list contains two entries; each of these will become a separate
+line in the generated <strong>ORCA</strong> input file, as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>! DFT B3LYP def2-SVP
+! engrad
+*xyzfile 0 1 temp.xyz
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Note that any method which is accessible through <strong>ORCA</strong>, such as <em>PM3</em>, <em>AM1</em>, <em>DFT</em> and so on, can
+be accessed through <a href="#id2"><span class="problematic" id="id3">``</span></a>Celeste.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">Celeste</span></code> input file can contain <code class="docutils literal notranslate"><span class="pre">PEScalc</span></code> directives with both <code class="docutils literal notranslate"><span class="pre">calctype</span> <span class="pre">=</span> <span class="pre">Energy</span></code> and <code class="docutils literal notranslate"><span class="pre">calctype</span> <span class="pre">=</span> <span class="pre">Optimize</span></code>.
+However, if more than one <code class="docutils literal notranslate"><span class="pre">PEScalc</span></code> with <code class="docutils literal notranslate"><span class="pre">calctype</span> <span class="pre">=</span> <span class="pre">Energy</span></code> (or <code class="docutils literal notranslate"><span class="pre">Optimize</span></code>) is defined, then this might cause internal problems - you should avoid this in your input files!</p>
+</div>
+</div>
+</div>
+<div class="section" id="what-is-celeste-doing-when-it-calculates-energy">
+<h2>What is <code class="docutils literal notranslate"><span class="pre">Celeste</span></code> doing when it calculates energy?<a class="headerlink" href="#what-is-celeste-doing-when-it-calculates-energy" title="Permalink to this headline">¶</a></h2>
+<p>For each dictionary (say, <code class="docutils literal notranslate"><span class="pre">d</span></code>) created through defining a <code class="docutils literal notranslate"><span class="pre">PEScalc</span></code> directive, <code class="docutils literal notranslate"><span class="pre">Celeste</span></code> generates a
+<code class="docutils literal notranslate"><span class="pre">PES</span></code> object:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d</span><span class="o">=</span><span class="p">{</span> <span class="s1">&#39;calctype&#39;</span> <span class="p">:</span> <span class="s2">&quot;Energy&quot;</span><span class="p">,</span> <span class="s1">&#39;code&#39;</span> <span class="p">:</span> <span class="s2">&quot;orca&quot;</span><span class="p">,</span> <span class="s1">&#39;executable&#39;</span> <span class="p">:</span> <span class="s2">&quot;~/orca&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;arglist&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;! DFT B3LYP def2-SVP&quot;</span><span class="p">,</span> <span class="s2">&quot;! engrad&quot;</span><span class="p">]</span> <span class="p">}</span>
+<span class="n">ecalc</span> <span class="o">=</span> <span class="n">PES</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>During a <code class="docutils literal notranslate"><span class="pre">Celeste</span></code> calculation, suppose we generate a chemical structure (<code class="docutils literal notranslate"><span class="pre">CXS</span></code>) object <code class="docutils literal notranslate"><span class="pre">a</span></code>; to perform PES calculation <code class="docutils literal notranslate"><span class="pre">ecalc</span></code> on the <code class="docutils literal notranslate"><span class="pre">CXS</span></code> object <code class="docutils literal notranslate"><span class="pre">a</span></code>, the following command is issued:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">E</span> <span class="o">=</span> <span class="n">ecalc</span><span class="o">.</span><span class="n">RunPES</span><span class="p">(</span> <span class="n">a</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">RunPES</span></code> is executed, <code class="docutils literal notranslate"><span class="pre">Celeste</span></code> does the following general steps:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Create a temporary input file for the external executable associated with the <code class="docutils literal notranslate"><span class="pre">ecalc</span></code> object (such as <strong>ORCA</strong>)</p></li>
+<li><p>Run the external code on the temporary input file using the <code class="docutils literal notranslate"><span class="pre">executable</span></code> defined in the <code class="docutils literal notranslate"><span class="pre">PES</span></code> object.</p></li>
+</ol>
+<p>3. Read the generated input back into the <code class="docutils literal notranslate"><span class="pre">CXS</span></code> object, including some indication of whether the
+external code failed.</p>
+</div></blockquote>
+</div>
+<div class="section" id="which-external-codes-are-supported">
+<h2>Which external codes are supported?<a class="headerlink" href="#which-external-codes-are-supported" title="Permalink to this headline">¶</a></h2>
+<p>Current external energy evaluation codes which are supported are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>ORCA</strong></p></li>
+</ul>
+</div></blockquote>
+<p>The following will be added at some point:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>DFTB+</strong></p></li>
+<li><p><strong>PSI4</strong></p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="useful-notes-about-energy-calculations">
+<h2>Useful notes about energy calculations<a class="headerlink" href="#useful-notes-about-energy-calculations" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Once an external code fails to execute correctly (for example, non-convergence of SCF calculation), this will typically flag an error in <code class="docutils literal notranslate"><span class="pre">Celeste</span></code> (although, depending on context, the code might be able to struggle on).</p></li>
+<li><p>The temporary input files generated for external codes typically have the suffix <code class="docutils literal notranslate"><span class="pre">temp</span></code>; so, you should avoid having similar filenames!</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">Celeste</span></code> will occasionally delete temporary files, such as <code class="docutils literal notranslate"><span class="pre">temp.xyz</span></code>; make sure this does not
+result in your input files being deleted.</p>
+</div>
+<ul class="simple">
+<li><p>The python modules <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> is used to perform calculations using external codes, and is also used to remove temporary files from previous calculations.</p></li>
+</ul>
+</div>
+<div class="section" id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
+<p>If energy calculations fail…</p>
+<ul class="simple">
+<li><p>Have you defined the correct <code class="docutils literal notranslate"><span class="pre">executable</span></code> and <code class="docutils literal notranslate"><span class="pre">code</span></code> in the <code class="docutils literal notranslate"><span class="pre">PEScalc</span></code>?</p></li>
+<li><p>Is there something wrong with the structure? Sometimes the last-generated output files from the external code will be saved, so can be viewed to get an idea of what’s going on?</p></li>
+<li><p>Have you really got the external executable installed?</p></li>
+<li><p>If you’re running on a HPC queue system, is the external executable installed on the compute nodes?</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="examples.html" class="btn btn-neutral float-right" title="Example calculations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="completeinput.html" class="btn btn-neutral float-left" title="Input specification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, Scott Habershon
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

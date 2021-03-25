@@ -1,0 +1,254 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>About Celeste &mdash; Celeste 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="#" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Algorithms in Celeste" href="algorithms.html" />
+    <link rel="prev" title="Welcome to Celeste’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Celeste
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">About Celeste</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#citing-celeste">Citing Celeste</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms in Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setting up Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">Running Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input files for Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="completeinput.html">Input specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="energy.html">Setting up energy calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Example calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="importing.html">Importing Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/modules.html">celeste</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Celeste</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>About Celeste</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/about.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="about-celeste">
+<h1>About Celeste<a class="headerlink" href="#about-celeste" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">Celeste</span></code> is a python package which implements a set of computational methods which are aimed
+at automated discovery and characterization of chemical reaction mechanisms. This python package
+is an evolution of the original Fortran code used in the Habershon group.</p>
+<p>Ultimately, <code class="docutils literal notranslate"><span class="pre">Celeste</span></code> will implement the following methods:</p>
+<ul class="simple">
+<li><p>Minimum-energy path (MEP) calculations, such as nudged elastic band (NEB) and Growing string method;</p></li>
+<li><p>Double-ended graph-driven mechanism finding;</p></li>
+<li><p>Single-ended graph-driven reaction network generation;</p></li>
+</ul>
+<div class="section" id="citing-celeste">
+<h2>Citing Celeste<a class="headerlink" href="#citing-celeste" title="Permalink to this headline">¶</a></h2>
+<p>If you use this package, please cite the following articles:</p>
+<p>1. Sampling reactive pathways with random walks in chemical space: Applications to molecular dissociation and catalysis,
+S. Habershon, <a class="reference external" href="http://dx.doi.org/10.1063/1.4929992">J. Chem. Phys., 143, 094106 (2015)</a></p>
+<p>2. Automated prediction of catalytic mechanism and rate law using graph-based reaction-path sampling,
+S. Habershon, <a class="reference external" href="http://dx.doi.org/10.1021/acs.jctc.6b00005">J. Chem. Theory Comput., 12, 1786 (2016)</a></p>
+<p>3. Automatic Proposal of Multistep Reaction Mechanisms using a Graph-Driven Search,
+I. Ismail, H. B. V. A. Stuttaford-Fowler, C. Ochan Ashok, C. Robertson and S. Habershon,
+<a class="reference external" href="http://doi.org/10.1021/acs.jpca.9b01014">J. Phys. Chem. A, 123, 3407 (2019)</a></p>
+<p>4. Fast screening of homogeneous catalysis mechanisms using graph-driven searches and approximate quantum chemistry,
+C. Robertson and S. Habershon, <a class="reference external" href="https://doi.org/10.1039/C9CY01997A">Cat. Sci. Tech., 9, 6357-6369 (2019)</a></p>
+<p>In addition to the above, you might also be interested in the following articles:</p>
+<p>1. Traversing Dense Networks of Elementary Chemical Reactions to Predict Minimum-Energy Reaction Mechanisms,
+C. Robertson, I. Ismail and S. Habershon, <a class="reference external" href="https://doi.org/10.1002/syst.201900047">ChemSystemChem, 2, e1900047 (2020)</a></p>
+<p>2. Identifying Barrierless Mechanisms for Benzene Formation in the Interstellar Medium Using Permutationally Invariant Reaction Discovery,
+C. Robertson, R. Hyland, A. J. D. Lacey, S. Havens and S. Habershon, <a class="reference external" href="https://doi.org/10.1021/acs.jctc.1c00046">J. Chem. Theory Comput., -, (2021)</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="algorithms.html" class="btn btn-neutral float-right" title="Algorithms in Celeste" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Celeste’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, Scott Habershon
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

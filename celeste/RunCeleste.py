@@ -128,6 +128,13 @@ def main(argv):
                EnergyCalc=EnergyCalcs)
 
 
+    # - MEP-finding using navigation functions (JOE!)
+    elif params.IOvars['CalculationType'] == "Navigation":
+
+        # Joe's code to go here.
+        sys.exit(1)
+
+
     # - Double-ended graph-driven search (DEDGDS).
     elif params.IOvars['CalculationType'] == "DEGDS":
 

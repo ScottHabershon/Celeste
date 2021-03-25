@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Input specification &mdash; Celeste 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Setting up energy calculations" href="energy.html" />
+    <link rel="prev" title="Input files for Celeste" href="input.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Celeste
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms in Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setting up Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">Running Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input files for Celeste</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Input specification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#a-note-on-units">A note on units</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#list-of-available-input-directives">List of available input directives</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#core-input-directives">Core input directives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#minimum-energy-path-directives">Minimum-energy path directives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pes-evaluation-directives">PES evaluation directives</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="energy.html">Setting up energy calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Example calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="importing.html">Importing Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/modules.html">celeste</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Celeste</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Input specification</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/completeinput.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="input-specification">
+<h1>Input specification<a class="headerlink" href="#input-specification" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">Celeste</span></code> input files contain directives telling the code which calculations to perform and how.
+This page contains a list of available input directives; further information can be found in the <a class="reference internal" href="source/modules.html"><span class="doc">API documentation</span></a>.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Note that the input of directives relating to energy evaluations is discussed <a class="reference internal" href="energy.html"><span class="doc">here</span></a>.</p>
+</div>
+<div class="section" id="a-note-on-units">
+<h2>A note on units<a class="headerlink" href="#a-note-on-units" title="Permalink to this headline">¶</a></h2>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><code class="docutils literal notranslate"><span class="pre">Celeste</span></code> uses atomic units, where the mass of the electron
+is 1.0, the charge on an electron is -1.0, <span class="math notranslate nohighlight">\(\hbar=1\)</span> and <span class="math notranslate nohighlight">\(4\pi\epsilon=1\)</span>.</p>
+<p>The exception to this is the input of atomic coordinates which, according to the usual convention of the
+<code class="docutils literal notranslate"><span class="pre">xyz</span></code> files used as input, are in Angstroms.</p>
+</div>
+</div>
+<div class="section" id="list-of-available-input-directives">
+<h2>List of available input directives<a class="headerlink" href="#list-of-available-input-directives" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="core-input-directives">
+<h3>Core input directives<a class="headerlink" href="#core-input-directives" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CalculationType</span></code> (<strong>default</strong>: None).</p></li>
+</ul>
+<p>Defines the calculation to be performed. Allowed values are:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">NEB</span></code>: nudged elastic band refinement of reaction-path. Also includes climbing-image NEB.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DEGDS</span></code>: double-ended reaction-mechanism search.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SGDS</span></code>: single-ended reaction-network generation.</p></li>
+</ol>
+</div></blockquote>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Currently, only <code class="docutils literal notranslate"><span class="pre">NEB</span></code> is supported as calculation type.</p>
+</div>
+<ul class="simple">
+<li><p><a href="#id1"><span class="problematic" id="id2">``</span></a>Description``(<strong>default</strong>: None)</p></li>
+</ul>
+<p>An optional string describing the calculation.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ReactantFile</span></code> (<strong>default</strong>: None)</p></li>
+</ul>
+<p>An <code class="docutils literal notranslate"><span class="pre">xyz</span></code> file describing the reactant structure. This is used in initializing <code class="docutils literal notranslate"><span class="pre">NEB</span></code>, <code class="docutils literal notranslate"><span class="pre">DEGDS</span></code> and <code class="docutils literal notranslate"><span class="pre">SGDS</span></code> calculations.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ProductFile</span></code> (<strong>default</strong>: None)</p></li>
+</ul>
+<p>An <code class="docutils literal notranslate"><span class="pre">xyz</span></code> file describing the reactant structure. This is used in initializing <code class="docutils literal notranslate"><span class="pre">NEB</span></code>, <code class="docutils literal notranslate"><span class="pre">DEGDS</span></code> and <code class="docutils literal notranslate"><span class="pre">SGDS</span></code> calculations.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">PathFile</span></code> (<strong>default</strong>: None)</p></li>
+</ul>
+<p>An <code class="docutils literal notranslate"><span class="pre">xyz</span></code> file containing a full reaction path, including reactants, products and intermediate images.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>You should only define <code class="docutils literal notranslate"><span class="pre">ReactantFile</span></code> and <code class="docutils literal notranslate"><span class="pre">ProductFile</span></code> <strong>or</strong> <code class="docutils literal notranslate"><span class="pre">PathFile</span></code>. If you provide
+all three at once, the code doesn’t know exactly where to extract structure information from and will
+quit!</p>
+</div>
+</div>
+<div class="section" id="minimum-energy-path-directives">
+<h3>Minimum-energy path directives<a class="headerlink" href="#minimum-energy-path-directives" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">InterpolationType</span></code> (<strong>default</strong>: <em>LinearCartesian</em>)</p></li>
+</ul>
+<p>When performing a MEP calculation, this directive defines the method to be used to generate the internal images
+by interpolation between the reaction end-points.</p>
+<p>Available options are:</p>
+<blockquote>
+<div><p>1. <code class="docutils literal notranslate"><span class="pre">LinearCartesian</span></code>: Performs linear interpolation between the end-points in Cartesian coordinates.
+This is usually not a good idea, especially for reactions which involve significant molecular distortions.</p>
+<ol class="arabic simple" start="2">
+<li><p><code class="docutils literal notranslate"><span class="pre">IDPP</span></code>: Performs image-dependent pair-potential (IDPP) interpolation, as proposed by <a class="reference external" href="https://doi.org/10.1063/1.4878664">Smidstrup et al</a>.</p></li>
+</ol>
+</div></blockquote>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">InterpolationType</span></code> is only relevant if <code class="docutils literal notranslate"><span class="pre">PathFile</span></code> is NOT defined. If <code class="docutils literal notranslate"><span class="pre">PathFile</span></code> is defined,
+then the MEP calculation will start from the provided reaction-path without interpolation.</p>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Nimages</span></code> (<strong>default</strong>: 0)</p></li>
+</ul>
+<p>This is the number of images in the reaction-path.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Numbering of images starts at 0, and runs to <code class="docutils literal notranslate"><span class="pre">Nimages</span></code> internally in <code class="docutils literal notranslate"><span class="pre">Celeste</span></code>. This means that the total
+number of images in the reaction-path, including end-points, is <code class="docutils literal notranslate"><span class="pre">Nimages</span> <span class="pre">+</span> <span class="pre">1</span></code>.</p>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">OptimizeEnds</span></code> (<strong>default</strong>: <em>False</em>)</p></li>
+</ul>
+<p>This is a logical flag which dictates whether the reactant and product structures are geometry-optimized
+before the MEP calculation proceeds.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">AlignEndPoints</span></code> (<strong>default</strong>: <em>False</em>)</p></li>
+</ul>
+<p>This is a logical flag which dictates whether the reactant and product structures are orientationally
+aligned (by the Kabsch algorithm) before path-interpolation and MEP.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">NEBspring</span></code> (<strong>default</strong>: 0.050 Eh/Bohr)</p></li>
+</ul>
+<p>This is the traditional NEB spring-constant, in atomic units.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">NEBiterations</span></code> (<strong>default</strong>: 10)</p></li>
+</ul>
+<p>This is the <strong>maximum</strong> number of iterations that a NEB calculation will run for; if convergence is signalled
+before this maximum number of iterations, the calculation will stop.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">NEBForceTolerance</span></code> (<strong>default</strong>: 1E-3 Eh/Bohr)</p></li>
+</ul>
+<p>This is the RMS tolerance on the <strong>perpendicular forces</strong> along the reaction-path demanded to signal convergence.
+This convergence criteria is based on the projected perpendicular forces along the reaction-path, without the NEB spring forces.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">NEBMaxForce</span></code> (<strong>default</strong>: 1E-3 Eh/Bohr)</p></li>
+</ul>
+<p>This is the target tolerance on the <strong>maximum perpendicular force-component</strong> along the reaction-path, calculated
+without the NEB spring forces.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">NEBMaxForce</span></code> value should typically be a bit larger than the <code class="docutils literal notranslate"><span class="pre">NEBForceTolerance</span></code> value, otherwise
+you’ll be waiting a long-time for convergence….</p>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ClimbingImage</span></code> (<strong>default</strong>: <em>False</em>)</p></li>
+</ul>
+<p>This is a logical flag dictating whether or not to use the <code class="docutils literal notranslate"><span class="pre">ClimbingImage</span></code> modification of NEB.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Currently, CINEB is not implemented.</p>
+</div>
+</div>
+<div class="section" id="pes-evaluation-directives">
+<h3>PES evaluation directives<a class="headerlink" href="#pes-evaluation-directives" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">PEScalc</span></code> (<strong>default</strong>: None)</p></li>
+</ul>
+<p>This directive provides a definition of a potential energy calculation method; usually this is an interface
+to an external <em>ab initio</em> electronic structure code, which can be used as a driver to perform energy
+evaluations or geometry optimization.</p>
+<p>The setup of <code class="docutils literal notranslate"><span class="pre">PEScalc</span></code> objects is further detailed in <a class="reference internal" href="energy.html"><span class="doc">here</span></a>.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="energy.html" class="btn btn-neutral float-right" title="Setting up energy calculations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="input.html" class="btn btn-neutral float-left" title="Input files for Celeste" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, Scott Habershon
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

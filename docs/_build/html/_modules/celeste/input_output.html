@@ -1,0 +1,394 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>celeste.input_output &mdash; Celeste 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> Celeste
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithms.html">Algorithms in Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setup.html">Setting up Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../run.html">Running Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../input.html">Input files for Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../completeinput.html">Input specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../energy.html">Setting up energy calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Example calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../importing.html">Importing Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/modules.html">celeste</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Celeste</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>celeste.input_output</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for celeste.input_output</h1><div class="highlight"><pre>
+<span></span><span class="c1">#</span>
+<span class="c1">############################################################################</span>
+<span class="c1">#</span>
+<span class="c1"># Celeste - chemical reaction discovery code.</span>
+<span class="c1"># Copyright (C) 2021, Scott Habershon</span>
+<span class="c1">#</span>
+<span class="c1"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1">############################################################################</span>
+
+<span class="sd">&quot;&quot;&quot;General file I/O functions for celeste package.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">getopt</span>
+<span class="kn">import</span> <span class="nn">celeste.params</span> <span class="k">as</span> <span class="nn">params</span>
+
+<div class="viewcode-block" id="ParseCommandLine"><a class="viewcode-back" href="../../source/celeste.html#celeste.input_output.ParseCommandLine">[docs]</a><span class="k">def</span> <span class="nf">ParseCommandLine</span><span class="p">(</span><span class="n">argv</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parses the command-line arguments to retrieve the input and output files when</span>
+<span class="sd">    using ``RunCeleste.py``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">         argv (str) : Command line arguments for parsing.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (tuple) containing</span>
+
+<span class="sd">                - inputfile (str) : input file from command line</span>
+<span class="sd">                - outputfile (str) : output file from command line</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">inputfile</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">outputfile</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+
+    <span class="c1"># Check input variables.</span>
+    <span class="n">usage1</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Usage: RunCeleste.py -i &lt;inputfile&gt; -o &lt;outputfile&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="n">usage2</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Usage: RunCeleste.py -i &lt;inputfile&gt; [OUTPUT WILL BE SENT TO SYS.STDOUT]</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">5</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Usage cases:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">usage1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">usage2</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">getopt</span><span class="o">.</span><span class="n">getopt</span><span class="p">(</span><span class="n">argv</span><span class="p">,</span> <span class="s2">&quot;hi:o:&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;ifile=&quot;</span><span class="p">,</span> <span class="s2">&quot;ofile=&quot;</span><span class="p">])</span>
+
+    <span class="k">except</span> <span class="n">getopt</span><span class="o">.</span><span class="n">GetoptError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">usage</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">opt</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">opt</span> <span class="o">==</span> <span class="s1">&#39;-h&#39;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">usage</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="s2">&quot;--ifile&quot;</span><span class="p">):</span>
+            <span class="n">inputfile</span> <span class="o">=</span> <span class="n">arg</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;-o&quot;</span><span class="p">,</span> <span class="s2">&quot;--ofile&quot;</span><span class="p">):</span>
+            <span class="n">outputfile</span> <span class="o">=</span> <span class="n">arg</span>
+    <span class="k">return</span> <span class="n">inputfile</span><span class="p">,</span> <span class="n">outputfile</span></div>
+
+
+<div class="viewcode-block" id="ReadInputFile"><a class="viewcode-back" href="../../source/celeste.html#celeste.input_output.ReadInputFile">[docs]</a><span class="k">def</span> <span class="nf">ReadInputFile</span><span class="p">(</span><span class="n">inputfile</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Reads information from inputfile and stores it in the params.py module.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        inputfile (str) : Reads the file in ``inputfile`` and parses input information based on keywords in</span>
+<span class="sd">        ``celeste.params.py``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Check that the input file exists.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">inputfile</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Input file named &quot;</span> <span class="o">+</span> <span class="n">inputfile</span> <span class="o">+</span> <span class="s2">&quot; does not exist...&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Read the input file.</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+
+        <span class="c1"># If line begins with #, then ignore it as a comment line.</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># Read the input files - some entries have special formats, so they are checked first.</span>
+        <span class="c1"># If the input string does not correspond to a special format entry, it is read as a</span>
+        <span class="c1"># simple member of the dictionary params.IOvars.</span>
+        <span class="c1">#</span>
+        <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span> <span class="p">,</span> <span class="n">maxsplit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># If the key value is &quot;PEScalc&quot;, then we need to store the dictionary which is</span>
+        <span class="c1"># given in the input file.</span>
+        <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;PEScalc&#39;</span><span class="p">:</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">IOpesinput</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+
+        <span class="c1"># Check that key is in the input dictionary.</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">IOvars</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">** Harsh Realm... &quot;</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s2">&quot; is not an allowed input parameter in params.IOvars</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Allowed input keys are:&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">IOvars</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1">#Excluding the free-form parameters (e.g. filenames), sense-check input parameters.</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">IOvarsFreeForm</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">PositiveIntegerInputs</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">** Harsh Realm...&quot;</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s2">&quot; must be greater than zero, currently &quot;</span><span class="o">+</span><span class="n">value</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">IOvarsFixedValues</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">IOvarsAllowed</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">** Harsh Realm...&quot;</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s2">&quot; must be one of: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="n">params</span><span class="o">.</span><span class="n">IOvarsAllowed</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Assign the key, value pair in the dictionary.</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">IOvars</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="c1"># Convert some of the input values to integers to avoid having to repeat this later.</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">PositiveIntegerInputs</span><span class="p">:</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">IOvars</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="c1"># Convert some of the input values to integers to avoid repeat later.</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">FloatInputs</span><span class="p">:</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">IOvars</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="c1"># Close the input file.</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="StartupOutput"><a class="viewcode-back" href="../../source/celeste.html#celeste.input_output.StartupOutput">[docs]</a><span class="k">def</span> <span class="nf">StartupOutput</span><span class="p">(</span><span class="n">outputfile</span><span class="p">,</span> <span class="n">inputfile</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Opens a generic logfile for calculation output and returns the corresponding filestrea as f.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        outputfile (str) : File to be opened for output.</span>
+<span class="sd">        inputfile (str) : Name of input file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Open output file.</span>
+    <span class="k">if</span> <span class="n">outputfile</span> <span class="o">==</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">:</span>
+        <span class="n">outf</span> <span class="o">=</span> <span class="n">outputfile</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">outf</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">outputfile</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Store output file for use across other modules.</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">OutputFile</span> <span class="o">=</span> <span class="n">outf</span>
+
+    <span class="n">str_line</span> <span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">*============================================================================</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="n">outf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">str_line</span><span class="p">)</span>
+    <span class="n">outf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;* Celeste - Tools for automated reaction discovery</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">outf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">* Main author: Scott Habershon</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">outf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;* Contributing authors: Christopher Robertson (Warwick)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">outf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;                        Idil Ismail (Warwick)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">outf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;                        James Gardner (Warwick)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">outf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;                        Sebastian Havens (Warwick)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">outf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">* Address: Department of Chemistry, University of Warwick, Coventry, UK&quot;</span><span class="p">)</span>
+    <span class="n">outf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">str_line</span><span class="p">)</span>
+
+    <span class="c1">#TODO Need to add something about licence here.</span>
+
+    <span class="c1"># Output the list of IOvars parameters.</span>
+    <span class="n">outf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;*</span><span class="se">\n</span><span class="s2">*** CALCULATION PARAMETER SUMMARY</span><span class="se">\n</span><span class="s2">*&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">inputfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">outf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">* Input filename: &quot;</span> <span class="o">+</span> <span class="n">inputfile</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">IOvars</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;PEScalc&#39;</span><span class="p">:</span>
+            <span class="n">outf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;* &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; :    &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">outf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;*</span><span class="se">\n</span><span class="s2">*** END OF CALCULATION PARAMETER SUMMARY</span><span class="se">\n</span><span class="s2">*&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># Note that we don&#39;t close the output file - it&#39;s needed for other output.</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, Scott Habershon
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

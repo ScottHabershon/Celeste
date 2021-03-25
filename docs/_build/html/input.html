@@ -1,0 +1,323 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Input files for Celeste &mdash; Celeste 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Input specification" href="completeinput.html" />
+    <link rel="prev" title="Running Celeste" href="run.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Celeste
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms in Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setting up Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">Running Celeste</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Input files for Celeste</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#input-file-structure">Input file structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#chemical-structure-formats">Chemical structure formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#input-of-multiple-structure-images">Input of multiple structure images</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="completeinput.html">Input specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="energy.html">Setting up energy calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Example calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="importing.html">Importing Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/modules.html">celeste</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Celeste</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Input files for Celeste</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/input.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="input-files-for-celeste">
+<h1>Input files for Celeste<a class="headerlink" href="#input-files-for-celeste" title="Permalink to this headline">¶</a></h1>
+<p>When running <code class="docutils literal notranslate"><span class="pre">Celeste</span></code> as a stand-alone executable code, you’ll need an input file.</p>
+<p>The input file directs the code in deciding which calculation to perform, and defines the simulation parameters.</p>
+<p>In addition, the input file can be used to define which energy calculation types should be used; this is explained in more detail in the [section on energy evaluations](energy.md)</p>
+<div class="section" id="input-file-structure">
+<h2>Input file structure<a class="headerlink" href="#input-file-structure" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A complete description of all possible input keywords can be found <a class="reference internal" href="completeinput.html"><span class="doc">here</span></a>.</p>
+</div>
+<p>A typical <code class="docutils literal notranslate"><span class="pre">Celeste</span></code> input file is a plain-text file like the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example input file.</span>
+
+<span class="n">CalculationType</span><span class="p">:</span> <span class="n">NEB</span>
+<span class="n">AlignEndPoints</span><span class="p">:</span> <span class="kc">True</span>
+<span class="n">Nimages</span><span class="p">:</span> <span class="mi">7</span>
+<span class="n">ReactantFile</span><span class="p">:</span> <span class="n">start</span><span class="o">.</span><span class="n">xyz</span>
+<span class="n">ProductFile</span><span class="p">:</span> <span class="n">end</span><span class="o">.</span><span class="n">xyz</span>
+<span class="n">InterpolationType</span><span class="p">:</span> <span class="n">IDPP</span>
+<span class="n">OptimizeEnds</span><span class="p">:</span> <span class="kc">True</span>
+<span class="n">NEBspring</span><span class="p">:</span> <span class="mf">0.050</span>
+<span class="n">NEBiterations</span><span class="p">:</span> <span class="mi">100</span>
+
+<span class="n">PEScalc</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;calctype&#39;</span> <span class="p">:</span> <span class="s2">&quot;Energy&quot;</span><span class="p">,</span> <span class="s1">&#39;code&#39;</span> <span class="p">:</span> <span class="s2">&quot;orca&quot;</span><span class="p">,</span> <span class="s1">&#39;executable&#39;</span> <span class="p">:</span> <span class="s2">&quot;/Users/scott/programs/orca/orca&quot;</span><span class="p">,</span> <span class="s1">&#39;arglist&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;! PM3 engrad&quot;</span><span class="p">]}</span>
+
+<span class="n">PEScalc</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;calctype&#39;</span> <span class="p">:</span> <span class="s2">&quot;Optimize&quot;</span><span class="p">,</span> <span class="s1">&#39;code&#39;</span> <span class="p">:</span> <span class="s2">&quot;orca&quot;</span><span class="p">,</span> <span class="s1">&#39;executable&#39;</span> <span class="p">:</span> <span class="s2">&quot;/Users/scott/programs/orca/orca&quot;</span><span class="p">,</span> <span class="s1">&#39;arglist&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;! PM3 Opt&quot;</span><span class="p">]}</span>
+</pre></div>
+</div>
+<p>Note the following features of the input file:</p>
+<ul class="simple">
+<li><p>The first line, beginning <cite>#</cite>, shows a comment line. Comment lines can be added anywhere in the file, but must begin with <cite>#</cite>.</p></li>
+<li><p>Blank lines are ignored.</p></li>
+<li><p>Input directives are identifed using:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Keyword</span><span class="p">:</span> <span class="n">value</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The list of available keywords is described in more detail [here.](completeinput)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Celeste</span></code> parses the input once initialized; useful errors should be raised if inconsistent data are input for a keyword.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">PEScalc</span></code> keywords can be used to define potential energy evaluation methods for energy calculation or geometry optimization.</p></li>
+</ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The only way to define energy evaluations at the moment is through the <code class="docutils literal notranslate"><span class="pre">PEScalc</span></code> keyword.</p>
+</div>
+</div>
+<div class="section" id="chemical-structure-formats">
+<h2>Chemical structure formats<a class="headerlink" href="#chemical-structure-formats" title="Permalink to this headline">¶</a></h2>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Currently, <code class="docutils literal notranslate"><span class="pre">Celeste</span></code> only supports input of chemical structures in <code class="docutils literal notranslate"><span class="pre">xyz</span></code> format.</p>
+</div>
+<p>In a standard <code class="docutils literal notranslate"><span class="pre">xyz</span></code> file, the structure is defined as a simple list of <em>(x,y,z)</em> atomic coordinates
+(in Angstroms), along with the atom label, as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">2</span>
+This is a comment line
+C   <span class="m">0</span>.0   <span class="m">0</span>.0   <span class="m">0</span>.0
+O   <span class="m">1</span>.3   <span class="m">0</span>.0   <span class="m">0</span>.0
+</pre></div>
+</div>
+<p>Note the following:</p>
+<ul class="simple">
+<li><p>The first line of the <cite>xyz</cite> file <strong>MUST</strong> contain the number of atoms</p></li>
+<li><p>The second line is a free-text comment. This can be used to store things like structural information, energies, or anything else. It can also be a blank line.</p></li>
+<li><p>Each subsequent line is of the format:</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>AtomLabel  X  Y  Z
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The coordinates should be given in Angstrom units.</p></li>
+</ul>
+</div>
+<div class="section" id="input-of-multiple-structure-images">
+<h2>Input of multiple structure images<a class="headerlink" href="#input-of-multiple-structure-images" title="Permalink to this headline">¶</a></h2>
+<p>When dealing with reaction-paths, we need to use files which tell us about the coordinates of all atoms at a series of
+images (or frames) along the reaction path. Fortunately, <code class="docutils literal notranslate"><span class="pre">xyz</span></code> files can deal with this easily.</p>
+<p>For example, a <code class="docutils literal notranslate"><span class="pre">xyz</span></code> file describing a “reaction path” simply contains a single <code class="docutils literal notranslate"><span class="pre">xyz</span></code> frame for each image,
+concatenated together in a single file. So, a simple example containing three images is as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">2</span>
+This is the first image
+C   <span class="m">0</span>.0   <span class="m">0</span>.0   <span class="m">0</span>.0
+O   <span class="m">1</span>.3   <span class="m">0</span>.0   <span class="m">0</span>.0
+<span class="m">2</span>
+This is the second image, slightly modified coordinates
+C   <span class="m">0</span>.0   <span class="m">0</span>.0   <span class="m">0</span>.0
+O   <span class="m">1</span>.4   <span class="m">0</span>.0   <span class="m">0</span>.0
+<span class="m">2</span>
+This is the third image, slightly modified coordinates
+C   <span class="m">0</span>.0   <span class="m">0</span>.0   <span class="m">0</span>.0
+O   <span class="m">1</span>.4   <span class="m">0</span>.0   <span class="m">0</span>.0
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="completeinput.html" class="btn btn-neutral float-right" title="Input specification" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="run.html" class="btn btn-neutral float-left" title="Running Celeste" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, Scott Habershon
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

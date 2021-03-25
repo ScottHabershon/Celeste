@@ -1,0 +1,283 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>celeste.constants &mdash; Celeste 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> Celeste
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithms.html">Algorithms in Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setup.html">Setting up Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../run.html">Running Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../input.html">Input files for Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../completeinput.html">Input specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../energy.html">Setting up energy calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Example calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../importing.html">Importing Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/modules.html">celeste</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Celeste</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>celeste.constants</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for celeste.constants</h1><div class="highlight"><pre>
+<span></span><span class="c1">#</span>
+<span class="c1">############################################################################</span>
+<span class="c1">#</span>
+<span class="c1"># Celeste - chemical reaction discovery code.</span>
+<span class="c1"># Copyright (C) 2021, Scott Habershon</span>
+<span class="c1">#</span>
+<span class="c1"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1">############################################################################</span>
+
+<span class="sd">&quot;&quot;&quot;Contains useful numerical constants such as bonding scale factor, threshold parameters and more.</span>
+
+<span class="sd">Attributes:</span>
+<span class="sd">    BondingScaleFactor (float) : numerical factor used to multiply sum of covalent radii in</span>
+<span class="sd">        determining cut-off distance for calculating adjacency matrix.</span>
+<span class="sd">    BIG_BONDING (float) : An arbitrary large distance given to pairs of atoms which are not</span>
+<span class="sd">        accessible by walking along bonds. Used during calculation of molecules from a graph.</span>
+<span class="sd">    NMOLMAX (int) : Maximum recommended treatable number of molecules.</span>
+<span class="sd">    NAMOLMAX (int) : Maximum recommended number of atoms in molecules.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># Conversion from Bohr to Angstroms - multiply a number in Bohr by bohr_to_ang to get Angstroms.</span>
+<span class="n">bohr_to_ang</span> <span class="o">=</span> <span class="mf">0.52917721080</span>
+
+<span class="c1"># Conversion from Angstroms to Bohr - multiply a number in Angstroms by ang_to_bohr to get Bohr.</span>
+<span class="n">ang_to_bohr</span> <span class="o">=</span> <span class="mf">1.88972612499359</span>
+
+<span class="c1"># Conversion from Hartrees to kJ/mol - multiply an energy in Hartrees by hartrees_to_kjmol to get kJ/mol</span>
+<span class="n">hartrees_to_kjmol</span> <span class="o">=</span> <span class="mf">2625.4996300</span>
+
+<span class="c1"># BondingScaleFactor influences the calculation of adjacency matrices. Two atoms are considered</span>
+<span class="c1"># to be bonded if the distance between them is (CovalentRadius_1 + CovalentRadius_2)*BondingScaleFactor.</span>
+<span class="c1">#</span>
+<span class="n">BondingScaleFactor</span> <span class="o">=</span> <span class="mf">1.10</span>
+
+<span class="c1"># This is a BIG number, used to make sure that the Floyd-Warshel shortest-path algorithm in cxs.py</span>
+<span class="c1"># avoids finding paths between non-bonded molecules.</span>
+<span class="n">BIG_BONDING</span> <span class="o">=</span> <span class="mi">10000</span>
+
+<span class="c1"># NMOLMAX is the maximum number of independent molecules we&#39;re happy to deal with.</span>
+<span class="n">NMOLMAX</span> <span class="o">=</span> <span class="mi">50</span>
+
+<span class="c1"># NAMOLMAX is the maximum number of atoms we&#39;re happy to have in each molecule.</span>
+<span class="n">NAMOLMAX</span> <span class="o">=</span> <span class="mi">25</span>
+
+
+<div class="viewcode-block" id="PrintConstants"><a class="viewcode-back" href="../../source/celeste.html#celeste.constants.PrintConstants">[docs]</a><span class="k">def</span> <span class="nf">PrintConstants</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Prints a report on the current values of important parameters defined in ``constants.py``</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        file (str) : File in which to print output. If ``file is None``, print to stdout.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">file</span>
+
+    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">* Useful numerial constants in constants.py *</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;- BondingScaleFactor = &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">BondingScaleFactor</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;- BIG_BONDING = &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">BIG_BONDING</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, Scott Habershon
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

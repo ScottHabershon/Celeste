@@ -1,0 +1,252 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Algorithms in Celeste &mdash; Celeste 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Setting up Celeste" href="setup.html" />
+    <link rel="prev" title="About Celeste" href="about.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Celeste
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About Celeste</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Algorithms in Celeste</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#minimum-energy-path-finding">Minimum-energy path finding</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setting up Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">Running Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input files for Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="completeinput.html">Input specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="energy.html">Setting up energy calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Example calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="importing.html">Importing Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/modules.html">celeste</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Celeste</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Algorithms in Celeste</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/algorithms.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="algorithms-in-celeste">
+<h1>Algorithms in Celeste<a class="headerlink" href="#algorithms-in-celeste" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">Celeste</span></code> implements a series of different algorithms, several developed in the Habershon group at Warwick, and several developed elsewhere.
+For clarity, this page summarizes the key algorithms.</p>
+<div class="section" id="minimum-energy-path-finding">
+<h2>Minimum-energy path finding<a class="headerlink" href="#minimum-energy-path-finding" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Interpolation using IDPP</strong></p></li>
+</ul>
+<p>We use the standard image-dependent pair-potential (IDPP) algorithm, as described <a class="reference external" href="https://doi.org/10.1063/1.4878664">here</a>,
+to generate initial reaction-path approximations when <code class="docutils literal notranslate"><span class="pre">InterpolationType</span></code> is set to <code class="docutils literal notranslate"><span class="pre">IDPP</span></code>.</p>
+<ul class="simple">
+<li><p><strong>Orientation of reactants and products</strong></p></li>
+</ul>
+<p>When <code class="docutils literal notranslate"><span class="pre">AlignEndPoints</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code> in the input file for a calculation, the product structure is rotated to give the
+best-fit to the product structure. This is achieved using the <a class="reference external" href="https://en.wikipedia.org/wiki/Kabsch_algorithm">Kabsch algorithm</a>, implemented using <code class="docutils literal notranslate"><span class="pre">scipy.spatial.transform.Rotation.align_vectors</span></code>
+to give the optimal rotation matrix.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This algorithm also shifts the structures so that their centroids coincide.</p>
+</div>
+<ul class="simple">
+<li><p><strong>Nudged elastic band (NEB)</strong></p></li>
+</ul>
+<p>To perform NEB simulations, we use the improved NEB approach described by <a class="reference external" href="https://doi.org/10.1063/1.1323224">Henkelman</a>.</p>
+<p>We also use the <strong>QuickMin</strong> algorithm to perform NEB optimization, as described <a class="reference external" href="https://doi.org/10.1063/1.2841941">here</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="setup.html" class="btn btn-neutral float-right" title="Setting up Celeste" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="about.html" class="btn btn-neutral float-left" title="About Celeste" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, Scott Habershon
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
