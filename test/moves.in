@@ -1,0 +1,15 @@
+*move
+id: Bond form
+na: 2
+graph:
+0 1
+1 0
+*end
+
+*move
+id: Bond break
+na: 2
+graph:
+0 -1
+-1 0
+*end

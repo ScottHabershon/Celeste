@@ -1,0 +1,133 @@
+
+*============================================================================
+* Celeste - Tools for automated reaction discovery
+
+* Main author: Scott Habershon
+
+* Contributing authors: Christopher Robertson (Warwick)
+                        Idil Ismail (Warwick)
+                        James Gardner (Warwick)
+                        Sebastian Havens (Warwick)
+
+* Address: Department of Chemistry, University of Warwick, Coventry, UK
+*============================================================================
+*
+*** CALCULATION PARAMETER SUMMARY
+*
+* Input filename: input
+* CalculationType :    NEB
+* Description :    None
+* ReactantFile :    start.xyz
+* ProductFile :    end.xyz
+* PathFile :    None
+* InterpolationType :    IDPP
+* Nimages :    7
+* NSAiterations :    100
+* SAInitialTemperature :    1000000.0
+* OptimizeEnds :    True
+* AlignEndPoints :    True
+* NEBspring :    0.05
+* NEBiterations :    100
+* NEBForceTolerance :    0.001
+* NEBMaxForce :    0.005
+* ClimbingImage :    False
+* MoveFile :    None
+* MaxReactions :    1
+* ValenceRanges :    [['C', 0, 4]]
+*
+*** END OF CALCULATION PARAMETER SUMMARY
+*
+*** PES Calculation details ***
+
+- Calculation comment: None
+- Calculation type: Energy
+- Calculation code: orca
+- Executable: /Users/scott/programs/orca/orca
+- Argument list: ['! PM3 engrad']
+- Template file: None
+
+*******************************
+
+*** PES Calculation details ***
+
+- Calculation comment: None
+- Calculation type: Optimize
+- Calculation code: orca
+- Executable: /Users/scott/programs/orca/orca
+- Argument list: ['! PM3 Opt']
+- Template file: None
+
+*******************************
+
+*** Starting NEB Calculation ***
+
+*** Generating initial linear interpolation...
+
+----- NEB output files -----
+
+* Convergence analysis file: input_neb_idpp.conv
+* Initial MEP file: input_neb_idpp_initial.xyz
+
+----- Initial NEB parameters -----
+
+* Potential Type = IDPP
+* NEB spring constant = 0.05 Eh / a0**2 
+* RMS force tolerance = 0.001 Eh / a0 
+* Maximum image force tolerance = 0.005 Eh / a0 
+
+-----------------------------------------------------------------------------------------
+# Iteration  |  <NEB Forces> (au)  |  <Perp. Forces> (au)  |  Max. Perp. Force (au)  
+-----------------------------------------------------------------------------------------
+  initial             0.003069             0.002491                 0.018921 
+  1                   0.003069             0.002491                 0.017665 
+  2                   0.003044             0.002467                 0.017480 
+  3                   0.002995             0.002421                 0.017109 
+  4                   0.002922             0.002351                 0.016556 
+  5                   0.002826             0.002260                 0.015824 
+  6                   0.002711             0.002151                 0.014922 
+  7                   0.002580             0.002026                 0.013866 
+  8                   0.002438             0.001890                 0.012677 
+  9                   0.002289             0.001749                 0.011393 
+ 10                   0.002142             0.001611                 0.010065 
+ 11                   0.002002             0.001482                 0.008761 
+ 12                   0.001874             0.001370                 0.007556 
+ 13                   0.001760             0.001273                 0.006517 
+ 14                   0.001658             0.001191                 0.005682 
+ 15                   0.001565             0.001118                 0.005569 
+ 16                   0.001479             0.001051                 0.005462 
+ 17                   0.001398             0.000989                 0.005258 
+ 18                   0.001322             0.000931                 0.004995 
+-----------------------------------------------------------------------------------------
+
+*** CONVERGENCE ACHIEVED AFTER 18 ITERATIONS ***
+
+# Reaction path energy after initial interpolation #
+--------------------------------------------------------------------------------------------------
+# Index  |  Arc length (au)  |  Energy (au)  |  Relative energy (au)  |  Relative energy (kJ/mol)
+--------------------------------------------------------------------------------------------------
+     0           0.000000       -16.267762             0.000000                0.000000 
+     1           1.953056       -16.252434             0.015328               40.243083 
+     2           3.906112       -16.218053             0.049709              130.510883 
+     3           5.859158       -16.177913             0.089849              235.897805 
+     4           7.812117       -16.139613             0.128148              336.453808 
+     5           9.764644       -16.100855             0.166907              438.214372 
+     6          11.720614       -16.059036             0.208725              548.008672 
+     7          13.684257       -16.269275            -0.001513               -3.971662 
+--------------------------------------------------------------------------------------------------
+
+----- NEB output files -----
+
+* Convergence analysis file: input_neb_pes.conv
+* Initial MEP file: input_neb_pes_initial.xyz
+
+----- Initial NEB parameters -----
+
+* Potential Type = PES
+* NEB spring constant = 0.05 Eh / a0**2 
+* RMS force tolerance = 0.001 Eh / a0 
+* Maximum image force tolerance = 0.005 Eh / a0 
+
+-----------------------------------------------------------------------------------------
+# Iteration  |  <NEB Forces> (au)  |  <Perp. Forces> (au)  |  Max. Perp. Force (au)  
+-----------------------------------------------------------------------------------------
+  initial             0.056263             0.053212                 0.202656 

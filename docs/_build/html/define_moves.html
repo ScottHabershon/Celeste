@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Defining allowed reactions (moves) &mdash; Celeste 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Setting up energy calculations" href="energy.html" />
+    <link rel="prev" title="Input specification" href="completeinput.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Celeste
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms in Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setting up Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">Running Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input files for Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="completeinput.html">Input specification</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Defining allowed reactions (moves)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#format-of-move-file">Format of Move File</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="energy.html">Setting up energy calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Example calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="importing.html">Importing Celeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/modules.html">celeste</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Celeste</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Defining allowed reactions (moves)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/define_moves.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="defining-allowed-reactions-moves">
+<h1>Defining allowed reactions (moves)<a class="headerlink" href="#defining-allowed-reactions-moves" title="Permalink to this headline">¶</a></h1>
+<p>An important part of the graph-driven reaction-mechanism schemes encoded in <code class="docutils literal notranslate"><span class="pre">Celeste</span></code> is the
+definition of <em>reaction moves</em>.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The input reaction moves are used to generate trial mechanisms; a mechanism is defined as a
+sequence of reaction moves, plus the indices of the atoms which the reaction is applied to.</p>
+</div>
+<p>When running <code class="docutils literal notranslate"><span class="pre">Celeste</span></code> (either as a standalone application from the terminal, or in an interactive python terminal),
+reaction moves are input using a <strong>MoveFile</strong>; this is a plain text file which contains a series of blocks, with each block
+defining an allowed reaction.</p>
+<div class="section" id="format-of-move-file">
+<h2>Format of Move File<a class="headerlink" href="#format-of-move-file" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>MoveFile</strong> contains a set of input blocks, one for each input reaction move (or family).</p>
+<p>The general format of each move block is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">move</span>
+<span class="nb">id</span><span class="p">:</span> <span class="n">Association</span> <span class="n">reaction</span>
+<span class="n">namove</span><span class="p">:</span> <span class="mi">2</span>
+<span class="n">graph</span><span class="p">:</span>
+<span class="mi">0</span> <span class="mi">1</span>
+<span class="mi">1</span> <span class="mi">0</span>
+<span class="o">*</span><span class="n">end</span>
+</pre></div>
+</div>
+<p>Note the following:</p>
+<ul class="simple">
+<li><p>Each move-definition begins with <code class="docutils literal notranslate"><span class="pre">*move</span></code> and ends with <code class="docutils literal notranslate"><span class="pre">*end</span></code>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">id</span></code> is a string describing this reaction - it is not used for anything other than identification.</p></li>
+<li><p>The integer <code class="docutils literal notranslate"><span class="pre">namove</span></code> defines the number of atoms involved in this reaction; in the example above, it is a two-atom association, so we have <code class="docutils literal notranslate"><span class="pre">namove:</span> <span class="pre">2</span></code>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">graph:</span></code> directive indicates that the following lines containing the move-graph for the reaction. The move graph is a <code class="docutils literal notranslate"><span class="pre">namove</span> <span class="pre">x</span> <span class="pre">namove</span></code> matrix containing integers identifying the changes in bonding for atoms subject to the given reaction.</p></li>
+</ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">graph</span></code> contains integers -1, 0 or +1 which define whether bonds between the atoms remain unchanged (0), are formed (+1) or broken (-1).</p>
+<p>Some examples are as follows:</p>
+<ul class="simple">
+<li><p>A two-atom move in which a bond forms between atoms <em>i</em> and <em>j</em>.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">graph</span><span class="p">:</span>
+<span class="mi">0</span> <span class="mi">1</span>
+<span class="mi">1</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>A two-atom move in which a bond forms between atoms <em>i</em> and <em>j</em>.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">graph</span><span class="p">:</span>
+<span class="mi">0</span> <span class="o">-</span><span class="mi">1</span>
+<span class="o">-</span><span class="mi">1</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>A three-atom move in which a bond forms between atoms <em>i</em> and <em>j</em>, but the bond between <em>j</em> and <em>k</em> breaks.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">graph</span><span class="p">:</span>
+<span class="mi">0</span> <span class="mi">1</span> <span class="mi">0</span>
+<span class="mi">1</span> <span class="mi">0</span> <span class="o">-</span><span class="mi">1</span>
+<span class="mi">0</span> <span class="o">-</span><span class="mi">1</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p><strong>Note:</strong> The bonding graphs must be symmetric.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="energy.html" class="btn btn-neutral float-right" title="Setting up energy calculations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="completeinput.html" class="btn btn-neutral float-left" title="Input specification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, Scott Habershon
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

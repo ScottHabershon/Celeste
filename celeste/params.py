@@ -41,14 +41,7 @@ IOvars['PathFile'] = None
 IOvars['InterpolationType'] = "LinearCartesian"
 IOvars['Nimages'] = 0
 IOvars['PEScalc'] = None
-IOvars['NSAiterations'] = 100
-IOvars['SAInitialTemperature'] = 1e6
-IOvars['MaxReactions'] = 1
-IOvars['ValenceRanges'] = [['C', 0, 4]]
 IOvars['OptimizeEnds'] = False
-IOvars['NavigationSpring'] = 1.0
-IOvars['Ninterpolate'] = 10
-IOvars['NavigationStep'] = 0.001
 IOvars['AlignEndPoints'] = False
 IOvars['NEBspring'] = 0.050
 IOvars['NEBiterations'] = 10
@@ -56,15 +49,27 @@ IOvars['NEBForceTolerance'] = 1E-3
 IOvars['NEBMaxForce'] = 5E-3
 IOvars['ClimbingImage'] = False
 
+# Mechanism-finding.
+IOvars['NSAiterations'] = 100
+IOvars['SAInitialTemperature'] = 1E3
+IOvars['MoveFile'] = None
+IOvars['MaxReactions'] = 5
+IOvars['ValenceRange'] = [['C', 1, 4],['O',1,2],['H',0,1],]
+IOvars['ReactiveAtoms'] = ["all"]
+IOvars['SAOutputFrequency'] = 500
+IOvars['ErrorType'] = 'FullStructure'
+
+
 # Identify input parameters which should be positive integers.
-PositiveIntegerInputs = ['Nimages', 'NSAiterations', 'MaxReactions', 'Ninterpolate', 'NEBiterations']
+PositiveIntegerInputs = ['Nimages', 'NSAiterations', 'MaxReactions', 'Ninterpolate', 'NEBiterations',
+                         'SAOutputFrequency']
 
 # Identify input parameters which should be floats.
 FloatInputs = ['NavigationSpring', 'SAInitialTemperature', 'NavigationStep', 'NEBspring',
                'NEBForceTolerance', 'NEBMaxForce']
 
 # Identify which parameters are free-form strings.
-IOvarsFreeForm = ["Description", "ReactantFile", "ProductFile", "PathFile"]
+IOvarsFreeForm = ["Description", "ReactantFile", "ProductFile", "PathFile", "MoveFile"]
 
 # Identify allowed values of some input parameters
 IOvarsFixedValues = ["CalculationType", "InterpolationType"]

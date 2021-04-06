@@ -91,18 +91,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../run.html">Running Celeste</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../input.html">Input files for Celeste</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../completeinput.html">Input specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../define_moves.html">Defining allowed reactions (moves)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../energy.html">Setting up energy calculations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Example calculations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../importing.html">Importing Celeste</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">celeste</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">celeste package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-celeste.RunCeleste">celeste.RunCeleste module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#celeste-runceleste-module">celeste.RunCeleste module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-celeste.chemical_data">celeste.chemical_data module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-celeste.constants">celeste.constants module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-celeste.cxs">celeste.cxs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-celeste.input_output">celeste.input_output module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-celeste.mechanism_finder">celeste.mechanism_finder module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#celeste-mechanism-finder-module">celeste.mechanism_finder module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-celeste.moves">celeste.moves module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-celeste.params">celeste.params module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-celeste.pes">celeste.pes module</a></li>
@@ -184,39 +185,8 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-celeste.RunCeleste">
-<span id="celeste-runceleste-module"></span><h2>celeste.RunCeleste module<a class="headerlink" href="#module-celeste.RunCeleste" title="Permalink to this headline">¶</a></h2>
-<p>Main driver routine to run the Celeste reaction discovery program.</p>
-<dl class="simple">
-<dt>Celeste can be used to perform the following simulations:</dt><dd><ol class="arabic simple">
-<li><p>Single-ended graph-driven discovery (GDS),</p></li>
-<li><p>Double-ended mechanism search (DEGDS),</p></li>
-<li><p>Reaction path analysis, particularly (CI)NEB.</p></li>
-</ol>
-</dd>
-</dl>
-<p class="rubric">Example</p>
-<p>To execute Celeste as a stand-alone code, you’ll need an input file.
-You can find information and example input files in <span class="xref std std-ref">input</span>.</p>
-<p>Once you have an input file, you can run Celeste code using:</p>
-<blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>RunCeleste.py -i <span class="o">[</span>input file<span class="o">]</span> -o <span class="o">[</span>output file<span class="o">]</span>
-</pre></div>
-</div>
-</div></blockquote>
-<dl class="function">
-<dt id="celeste.RunCeleste.main">
-<code class="sig-prename descclassname">celeste.RunCeleste.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param">argv</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/celeste/RunCeleste.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.RunCeleste.main" title="Permalink to this definition">¶</a></dt>
-<dd><p>Main driver routine for RunCeleste.py.</p>
-<p>Performs a variety of reaction-discovery and reaction-path finding simulations, as controlled through the
-<code class="docutils literal notranslate"><span class="pre">input</span></code> file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>argv</strong> (<em>str</em>) – List of input arguments from command line.</p>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="section" id="celeste-runceleste-module">
+<h2>celeste.RunCeleste module<a class="headerlink" href="#celeste-runceleste-module" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-celeste.chemical_data">
 <span id="celeste-chemical-data-module"></span><h2>celeste.chemical_data module<a class="headerlink" href="#module-celeste.chemical_data" title="Permalink to this headline">¶</a></h2>
@@ -536,6 +506,24 @@ was successful or not.</p>
 <p>The example above creates a carbon monoxide molecule, with the carbon atom at (0,0,0) and the
 oxygen atom at (1.5,0,0) (atomic units used by default).</p>
 <dl class="method">
+<dt id="celeste.cxs.CXS.CompareAtoms">
+<code class="sig-name descname">CompareAtoms</code><span class="sig-paren">(</span><em class="sig-param">cx</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/celeste/cxs.html#CXS.CompareAtoms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.CompareAtoms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares the number of atoms and the elements in the atom lists in <code class="docutils literal notranslate"><span class="pre">self</span></code> and <code class="docutils literal notranslate"><span class="pre">cx</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cx</strong> – A <code class="docutils literal notranslate"><span class="pre">CXS</span></code> object to compare against.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A logical flag which is <code class="docutils literal notranslate"><span class="pre">True</span></code> if the total chemical formulae (i.e. number of
+atoms and element-types) are identical.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Flag</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="celeste.cxs.CXS.CopyCXS">
 <code class="sig-name descname">CopyCXS</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/celeste/cxs.html#CXS.CopyCXS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.CopyCXS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Makes a copy of the self.CXS object in a safe manner.</p>
@@ -560,6 +548,20 @@ a numpy array <code class="docutils literal notranslate"><span class="pre">dista
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>distances (np, float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.cxs.CXS.GetFormula">
+<code class="sig-name descname">GetFormula</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/celeste/cxs.html#CXS.GetFormula"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.CXS.GetFormula" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a string representation of the molecular chemical formula.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A string containing the chemical formula of the molecule.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>formula (string)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -803,20 +805,6 @@ individual molecules in a <code class="docutils literal notranslate"><span class
 </dd></dl>
 
 <dl class="method">
-<dt id="celeste.cxs.Molecule.GetFormula">
-<code class="sig-name descname">GetFormula</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/celeste/cxs.html#Molecule.GetFormula"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.Molecule.GetFormula" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a string representation of the molecular chemical formula.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A string containing the chemical formula of the molecule.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>formula (string)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
 <dt id="celeste.cxs.Molecule.GetMols">
 <code class="sig-name descname">GetMols</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/celeste/cxs.html#Molecule.GetMols"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.cxs.Molecule.GetMols" title="Permalink to this definition">¶</a></dt>
 <dd><p>When GetMols is called for a molecule object, it should not return anything new - this function ensures
@@ -880,40 +868,8 @@ using <code class="docutils literal notranslate"><span class="pre">RunCeleste.py
 </dd></dl>
 
 </div>
-<div class="section" id="module-celeste.mechanism_finder">
-<span id="celeste-mechanism-finder-module"></span><h2>celeste.mechanism_finder module<a class="headerlink" href="#module-celeste.mechanism_finder" title="Permalink to this headline">¶</a></h2>
-<p>Graph-based mechanism generation routines.</p>
-<p>This module contains the main mechanism-finding routines used in the Habershon group’s
-mechanism searching research.</p>
-<p>This module implements either double-ended mechanism-finding or single-ended mechanism generation.</p>
-<dl class="class">
-<dt id="celeste.mechanism_finder.Mechanism">
-<em class="property">class </em><code class="sig-prename descclassname">celeste.mechanism_finder.</code><code class="sig-name descname">Mechanism</code><span class="sig-paren">(</span><em class="sig-param">reactantfile=None</em>, <em class="sig-param">productfile=None</em>, <em class="sig-param">maxreactions=1</em>, <em class="sig-param">valenceranges=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/celeste/mechanism_finder.html#Mechanism"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.mechanism_finder.Mechanism" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Defines the <code class="docutils literal notranslate"><span class="pre">Mechanism</span></code> object as a container for a double-ended reaction mechanism.</p>
-<p>This module contains the <code class="docutils literal notranslate"><span class="pre">Mechanism</span></code> object, as well as related mechanism-finding routines. These routines
-implement the double-ended mechanism-finding approach, as well as a single-ended
-mechanism generation scheme, both as developed in the Habershon group.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>reactantfile</strong> (<em>str</em>) – Structure containing the initial reactant file.</p></li>
-<li><p><strong>productfile</strong> (<em>str</em><em>,</em><em>optional</em>) – Structure containing the target product file (used in the case of
-double-ended mechanisms search).</p></li>
-<li><p><strong>maxreactions</strong> (<em>int</em>) – Maximum number of allowed reactions in the mechanism (including
-non-progressing null reactions).</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="method">
-<dt id="celeste.mechanism_finder.Mechanism.RunMechanismFinder">
-<code class="sig-name descname">RunMechanismFinder</code><span class="sig-paren">(</span><em class="sig-param">moves=None</em>, <em class="sig-param">nsaiterations=100</em>, <em class="sig-param">SAInitialTemperature=100.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/celeste/mechanism_finder.html#Mechanism.RunMechanismFinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.mechanism_finder.Mechanism.RunMechanismFinder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Performs a double-ended reaction-mechanism search.</p>
-<p>Returns:</p>
-</dd></dl>
-
-</dd></dl>
-
+<div class="section" id="celeste-mechanism-finder-module">
+<h2>celeste.mechanism_finder module<a class="headerlink" href="#celeste-mechanism-finder-module" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-celeste.moves">
 <span id="celeste-moves-module"></span><h2>celeste.moves module<a class="headerlink" href="#module-celeste.moves" title="Permalink to this headline">¶</a></h2>
@@ -1564,6 +1520,24 @@ was successful or not.</p>
 <p>The example above creates a carbon monoxide molecule, with the carbon atom at (0,0,0) and the
 oxygen atom at (1.5,0,0) (atomic units used by default).</p>
 <dl class="method">
+<dt id="celeste.CXS.CompareAtoms">
+<code class="sig-name descname">CompareAtoms</code><span class="sig-paren">(</span><em class="sig-param">cx</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/celeste/cxs.html#CXS.CompareAtoms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.CompareAtoms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares the number of atoms and the elements in the atom lists in <code class="docutils literal notranslate"><span class="pre">self</span></code> and <code class="docutils literal notranslate"><span class="pre">cx</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cx</strong> – A <code class="docutils literal notranslate"><span class="pre">CXS</span></code> object to compare against.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A logical flag which is <code class="docutils literal notranslate"><span class="pre">True</span></code> if the total chemical formulae (i.e. number of
+atoms and element-types) are identical.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Flag</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="celeste.CXS.CopyCXS">
 <code class="sig-name descname">CopyCXS</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/celeste/cxs.html#CXS.CopyCXS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.CopyCXS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Makes a copy of the self.CXS object in a safe manner.</p>
@@ -1588,6 +1562,20 @@ a numpy array <code class="docutils literal notranslate"><span class="pre">dista
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>distances (np, float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="celeste.CXS.GetFormula">
+<code class="sig-name descname">GetFormula</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/celeste/cxs.html#CXS.GetFormula"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#celeste.CXS.GetFormula" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a string representation of the molecular chemical formula.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A string containing the chemical formula of the molecule.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>formula (string)</p>
 </dd>
 </dl>
 </dd></dl>

@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../run.html">Running Celeste</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../input.html">Input files for Celeste</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../completeinput.html">Input specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../define_moves.html">Defining allowed reactions (moves)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../energy.html">Setting up energy calculations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples.html">Example calculations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../importing.html">Importing Celeste</a></li>
@@ -192,6 +193,9 @@
 
 <span class="kn">import</span> <span class="nn">sys</span>
 
+<span class="c1"># Boltzmann&#39;s constant in atomic units (so k * T (in Kelvin) = Hartrees):</span>
+<span class="n">kboltz</span> <span class="o">=</span> <span class="mf">3.166E-6</span>
+
 <span class="c1"># Conversion from Bohr to Angstroms - multiply a number in Bohr by bohr_to_ang to get Angstroms.</span>
 <span class="n">bohr_to_ang</span> <span class="o">=</span> <span class="mf">0.52917721080</span>
 
@@ -204,7 +208,7 @@
 <span class="c1"># BondingScaleFactor influences the calculation of adjacency matrices. Two atoms are considered</span>
 <span class="c1"># to be bonded if the distance between them is (CovalentRadius_1 + CovalentRadius_2)*BondingScaleFactor.</span>
 <span class="c1">#</span>
-<span class="n">BondingScaleFactor</span> <span class="o">=</span> <span class="mf">1.10</span>
+<span class="n">BondingScaleFactor</span> <span class="o">=</span> <span class="mf">1.20</span>
 
 <span class="c1"># This is a BIG number, used to make sure that the Floyd-Warshel shortest-path algorithm in cxs.py</span>
 <span class="c1"># avoids finding paths between non-bonded molecules.</span>
@@ -216,6 +220,20 @@
 <span class="c1"># NAMOLMAX is the maximum number of atoms we&#39;re happy to have in each molecule.</span>
 <span class="n">NAMOLMAX</span> <span class="o">=</span> <span class="mi">25</span>
 
+<span class="c1"># NAMOVEMAX is the maximum number of atoms which could change in a move (in other words, it the</span>
+<span class="c1"># maximum allowed size of the move graphs).</span>
+<span class="n">NAMOVEMAX</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="c1"># GCONV is the convergence tolerance for the graph-error function - this should usually be a small</span>
+<span class="c1"># number like 1E-5:</span>
+<span class="n">GCONV</span> <span class="o">=</span> <span class="mf">1E-5</span>
+
+<span class="c1"># LARGE_ERROR is a large error-value which is assigned to reaction mechanisms which have</span>
+<span class="c1"># non-physical mechanisms (e.g. valence errors):</span>
+<span class="n">LARGE_ERROR</span> <span class="o">=</span> <span class="mf">1E4</span>
+
+<span class="c1"># NTRYMAX is the maximum number of attempts to change reactive atoms when updating the mechanism:</span>
+<span class="n">NTRYMAX</span> <span class="o">=</span> <span class="mi">1000</span>
 
 <div class="viewcode-block" id="PrintConstants"><a class="viewcode-back" href="../../source/celeste.html#celeste.constants.PrintConstants">[docs]</a><span class="k">def</span> <span class="nf">PrintConstants</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Prints a report on the current values of important parameters defined in ``constants.py``</span>

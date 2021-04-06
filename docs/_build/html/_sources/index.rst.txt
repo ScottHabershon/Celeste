@@ -25,6 +25,7 @@ information about the code too.
    run
    input 
    completeinput
+   define_moves
    energy
    examples
    importing

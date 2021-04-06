@@ -1,17 +1,24 @@
 # Example input file.
 
-CalculationType: NEB
+CalculationType: DEGDS
 AlignEndPoints: True
 Nimages: 7
 ReactantFile: start.xyz
 ProductFile: end.xyz
 InterpolationType: IDPP
 OptimizeEnds: True
-NavigationSpring: 0.2000
-Ninterpolate: 5
-NavigationStep: 0.1
 NEBspring: 0.050
 NEBiterations: 100
+
+SAInitialTemperature: 10.00
+NSAiterations: 10000
+MaxReactions: 3
+SAOutputFrequency: 10
+ErrorType: FullStructure
+
+ReactiveAtoms: ["C","O","H"]
+
+MoveFile: moves.in
 
 PEScalc: {'calctype' : "Energy", 'code' : "orca", 'executable' : "/Users/scott/programs/orca/orca", 'arglist' : ["! PM3 engrad"]}
 PEScalc: {'calctype' : "Optimize", 'code' : "orca", 'executable' : "/Users/scott/programs/orca/orca", 'arglist' : ["! PM3 Opt"]}

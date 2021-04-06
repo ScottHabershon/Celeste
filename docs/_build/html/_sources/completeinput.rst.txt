@@ -125,6 +125,57 @@ This is a logical flag dictating whether or not to use the ``ClimbingImage`` mod
 .. warning::
     Currently, CINEB is not implemented.
 
+Mechanism-finding directives
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* ``MoveFile`` (**default**: *None*)
+
+Defines the file which stores the available set of chemical reaction families (or *moves*) which can
+be used during mechanism-finding or reaction-network generation simulations.
+
+* ``MaxReactions`` (**default**: 1)
+
+Maximum number of reaction-steps which will be used in mechanism-finding (``DEGDS``) or reaction-tree (``SGDS``) generation.
+
+* ``ValenceRange`` (**default**: [['C', 0, 4],['O',1,2],['H',0,1],['N',1,3]])
+
+This is a python tuple which gives minimum and maximum valence ranges for elements in the system. These valence ranges are used during mechanism-generation calculations to constrain the search; molecular structurs which contain atomic valences lying outside this range will be rejected.
+
+For example, to set the carbon atomic valence range to [0,4] and the oxygen atomic valence range to [1,2], we would input:
+
+.. code-block::
+
+    ValenceRange: [['C', 0, 4],['O',1,2],['H',0,1],['N',1,3]]
+
+
+* ``SAInitialTemperature`` (**default**: 1000)
+
+Initial temperature (in K) for the simulated-annealing search for reaction-mechanisms connecting
+input reactant and product configurations.
+
+* ``NSAiterations`` (**default**: 1000)
+
+Maximum number of simulated-annealing iterations which will be performed during search for
+double-ended reaction mechanism. The search will stop once a mechanism with graph-error function value
+less than ``constants.GCONV`` is found.
+
+* ``SAOutputFrequency`` (**default**: 500)
+
+Frequency with which output is produced during simulated-annealing mechanism search.
+
+* ``ReactiveAtoms`` (**default**: ["all"])
+
+A list of strings defining which atom-types are allowed to participate in reactions during mechanism-searching. For example:
+
+.. code-block::
+
+    ReactiveAtoms: ["C", "O"]
+
+
+.. warning::
+    The ``ReactiveAtoms`` list **must** be defined as a JSON list, so you must use **"all"**, rather than **'all'**.
+
+
 PES evaluation directives
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 

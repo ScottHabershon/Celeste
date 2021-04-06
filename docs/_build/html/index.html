@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="run.html">Running Celeste</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input.html">Input files for Celeste</a></li>
 <li class="toctree-l1"><a class="reference internal" href="completeinput.html">Input specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="define_moves.html">Defining allowed reactions (moves)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="energy.html">Setting up energy calculations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Example calculations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="importing.html">Importing Celeste</a></li>
@@ -200,9 +201,14 @@ information about the code too.</p>
 <li class="toctree-l2"><a class="reference internal" href="completeinput.html#list-of-available-input-directives">List of available input directives</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="completeinput.html#core-input-directives">Core input directives</a></li>
 <li class="toctree-l3"><a class="reference internal" href="completeinput.html#minimum-energy-path-directives">Minimum-energy path directives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="completeinput.html#mechanism-finding-directives">Mechanism-finding directives</a></li>
 <li class="toctree-l3"><a class="reference internal" href="completeinput.html#pes-evaluation-directives">PES evaluation directives</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="define_moves.html">Defining allowed reactions (moves)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="define_moves.html#format-of-move-file">Format of Move File</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="energy.html">Setting up energy calculations</a><ul>
@@ -216,17 +222,24 @@ information about the code too.</p>
 <li class="toctree-l2"><a class="reference internal" href="energy.html#troubleshooting">Troubleshooting</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Example calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Example calculations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#example-input-files">Example input files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#example-1-neb-calculation-for-formaldehyde">Example 1: NEB calculation for formaldehyde</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#examples-using-import-celeste">Examples using <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">celeste</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="importing.html">Importing Celeste</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/modules.html">celeste</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="source/celeste.html">celeste package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="source/celeste.html#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="source/celeste.html#module-celeste.RunCeleste">celeste.RunCeleste module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="source/celeste.html#celeste-runceleste-module">celeste.RunCeleste module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="source/celeste.html#module-celeste.chemical_data">celeste.chemical_data module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="source/celeste.html#module-celeste.constants">celeste.constants module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="source/celeste.html#module-celeste.cxs">celeste.cxs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="source/celeste.html#module-celeste.input_output">celeste.input_output module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="source/celeste.html#module-celeste.mechanism_finder">celeste.mechanism_finder module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="source/celeste.html#celeste-mechanism-finder-module">celeste.mechanism_finder module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="source/celeste.html#module-celeste.moves">celeste.moves module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="source/celeste.html#module-celeste.params">celeste.params module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="source/celeste.html#module-celeste.pes">celeste.pes module</a></li>

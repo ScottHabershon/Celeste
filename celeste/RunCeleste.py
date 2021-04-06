@@ -72,6 +72,10 @@ def main(argv):
     for en in EnergyCalcs:
         en.PrintPESDetails(params.OutputFile)
 
+    # test
+    # a = cxs.CXS(FileName = params.IOvars['ReactantFile'] )
+    # a.PrintAllMols()
+
 
     # Decide which calculation type to run....
     # - MEP finder....
@@ -127,6 +131,11 @@ def main(argv):
                File=params.OutputFile,
                EnergyCalc=EnergyCalcs)
 
+        # Print final energy and structure.
+        rp.ReportFullPathEnergy(File=inputfile+"_final_energy.out",
+                                comment="Reaction path energy after MEP refinement")
+        rp.PrintToFile(inputfile + "_final_path.xyz", format="xyz")
+
 
     # - MEP-finding using navigation functions (JOE!)
     elif params.IOvars['CalculationType'] == "Navigation":
@@ -142,14 +151,30 @@ def main(argv):
         mech = mfind.Mechanism( reactantfile = params.IOvars['ReactantFile'],
                                 productfile = params.IOvars['ProductFile'],
                                 maxreactions = params.IOvars['MaxReactions'],
-                                valenceranges = params.IOvars['ValenceRanges'])
+                                valencerange = params.IOvars['ValenceRange'],
+                                reactiveatoms = params.IOvars['ReactiveAtoms'],
+                                errortype = params.IOvars['ErrorType'])
 
         # Initialize the reaction moves:
-        #moveset = moves.ReadMoveSet( movefile = params.IOvars['MoveFile'] )
+        mech.ReadMoveSet( movefile = params.IOvars['MoveFile'] )
 
-        # mech.RunMechanismFinder(moves = moveset,
-                        #        nsaiterations = params.IOvars['NSAiterations'],
-                        #        SAInitialTemperature = params.IOvars['SAInitialTemperature'])
+        # Print move information report:
+        mech.ReportMoves( File = params.OutputFile )
+
+        # Now run the mechanism search:
+        converged = mech.RunMechanismFinder( iterations = params.IOvars['NSAiterations'],
+                                 InitialTemperature = params.IOvars['SAInitialTemperature'],
+                                 progressfile = inputfile + "_mechopt.dat",
+                                 File = params.OutputFile,
+                                 OutputFrequency = params.IOvars['SAOutputFrequency'])
+
+
+        # If the calculation successfully converged on a mechanism, print output:
+        if converged:
+
+            # For all of the intermediate structures, we now generate xyz atomic coordinates
+            # by optimization under a graph-restraining potential:
+
 
 # Main driver.
 #

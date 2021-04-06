@@ -86,7 +86,7 @@ class CXS:
     """
 
     def __init__(self, natoms=None, positions=None, atomlabels=None, comment=None, FileName=None,
-                 PositionUnits='Bohr',Empty=False):
+                 PositionUnits='Bohr', Empty=False):
         """Initialization of a CXS object, either from file FileName, or from direct definition.
         """
 
@@ -210,6 +210,7 @@ class CXS:
                 if self.dist[i,j] <= rcut:
                     self.graph[i,j] = 1
                     self.graph[j,i] = 1
+
 
     def PrintEnergy(self,file=None):
         """Simple routine to print energy in pretty format.
@@ -661,6 +662,49 @@ class CXS:
         return
 
 
+    def CompareAtoms(self, cx):
+        """
+        Compares the number of atoms and the elements in the atom lists in ``self`` and ``cx``.
+
+        Args:
+            cx: A ``CXS`` object to compare against.
+
+        Returns:
+            Flag: A logical flag which is ``True`` if the total chemical formulae (i.e. number of
+            atoms and element-types) are identical.
+        """
+
+        # First check number of atoms - return false if they are different.
+        Flag = (self.natoms == cx.natoms)
+        if Flag == False:
+            return Flag
+
+        # Now compare chemical formulae:
+        Flag = ( self.GetFormula() == cx.GetFormula() )
+
+        return Flag
+
+
+    def GetFormula(self):
+        """Creates a string representation of the molecular chemical formula.
+
+        Returns:
+            formula (string) : A string containing the chemical formula of the molecule.
+        """
+        nelem = [0 for i in range(chemdata.nelements)]
+        for j in range(self.natoms):
+            for key in chemdata.ElementSymbol:
+                if self.atomlabels[j] == key:
+                    nelem[chemdata.ElementSymbol[key]] += 1
+
+        formula = ""
+        for key in chemdata.ElementSymbol:
+            if nelem[chemdata.ElementSymbol[key]] > 0:
+                formula += str(key)
+                formula += str(nelem[chemdata.ElementSymbol[key]])
+        return formula
+
+
 ########################
 
 class Molecule(CXS):
@@ -681,24 +725,27 @@ class Molecule(CXS):
         return
 
 
-    def GetFormula(self):
-        """Creates a string representation of the molecular chemical formula.
+    # def GetFormula(self):
+    #     """Creates a string representation of the molecular chemical formula.
+    #
+    #     Returns:
+    #         formula (string) : A string containing the chemical formula of the molecule.
+    #
+    #     """
+    #     nelem = [0 for i in range(chemdata.nelements)]
+    #     for j in range(self.natoms):
+    #         for key in chemdata.ElementSymbol:
+    #             if self.atomlabels[j] == key:
+    #                 nelem[chemdata.ElementSymbol[key]] += 1
+    #
+    #     formula = ""
+    #     for key in chemdata.ElementSymbol:
+    #         if nelem[chemdata.ElementSymbol[key]] > 0:
+    #             formula += str(key)
+    #             formula += str(nelem[chemdata.ElementSymbol[key]])
+    #     return formula
 
-        Returns:
-            formula (string) : A string containing the chemical formula of the molecule.
 
-        """
-        nelem = [0 for i in range(chemdata.nelements)]
-        for j in range(self.natoms):
-            for key in chemdata.ElementSymbol:
-                if self.atomlabels[j] == key:
-                    nelem[chemdata.ElementSymbol[key]] += 1
 
-        formula = ""
-        for key in chemdata.ElementSymbol:
-            if nelem[chemdata.ElementSymbol[key]] > 0:
-                formula += str(key)
-                formula += str(nelem[chemdata.ElementSymbol[key]])
-        return formula
 
 

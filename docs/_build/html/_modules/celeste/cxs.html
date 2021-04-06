@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../run.html">Running Celeste</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../input.html">Input files for Celeste</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../completeinput.html">Input specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../define_moves.html">Defining allowed reactions (moves)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../energy.html">Setting up energy calculations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples.html">Example calculations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../importing.html">Importing Celeste</a></li>
@@ -246,7 +247,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">natoms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">positions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">atomlabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">FileName</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">PositionUnits</span><span class="o">=</span><span class="s1">&#39;Bohr&#39;</span><span class="p">,</span><span class="n">Empty</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                 <span class="n">PositionUnits</span><span class="o">=</span><span class="s1">&#39;Bohr&#39;</span><span class="p">,</span> <span class="n">Empty</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialization of a CXS object, either from file FileName, or from direct definition.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -370,6 +371,7 @@
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">rcut</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span></div>
+
 
 <div class="viewcode-block" id="CXS.PrintEnergy"><a class="viewcode-back" href="../../source/celeste.html#celeste.cxs.CXS.PrintEnergy">[docs]</a>    <span class="k">def</span> <span class="nf">PrintEnergy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Simple routine to print energy in pretty format.</span>
@@ -818,7 +820,50 @@
                 <span class="n">dEdr</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">*</span> <span class="n">onr4</span> <span class="o">-</span> <span class="mf">4.0</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">*</span> <span class="p">(</span><span class="n">onr4</span> <span class="o">*</span> <span class="n">onr</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">dvdr</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">+=</span> <span class="n">dEdr</span> <span class="o">*</span> <span class="n">dxr</span><span class="p">[:]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">dvdr</span><span class="p">[</span><span class="n">j</span><span class="p">,:]</span> <span class="o">-=</span> <span class="n">dEdr</span> <span class="o">*</span> <span class="n">dxr</span><span class="p">[:]</span>
-        <span class="k">return</span></div></div>
+        <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="CXS.CompareAtoms"><a class="viewcode-back" href="../../source/celeste.html#celeste.cxs.CXS.CompareAtoms">[docs]</a>    <span class="k">def</span> <span class="nf">CompareAtoms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compares the number of atoms and the elements in the atom lists in ``self`` and ``cx``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cx: A ``CXS`` object to compare against.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Flag: A logical flag which is ``True`` if the total chemical formulae (i.e. number of</span>
+<span class="sd">            atoms and element-types) are identical.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># First check number of atoms - return false if they are different.</span>
+        <span class="n">Flag</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span> <span class="o">==</span> <span class="n">cx</span><span class="o">.</span><span class="n">natoms</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Flag</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Flag</span>
+
+        <span class="c1"># Now compare chemical formulae:</span>
+        <span class="n">Flag</span> <span class="o">=</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">GetFormula</span><span class="p">()</span> <span class="o">==</span> <span class="n">cx</span><span class="o">.</span><span class="n">GetFormula</span><span class="p">()</span> <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Flag</span></div>
+
+
+<div class="viewcode-block" id="CXS.GetFormula"><a class="viewcode-back" href="../../source/celeste.html#celeste.cxs.CXS.GetFormula">[docs]</a>    <span class="k">def</span> <span class="nf">GetFormula</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a string representation of the molecular chemical formula.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            formula (string) : A string containing the chemical formula of the molecule.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nelem</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">chemdata</span><span class="o">.</span><span class="n">nelements</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">chemdata</span><span class="o">.</span><span class="n">ElementSymbol</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">atomlabels</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
+                    <span class="n">nelem</span><span class="p">[</span><span class="n">chemdata</span><span class="o">.</span><span class="n">ElementSymbol</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">formula</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">chemdata</span><span class="o">.</span><span class="n">ElementSymbol</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nelem</span><span class="p">[</span><span class="n">chemdata</span><span class="o">.</span><span class="n">ElementSymbol</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">formula</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="n">formula</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">nelem</span><span class="p">[</span><span class="n">chemdata</span><span class="o">.</span><span class="n">ElementSymbol</span><span class="p">[</span><span class="n">key</span><span class="p">]])</span>
+        <span class="k">return</span> <span class="n">formula</span></div></div>
 
 
 <span class="c1">########################</span>
@@ -838,28 +883,31 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nmol</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">GetFormula</span><span class="p">()</span>
-        <span class="k">return</span></div>
+        <span class="k">return</span></div></div>
 
 
-<div class="viewcode-block" id="Molecule.GetFormula"><a class="viewcode-back" href="../../source/celeste.html#celeste.cxs.Molecule.GetFormula">[docs]</a>    <span class="k">def</span> <span class="nf">GetFormula</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Creates a string representation of the molecular chemical formula.</span>
+    <span class="c1"># def GetFormula(self):</span>
+    <span class="c1">#     &quot;&quot;&quot;Creates a string representation of the molecular chemical formula.</span>
+    <span class="c1">#</span>
+    <span class="c1">#     Returns:</span>
+    <span class="c1">#         formula (string) : A string containing the chemical formula of the molecule.</span>
+    <span class="c1">#</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     nelem = [0 for i in range(chemdata.nelements)]</span>
+    <span class="c1">#     for j in range(self.natoms):</span>
+    <span class="c1">#         for key in chemdata.ElementSymbol:</span>
+    <span class="c1">#             if self.atomlabels[j] == key:</span>
+    <span class="c1">#                 nelem[chemdata.ElementSymbol[key]] += 1</span>
+    <span class="c1">#</span>
+    <span class="c1">#     formula = &quot;&quot;</span>
+    <span class="c1">#     for key in chemdata.ElementSymbol:</span>
+    <span class="c1">#         if nelem[chemdata.ElementSymbol[key]] &gt; 0:</span>
+    <span class="c1">#             formula += str(key)</span>
+    <span class="c1">#             formula += str(nelem[chemdata.ElementSymbol[key]])</span>
+    <span class="c1">#     return formula</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            formula (string) : A string containing the chemical formula of the molecule.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">nelem</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">chemdata</span><span class="o">.</span><span class="n">nelements</span><span class="p">)]</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natoms</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">chemdata</span><span class="o">.</span><span class="n">ElementSymbol</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">atomlabels</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
-                    <span class="n">nelem</span><span class="p">[</span><span class="n">chemdata</span><span class="o">.</span><span class="n">ElementSymbol</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
 
-        <span class="n">formula</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">chemdata</span><span class="o">.</span><span class="n">ElementSymbol</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">nelem</span><span class="p">[</span><span class="n">chemdata</span><span class="o">.</span><span class="n">ElementSymbol</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">formula</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-                <span class="n">formula</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">nelem</span><span class="p">[</span><span class="n">chemdata</span><span class="o">.</span><span class="n">ElementSymbol</span><span class="p">[</span><span class="n">key</span><span class="p">]])</span>
-        <span class="k">return</span> <span class="n">formula</span></div></div>
 
 
 </pre></div>

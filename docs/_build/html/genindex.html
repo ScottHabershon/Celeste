@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="run.html">Running Celeste</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input.html">Input files for Celeste</a></li>
 <li class="toctree-l1"><a class="reference internal" href="completeinput.html">Input specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="define_moves.html">Defining allowed reactions (moves)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="energy.html">Setting up energy calculations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Example calculations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="importing.html">Importing Celeste</a></li>
@@ -213,26 +214,28 @@
 </li>
       <li><a href="source/celeste.html#module-celeste.input_output">celeste.input_output (module)</a>
 </li>
-      <li><a href="source/celeste.html#module-celeste.mechanism_finder">celeste.mechanism_finder (module)</a>
-</li>
       <li><a href="source/celeste.html#module-celeste.moves">celeste.moves (module)</a>
 </li>
       <li><a href="source/celeste.html#module-celeste.params">celeste.params (module)</a>
 </li>
       <li><a href="source/celeste.html#module-celeste.pes">celeste.pes (module)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/celeste.html#module-celeste.reactionpath">celeste.reactionpath (module)</a>
 </li>
-      <li><a href="source/celeste.html#module-celeste.RunCeleste">celeste.RunCeleste (module)</a>
-</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/celeste.html#celeste.reactionpath.RP.CheckNEBConvergence">CheckNEBConvergence() (celeste.reactionpath.RP method)</a>
 </li>
       <li><a href="source/celeste.html#celeste.CXS.comment">comment (celeste.CXS attribute)</a>
 
       <ul>
         <li><a href="source/celeste.html#celeste.cxs.CXS.comment">(celeste.cxs.CXS attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="source/celeste.html#celeste.CXS.CompareAtoms">CompareAtoms() (celeste.CXS method)</a>
+
+      <ul>
+        <li><a href="source/celeste.html#celeste.cxs.CXS.CompareAtoms">(celeste.cxs.CXS method)</a>
 </li>
       </ul></li>
       <li><a href="source/celeste.html#celeste.CXS.CopyCXS">CopyCXS() (celeste.CXS method)</a>
@@ -303,8 +306,12 @@
         <li><a href="source/celeste.html#celeste.cxs.CXS.GetAllPairDistances">(celeste.cxs.CXS method)</a>
 </li>
       </ul></li>
-      <li><a href="source/celeste.html#celeste.cxs.Molecule.GetFormula">GetFormula() (celeste.cxs.Molecule method)</a>
+      <li><a href="source/celeste.html#celeste.CXS.GetFormula">GetFormula() (celeste.CXS method)</a>
+
+      <ul>
+        <li><a href="source/celeste.html#celeste.cxs.CXS.GetFormula">(celeste.cxs.CXS method)</a>
 </li>
+      </ul></li>
       <li><a href="source/celeste.html#celeste.reactionpath.RP.GetFullPathEnergy">GetFullPathEnergy() (celeste.reactionpath.RP method)</a>
 </li>
       <li><a href="source/celeste.html#celeste.CXS.GetGraph">GetGraph() (celeste.CXS method)</a>
@@ -393,16 +400,12 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/celeste.html#celeste.RunCeleste.main">main() (in module celeste.RunCeleste)</a>
-</li>
       <li><a href="source/celeste.html#celeste.CXS.mass">mass (celeste.CXS attribute)</a>
 
       <ul>
         <li><a href="source/celeste.html#celeste.cxs.CXS.mass">(celeste.cxs.CXS attribute)</a>
 </li>
       </ul></li>
-      <li><a href="source/celeste.html#celeste.mechanism_finder.Mechanism">Mechanism (class in celeste.mechanism_finder)</a>
-</li>
       <li><a href="source/celeste.html#celeste.CXS.mol">mol (celeste.CXS attribute)</a>
 
       <ul>
@@ -543,13 +546,11 @@
         <li><a href="source/celeste.html#celeste.cxs.CXS.ReadStructureFromFile">(celeste.cxs.CXS method)</a>
 </li>
       </ul></li>
-      <li><a href="source/celeste.html#celeste.reactionpath.RP.ReportFullPathEnergy">ReportFullPathEnergy() (celeste.reactionpath.RP method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/celeste.html#celeste.reactionpath.RP">RP (class in celeste.reactionpath)</a>
+      <li><a href="source/celeste.html#celeste.reactionpath.RP.ReportFullPathEnergy">ReportFullPathEnergy() (celeste.reactionpath.RP method)</a>
 </li>
-      <li><a href="source/celeste.html#celeste.mechanism_finder.Mechanism.RunMechanismFinder">RunMechanismFinder() (celeste.mechanism_finder.Mechanism method)</a>
+      <li><a href="source/celeste.html#celeste.reactionpath.RP">RP (class in celeste.reactionpath)</a>
 </li>
       <li><a href="source/celeste.html#celeste.pes.PES.RunOrcaCalc">RunOrcaCalc() (celeste.pes.PES method)</a>
 </li>

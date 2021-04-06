@@ -32,6 +32,9 @@ Attributes:
 
 import sys
 
+# Boltzmann's constant in atomic units (so k * T (in Kelvin) = Hartrees):
+kboltz = 3.166E-6
+
 # Conversion from Bohr to Angstroms - multiply a number in Bohr by bohr_to_ang to get Angstroms.
 bohr_to_ang = 0.52917721080
 
@@ -44,7 +47,7 @@ hartrees_to_kjmol = 2625.4996300
 # BondingScaleFactor influences the calculation of adjacency matrices. Two atoms are considered
 # to be bonded if the distance between them is (CovalentRadius_1 + CovalentRadius_2)*BondingScaleFactor.
 #
-BondingScaleFactor = 1.10
+BondingScaleFactor = 1.20
 
 # This is a BIG number, used to make sure that the Floyd-Warshel shortest-path algorithm in cxs.py
 # avoids finding paths between non-bonded molecules.
@@ -56,6 +59,20 @@ NMOLMAX = 50
 # NAMOLMAX is the maximum number of atoms we're happy to have in each molecule.
 NAMOLMAX = 25
 
+# NAMOVEMAX is the maximum number of atoms which could change in a move (in other words, it the
+# maximum allowed size of the move graphs).
+NAMOVEMAX = 4
+
+# GCONV is the convergence tolerance for the graph-error function - this should usually be a small
+# number like 1E-5:
+GCONV = 1E-5
+
+# LARGE_ERROR is a large error-value which is assigned to reaction mechanisms which have
+# non-physical mechanisms (e.g. valence errors):
+LARGE_ERROR = 1E4
+
+# NTRYMAX is the maximum number of attempts to change reactive atoms when updating the mechanism:
+NTRYMAX = 1000
 
 def PrintConstants(file=None):
     """Prints a report on the current values of important parameters defined in ``constants.py``
